@@ -1,0 +1,22 @@
+version: v2
+managed:
+  enabled: true
+plugins:
+  # Generate TypeScript types and schemas (shared across packages)
+  - remote: buf.build/bufbuild/es:v2.10.1
+    out: src/gen/
+    opt:
+      - target=ts
+      - import_extension=.js
+  # Generate Connect-Query hooks for TanStack Query
+  - remote: buf.build/connectrpc/query-es:v2.2.0
+    out: src/gen/
+    opt:
+      - target=ts
+      - import_extension=.js
+  # Generate Go protobuf types
+  - remote: buf.build/protocolbuffers/go
+    out: ../../apps/backend/gen
+  # Generate Go Connect-RPC handlers
+  - remote: buf.build/connectrpc/go
+    out: ../../apps/backend/gen

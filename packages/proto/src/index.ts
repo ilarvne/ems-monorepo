@@ -1,0 +1,11 @@
+// Re-export all generated protobuf types and services
+export * from './gen/events_pb.js'
+export * from './gen/events-EventsService_connectquery.js'
+export * from './gen/events-EventAttendanceService_connectquery.js'
+export * from './gen/events-EventRegistrationsService_connectquery.js'
+export * from './gen/events-OrganizationsService_connectquery.js'
+export * from './gen/events-OrganizationTypesService_connectquery.js'
+export * from './gen/events-StatisticsService_connectquery.js'
+export * from './gen/events-TagsService_connectquery.js'
+export * from './gen/users_pb.js'
+export * from './gen/users-UsersService_connectquery.js'

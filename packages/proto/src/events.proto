@@ -1,0 +1,704 @@
+syntax = "proto3";
+
+package events.v1;
+
+option go_package = "github.com/studyverse/ems-backend/gen/eventsv1";
+
+// Enums
+enum EventFormat {
+  EVENT_FORMAT_UNSPECIFIED = 0;
+  EVENT_FORMAT_ONLINE = 1;
+  EVENT_FORMAT_OFFLINE = 2;
+}
+
+enum OrganizationStatus {
+  ORGANIZATION_STATUS_UNSPECIFIED = 0;
+  ORGANIZATION_STATUS_ACTIVE = 1;
+  ORGANIZATION_STATUS_ARCHIVED = 2;
+  ORGANIZATION_STATUS_FROZEN = 3;
+}
+
+enum RegistrationStatus {
+  REGISTRATION_STATUS_UNSPECIFIED = 0;
+  REGISTRATION_STATUS_REGISTERED = 1;
+  REGISTRATION_STATUS_CANCELLED = 2;
+  REGISTRATION_STATUS_WAITLIST = 3;
+}
+
+enum AttendanceStatus {
+  ATTENDANCE_STATUS_UNSPECIFIED = 0;
+  ATTENDANCE_STATUS_ATTENDED = 1;
+  ATTENDANCE_STATUS_NO_SHOW = 2;
+  ATTENDANCE_STATUS_CHECKED_IN = 3;
+}
+
+// Messages
+message OrganizationType {
+  int32 id = 1;
+  string title = 2;
+  string created_at = 3;
+  string updated_at = 4;
+}
+
+message Organization {
+  int32 id = 1;
+  string title = 2;
+  optional string image_url = 3;
+  optional string description = 4;
+  int32 organization_type_id = 5;
+  optional string instagram = 6;
+  optional string telegram_channel = 7;
+  optional string telegram_chat = 8;
+  optional string website = 9;
+  optional string youtube = 10;
+  optional string tiktok = 11;
+  optional string linkedin = 12;
+  OrganizationStatus status = 13;
+  string created_at = 14;
+  string updated_at = 15;
+}
+
+message Tag {
+  int32 id = 1;
+  string name = 2;
+  string created_at = 3;
+  string updated_at = 4;
+}
+
+message Event {
+  int32 id = 1;
+  string title = 2;
+  string description = 3;
+  optional string image_url = 4;
+  int32 user_id = 5;
+  int32 organization_id = 6;
+  string location = 7;
+  string start_time = 8;
+  string end_time = 9;
+  EventFormat format = 10;
+  repeated int32 tag_ids = 11;
+  string created_at = 12;
+  string updated_at = 13;
+  int32 total_registrations = 14;
+  int32 total_attendees = 15;
+  optional Organization organization = 16;
+  repeated Tag tags = 17;
+}
+
+message EventRegistration {
+  int32 id = 1;
+  int32 event_id = 2;
+  int32 user_id = 3;
+  RegistrationStatus status = 4;
+  string registered_at = 5;
+  optional string cancelled_at = 6;
+  string created_at = 7;
+  string updated_at = 8;
+}
+
+message EventAttendance {
+  int32 id = 1;
+  int32 registration_id = 2;
+  AttendanceStatus status = 3;
+  optional string checked_in_at = 4;
+  optional int32 checked_in_by = 5;
+  optional string notes = 6;
+  string created_at = 7;
+  string updated_at = 8;
+}
+
+message EventStatistics {
+  int32 total_events = 1;
+  int32 total_registrations = 2;
+  int32 total_attendees = 3;
+  int32 upcoming_events = 4;
+  int32 past_events = 5;
+  repeated EventStats recent_events = 6;
+}
+
+message EventStats {
+  int32 event_id = 1;
+  string event_title = 2;
+  int32 registrations = 3;
+  int32 attendees = 4;
+  double attendance_rate = 5;
+  string start_time = 6;
+}
+
+// Request/Response Messages
+message CreateOrganizationRequest {
+  string title = 1;
+  optional string image_url = 2;
+  optional string description = 3;
+  int32 organization_type_id = 4;
+  optional string instagram = 5;
+  optional string telegram_channel = 6;
+  optional string telegram_chat = 7;
+  optional string website = 8;
+  optional string youtube = 9;
+  optional string tiktok = 10;
+  optional string linkedin = 11;
+  OrganizationStatus status = 12;
+}
+
+message CreateOrganizationResponse {
+  Organization organization = 1;
+}
+
+message GetOrganizationRequest {
+  int32 id = 1;
+}
+
+message GetOrganizationResponse {
+  Organization organization = 1;
+}
+
+message ListOrganizationsRequest {
+  int32 page = 1;
+  int32 limit = 2;
+}
+
+message ListOrganizationsResponse {
+  repeated Organization organizations = 1;
+  int32 total = 2;
+}
+
+message UpdateOrganizationRequest {
+  int32 id = 1;
+  optional string title = 2;
+  optional string image_url = 3;
+  optional string description = 4;
+  optional int32 organization_type_id = 5;
+  optional string instagram = 6;
+  optional string telegram_channel = 7;
+  optional string telegram_chat = 8;
+  optional string website = 9;
+  optional string youtube = 10;
+  optional string tiktok = 11;
+  optional string linkedin = 12;
+  optional OrganizationStatus status = 13;
+}
+
+message UpdateOrganizationResponse {
+  Organization organization = 1;
+}
+
+message DeleteOrganizationRequest {
+  int32 id = 1;
+}
+
+message DeleteOrganizationResponse {
+  bool success = 1;
+}
+
+// Organization Type CRUD
+message CreateOrganizationTypeRequest {
+  string title = 1;
+}
+
+message CreateOrganizationTypeResponse {
+  OrganizationType organization_type = 1;
+}
+
+message GetOrganizationTypeRequest {
+  int32 id = 1;
+}
+
+message GetOrganizationTypeResponse {
+  OrganizationType organization_type = 1;
+}
+
+message ListOrganizationTypesRequest {
+  int32 page = 1;
+  int32 limit = 2;
+}
+
+message ListOrganizationTypesResponse {
+  repeated OrganizationType organization_types = 1;
+  int32 total = 2;
+}
+
+message UpdateOrganizationTypeRequest {
+  int32 id = 1;
+  optional string title = 2;
+}
+
+message UpdateOrganizationTypeResponse {
+  OrganizationType organization_type = 1;
+}
+
+message DeleteOrganizationTypeRequest {
+  int32 id = 1;
+}
+
+message DeleteOrganizationTypeResponse {
+  bool success = 1;
+}
+
+// Event CRUD
+message CreateEventRequest {
+  string title = 1;
+  string description = 2;
+  optional string image_url = 3;
+  int32 user_id = 4;
+  int32 organization_id = 5;
+  string location = 6;
+  string start_time = 7;
+  string end_time = 8;
+  EventFormat format = 9;
+  repeated int32 tag_ids = 10;
+}
+
+message CreateEventResponse {
+  Event event = 1;
+}
+
+message GetEventRequest {
+  int32 id = 1;
+}
+
+message GetEventResponse {
+  Event event = 1;
+}
+
+message ListEventsRequest {
+  int32 page = 1;
+  int32 limit = 2;
+  optional int32 user_id = 3;
+  optional int32 organization_id = 4;
+  repeated int32 tag_ids = 5;
+}
+
+message ListEventsResponse {
+  repeated Event events = 1;
+  int32 total = 2;
+}
+
+message UpdateEventRequest {
+  int32 id = 1;
+  optional string title = 2;
+  optional string description = 3;
+  optional string image_url = 4;
+  optional int32 user_id = 5;
+  optional int32 organization_id = 6;
+  optional string location = 7;
+  optional string start_time = 8;
+  optional string end_time = 9;
+  optional EventFormat format = 10;
+  repeated int32 tag_ids = 11;
+}
+
+message UpdateEventResponse {
+  Event event = 1;
+}
+
+message DeleteEventRequest {
+  int32 id = 1;
+}
+
+message DeleteEventResponse {
+  bool success = 1;
+}
+
+// Tag CRUD
+message CreateTagRequest {
+  string name = 1;
+}
+
+message CreateTagResponse {
+  Tag tag = 1;
+}
+
+message GetTagRequest {
+  int32 id = 1;
+}
+
+message GetTagResponse {
+  Tag tag = 1;
+}
+
+message ListTagsRequest {
+  int32 page = 1;
+  int32 limit = 2;
+}
+
+message ListTagsResponse {
+  repeated Tag tags = 1;
+  int32 total = 2;
+}
+
+message UpdateTagRequest {
+  int32 id = 1;
+  optional string name = 2;
+}
+
+message UpdateTagResponse {
+  Tag tag = 1;
+}
+
+message DeleteTagRequest {
+  int32 id = 1;
+}
+
+message DeleteTagResponse {
+  bool success = 1;
+}
+
+// Additional request/response messages for custom methods
+message GetPublishableOrganizationsRequest {
+  int32 user_id = 1;
+}
+
+message GetPublishableOrganizationsResponse {
+  repeated Organization organizations = 1;
+}
+
+message GetUserOrganizationsRequest {
+  int32 user_id = 1;
+}
+
+message GetUserOrganizationsResponse {
+  repeated Organization organizations = 1;
+}
+
+message GetEventsByTagIdRequest {
+  int32 tag_id = 1;
+}
+
+message GetEventsByTagIdResponse {
+  repeated Event events = 1;
+}
+
+message GetUserSubscribedEventsRequest {
+  int32 user_id = 1;
+}
+
+message GetUserSubscribedEventsResponse {
+  repeated Event events = 1;
+}
+
+message ListEventsForAdminRequest {
+  int32 page = 1;
+  int32 limit = 2;
+  optional int32 user_id = 3;
+  optional int32 organization_id = 4;
+}
+
+message ListEventsForAdminResponse {
+  repeated Event events = 1;
+}
+
+// Event Registration messages
+message RegisterForEventRequest {
+  int32 event_id = 1;
+  int32 user_id = 2;
+}
+
+message RegisterForEventResponse {
+  EventRegistration registration = 1;
+}
+
+message CancelRegistrationRequest {
+  int32 registration_id = 1;
+}
+
+message CancelRegistrationResponse {
+  bool success = 1;
+}
+
+message GetEventRegistrationsRequest {
+  int32 event_id = 1;
+  optional int32 page = 2;
+  optional int32 limit = 3;
+}
+
+message GetEventRegistrationsResponse {
+  repeated EventRegistration registrations = 1;
+  int32 total = 2;
+}
+
+message GetUserRegistrationsRequest {
+  int32 user_id = 1;
+}
+
+message GetUserRegistrationsResponse {
+  repeated EventRegistration registrations = 1;
+}
+
+// Attendance messages
+message CheckInAttendeeRequest {
+  int32 registration_id = 1;
+  int32 checked_in_by = 2;
+  optional string notes = 3;
+}
+
+message CheckInAttendeeResponse {
+  EventAttendance attendance = 1;
+}
+
+message MarkAttendanceRequest {
+  int32 registration_id = 1;
+  AttendanceStatus status = 2;
+  optional string notes = 3;
+}
+
+message MarkAttendanceResponse {
+  EventAttendance attendance = 1;
+}
+
+message GetEventAttendanceRequest {
+  int32 event_id = 1;
+}
+
+message GetEventAttendanceResponse {
+  repeated EventAttendance attendance = 1;
+  int32 total_registered = 2;
+  int32 total_attended = 3;
+  int32 total_no_show = 4;
+}
+
+// Statistics messages
+message GetDashboardStatisticsRequest {}
+
+message GetDashboardStatisticsResponse {
+  EventStatistics statistics = 1;
+}
+
+message GetEventStatisticsRequest {
+  int32 event_id = 1;
+}
+
+message GetEventStatisticsResponse {
+  int32 total_registrations = 1;
+  int32 total_attendees = 2;
+  int32 checked_in = 3;
+  int32 no_show = 4;
+  double attendance_rate = 5;
+}
+
+message TagDistribution {
+  int32 tag_id = 1;
+  string tag_name = 2;
+  int32 event_count = 3;
+}
+
+message GetEventTagsDistributionByMonthRequest {
+  int32 year = 1;
+  int32 month = 2;
+}
+
+message GetEventTagsDistributionByMonthResponse {
+  repeated TagDistribution tags = 1;
+  int32 total_events = 2;
+}
+
+message EventActivity {
+  string date = 1;
+  int32 count = 2;
+  int32 level = 3;
+}
+
+message GetEventActivityByYearRequest {
+  int32 year = 1;
+}
+
+message GetEventActivityByYearResponse {
+  repeated EventActivity activities = 1;
+  int32 total_events = 2;
+}
+
+message EventStatsSummary {
+  int32 total_events = 1;
+  int32 total_registrations = 2;
+  int32 total_attendees = 3;
+}
+
+message GetOverallStatisticsRequest {}
+
+message GetOverallStatisticsResponse {
+  int32 total_events = 1;
+  int32 total_users = 2;
+  int32 total_organizations = 3;
+  int32 total_registrations = 4;
+  int32 upcoming_events = 5;
+  double average_attendance_rate = 6;
+  int32 events_this_month = 7;
+  int32 registrations_this_month = 8;
+}
+
+message EventTrend {
+  string date = 1;
+  int32 event_count = 2;
+  int32 registration_count = 3;
+}
+
+message GetEventTrendsRequest {
+  int32 days = 1; // Number of days to look back (default 90)
+}
+
+message GetEventTrendsResponse {
+  repeated EventTrend trends = 1;
+}
+
+message ClubLeaderboard {
+  int32 organization_id = 1;
+  string organization_title = 2;
+  optional string organization_image = 3;
+  int32 total_events = 4;
+  int32 total_registrations = 5;
+  int32 total_attendees = 6;
+  double average_attendance_rate = 7;
+}
+
+message GetTopPerformingClubsRequest {
+  int32 limit = 1; // Number of clubs to return (default 10)
+  int32 days = 2; // Time period to consider (default 90)
+}
+
+message GetTopPerformingClubsResponse {
+  repeated ClubLeaderboard clubs = 1;
+}
+
+message GetUserEngagementLevelsRequest {}
+
+message UserEngagementLevel {
+  string level = 1; // "active_users", "registered_for_events", "attended_events", "repeat_attendees"
+  int32 count = 2;
+  double percentage = 3; // Percentage relative to active users
+}
+
+message GetUserEngagementLevelsResponse {
+  repeated UserEngagementLevel levels = 1;
+  int32 total_users = 2;
+  string trend_message = 3; // e.g., "Trending up by 5.2% this month"
+  string description = 4; // e.g., "Showing engagement metrics for active users"
+  bool is_positive_trend = 5; // Whether the trend is positive or negative
+}
+
+// Top Performing Events
+message TopPerformingEvent {
+  int32 id = 1;
+  string title = 2;
+  optional string image_url = 3;
+  optional Organization organization = 4;
+  string start_time = 5;
+  int32 total_registrations = 6;
+  int32 total_attendees = 7;
+  double attendance_rate = 8;
+}
+
+message GetTopPerformingEventsRequest {
+  int32 limit = 1; // Number of events to return (default 10)
+  int32 days = 2; // Time period to consider (default 90)
+}
+
+message GetTopPerformingEventsResponse {
+  repeated TopPerformingEvent events = 1;
+}
+
+// Low Registration Events
+message LowRegistrationEvent {
+  int32 id = 1;
+  string title = 2;
+  optional string image_url = 3;
+  optional Organization organization = 4;
+  string start_time = 5;
+  int32 capacity = 6;
+  int32 total_registrations = 7;
+  double capacity_utilization = 8;
+  int32 days_until_event = 9;
+}
+
+message GetLowRegistrationEventsRequest {
+  int32 threshold = 1; // Capacity utilization threshold percentage (default 50)
+  int32 days_ahead = 2; // Only include events within this many days (default 30)
+}
+
+message GetLowRegistrationEventsResponse {
+  repeated LowRegistrationEvent events = 1;
+}
+
+// Organization Activity
+message OrganizationActivity {
+  int32 id = 1;
+  string title = 2;
+  optional string image_url = 3;
+  int32 events_this_month = 4;
+  int32 events_last_month = 5;
+  int32 total_events = 6;
+  double average_attendance = 7;
+  double growth_rate = 8;
+}
+
+message GetOrganizationActivityRequest {
+  int32 limit = 1; // Number of organizations to return (default 20)
+}
+
+message GetOrganizationActivityResponse {
+  repeated OrganizationActivity organizations = 1;
+}
+
+// Services
+service OrganizationsService {
+  rpc CreateOrganization(CreateOrganizationRequest) returns (CreateOrganizationResponse);
+  rpc GetOrganization(GetOrganizationRequest) returns (GetOrganizationResponse);
+  rpc ListOrganizations(ListOrganizationsRequest) returns (ListOrganizationsResponse);
+  rpc UpdateOrganization(UpdateOrganizationRequest) returns (UpdateOrganizationResponse);
+  rpc DeleteOrganization(DeleteOrganizationRequest) returns (DeleteOrganizationResponse);
+  rpc GetPublishableOrganizations(GetPublishableOrganizationsRequest) returns (GetPublishableOrganizationsResponse);
+  rpc GetUserOrganizations(GetUserOrganizationsRequest) returns (GetUserOrganizationsResponse);
+}
+
+service OrganizationTypesService {
+  rpc CreateOrganizationType(CreateOrganizationTypeRequest) returns (CreateOrganizationTypeResponse);
+  rpc GetOrganizationType(GetOrganizationTypeRequest) returns (GetOrganizationTypeResponse);
+  rpc ListOrganizationTypes(ListOrganizationTypesRequest) returns (ListOrganizationTypesResponse);
+  rpc UpdateOrganizationType(UpdateOrganizationTypeRequest) returns (UpdateOrganizationTypeResponse);
+  rpc DeleteOrganizationType(DeleteOrganizationTypeRequest) returns (DeleteOrganizationTypeResponse);
+}
+
+service EventsService {
+  rpc CreateEvent(CreateEventRequest) returns (CreateEventResponse);
+  rpc GetEvent(GetEventRequest) returns (GetEventResponse);
+  rpc ListEvents(ListEventsRequest) returns (ListEventsResponse);
+  rpc ListEventsForAdmin(ListEventsForAdminRequest) returns (ListEventsForAdminResponse);
+  rpc UpdateEvent(UpdateEventRequest) returns (UpdateEventResponse);
+  rpc DeleteEvent(DeleteEventRequest) returns (DeleteEventResponse);
+  rpc GetEventsByTagId(GetEventsByTagIdRequest) returns (GetEventsByTagIdResponse);
+  rpc GetUserSubscribedEvents(GetUserSubscribedEventsRequest) returns (GetUserSubscribedEventsResponse);
+}
+
+service TagsService {
+  rpc CreateTag(CreateTagRequest) returns (CreateTagResponse);
+  rpc GetTag(GetTagRequest) returns (GetTagResponse);
+  rpc ListTags(ListTagsRequest) returns (ListTagsResponse);
+  rpc UpdateTag(UpdateTagRequest) returns (UpdateTagResponse);
+  rpc DeleteTag(DeleteTagRequest) returns (DeleteTagResponse);
+}
+
+service EventRegistrationsService {
+  rpc RegisterForEvent(RegisterForEventRequest) returns (RegisterForEventResponse);
+  rpc CancelRegistration(CancelRegistrationRequest) returns (CancelRegistrationResponse);
+  rpc GetEventRegistrations(GetEventRegistrationsRequest) returns (GetEventRegistrationsResponse);
+  rpc GetUserRegistrations(GetUserRegistrationsRequest) returns (GetUserRegistrationsResponse);
+}
+
+service EventAttendanceService {
+  rpc CheckInAttendee(CheckInAttendeeRequest) returns (CheckInAttendeeResponse);
+  rpc MarkAttendance(MarkAttendanceRequest) returns (MarkAttendanceResponse);
+  rpc GetEventAttendance(GetEventAttendanceRequest) returns (GetEventAttendanceResponse);
+}
+
+service StatisticsService {
+  rpc GetDashboardStatistics(GetDashboardStatisticsRequest) returns (GetDashboardStatisticsResponse);
+  rpc GetEventStatistics(GetEventStatisticsRequest) returns (GetEventStatisticsResponse);
+  rpc GetEventTagsDistributionByMonth(GetEventTagsDistributionByMonthRequest) returns (GetEventTagsDistributionByMonthResponse);
+  rpc GetEventActivityByYear(GetEventActivityByYearRequest) returns (GetEventActivityByYearResponse);
+  rpc GetOverallStatistics(GetOverallStatisticsRequest) returns (GetOverallStatisticsResponse);
+  rpc GetEventTrends(GetEventTrendsRequest) returns (GetEventTrendsResponse);
+  rpc GetTopPerformingClubs(GetTopPerformingClubsRequest) returns (GetTopPerformingClubsResponse);
+  rpc GetUserEngagementLevels(GetUserEngagementLevelsRequest) returns (GetUserEngagementLevelsResponse);
+  rpc GetTopPerformingEvents(GetTopPerformingEventsRequest) returns (GetTopPerformingEventsResponse);
+  rpc GetLowRegistrationEvents(GetLowRegistrationEventsRequest) returns (GetLowRegistrationEventsResponse);
+  rpc GetOrganizationActivity(GetOrganizationActivityRequest) returns (GetOrganizationActivityResponse);
+}
