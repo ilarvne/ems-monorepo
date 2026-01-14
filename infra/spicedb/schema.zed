@@ -1,59 +1,101 @@
 /**
  * SpiceDB Authorization Schema for EMS
  * 
- * This schema implements RBAC + ReBAC (Relationship-Based Access Control)
+ * Implements RBAC + ReBAC (Relationship-Based Access Control)
  * following the Google Zanzibar model.
+ * 
+ * Roles:
+ * - Guest: Unauthenticated user (public read-only access)
+ * - Student: Authenticated user (public read-only access)
+ * - President: Club leader (can manage their own club)
+ * - Staff/Admin: Platform-level management (can manage all clubs)
  */
 
 definition user {}
 
-definition organization {
-    // Direct relations
-    relation owner: user
+/**
+ * Platform represents the university-level administration.
+ * Use a constant ID like "platform:astanait"
+ */
+definition platform {
     relation admin: user
+    relation staff: user
+
+    // Staff/Admin can manage ALL clubs and view ALL stats
+    permission manage_system = admin
+    permission manage_clubs = admin + staff
+    permission view_analytics = admin + staff
+}
+
+/**
+ * Club (Organization) - the main organizational unit.
+ * Each club is linked to the platform for staff permission inheritance.
+ */
+definition club {
+    // Link every club to the platform to inherit staff permissions
+    relation parent_platform: platform
+
+    // Direct club roles
+    relation president: user
     relation member: user
 
-    // Computed permissions
-    permission manage = owner + admin
-    permission view = owner + admin + member
-    permission create_event = owner + admin
-    permission invite_member = owner + admin
-    permission remove_member = owner + admin
+    // PERMISSION LOGIC:
+    // Create events if you are the President OR if you are Platform Staff
+    permission create_event = president + parent_platform->manage_clubs
+
+    // Edit Club Settings: President OR Staff
+    permission manage_settings = president + parent_platform->manage_clubs
+
+    // View Analytics: President OR Staff (not regular members or guests)
+    permission view_analytics = president + parent_platform->view_analytics
+
+    // View Club Info: Anyone (handled at application level as public)
+    permission view = president + member + parent_platform->staff + parent_platform->admin
 }
 
+/**
+ * Event - belongs to a club, inherits permissions from club.
+ */
 definition event {
-    // Relations
-    relation parent_org: organization
+    relation host_club: club
     relation creator: user
-    relation moderator: user
 
-    // Permissions inherited from organization or direct
-    permission view = creator + moderator + parent_org->view
-    permission edit = creator + moderator + parent_org->manage
-    permission delete = creator + parent_org->manage
-    permission manage_registrations = creator + moderator + parent_org->admin
-    permission check_in_attendees = creator + moderator + parent_org->member
+    // Edit/Delete Event: Inherited from the club's create_event permission
+    permission edit = creator + host_club->create_event
+    permission delete = creator + host_club->create_event
+
+    // Manage registrations/attendance: event creator or club staff
+    permission manage_registrations = creator + host_club->create_event
+
+    // Check-in attendees: event creator or club members with elevated role
+    permission check_in = creator + host_club->create_event
 }
 
+/**
+ * Event Registration - tracks user registration to events.
+ */
 definition event_registration {
-    // Relations
-    relation event: event
+    relation parent_event: event
     relation registrant: user
 
-    // Permissions
-    permission view = registrant + event->manage_registrations
-    permission cancel = registrant + event->manage_registrations
-    permission check_in = event->check_in_attendees
+    // View own registration or if you can manage the event
+    permission view = registrant + parent_event->manage_registrations
+    
+    // Cancel: registrant themselves or event managers
+    permission cancel = registrant + parent_event->manage_registrations
+    
+    // Check-in: only those who can check in for the event
+    permission check_in = parent_event->check_in
 }
 
+/**
+ * Tag - organization-wide tagging for events.
+ */
 definition tag {
-    // Relations
-    relation parent_org: organization
-    relation creator: user
+    relation parent_platform: platform
 
-    // Permissions
-    permission view = creator + parent_org->view
-    permission edit = creator + parent_org->manage
-    permission delete = creator + parent_org->manage
-    permission assign_to_event = parent_org->create_event
+    // Only staff can create/edit/delete tags
+    permission create = parent_platform->manage_clubs
+    permission edit = parent_platform->manage_clubs
+    permission delete = parent_platform->manage_clubs
 }

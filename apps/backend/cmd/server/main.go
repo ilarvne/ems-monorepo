@@ -15,8 +15,10 @@ import (
 
 	"github.com/studyverse/ems-backend/gen/eventsv1/eventsv1connect"
 	"github.com/studyverse/ems-backend/gen/usersv1/usersv1connect"
+	"github.com/studyverse/ems-backend/internal/auth"
 	"github.com/studyverse/ems-backend/internal/config"
 	"github.com/studyverse/ems-backend/internal/db"
+	"github.com/studyverse/ems-backend/internal/perms"
 	"github.com/studyverse/ems-backend/internal/services"
 )
 
@@ -34,6 +36,23 @@ func main() {
 		"host", cfg.Host,
 		"port", cfg.Port,
 	)
+
+	// Initialize Kratos client for authentication
+	kratosClient := auth.NewKratosClient(cfg.KratosPublicURL)
+	slog.Info("Kratos client initialized", "url", cfg.KratosPublicURL)
+
+	// Initialize SpiceDB client for authorization
+	permsClient, err := perms.NewClient(cfg.SpiceDBEndpoint, cfg.SpiceDBPresharedKey, cfg.SpiceDBInsecure)
+	if err != nil {
+		slog.Warn("Failed to initialize SpiceDB client - authorization checks will fail",
+			"endpoint", cfg.SpiceDBEndpoint,
+			"error", err,
+		)
+	} else {
+		slog.Info("SpiceDB client initialized", "endpoint", cfg.SpiceDBEndpoint)
+	}
+	// Store permsClient for later use in services
+	_ = permsClient
 
 	// Connect to database
 	ctx := context.Background()
@@ -83,8 +102,10 @@ func main() {
 		w.Write([]byte("OK"))
 	})
 
-	// CORS middleware
-	handler := corsMiddleware(cfg.CORSOrigins, mux)
+	// Build middleware chain: CORS -> Auth -> Mux
+	// Auth middleware extracts Kratos session and injects user ID into context
+	authMiddleware := auth.NewMiddleware(kratosClient)
+	handler := corsMiddleware(cfg.CORSOrigins, authMiddleware(mux))
 
 	// Create server with h2c (HTTP/2 cleartext) support for Connect-RPC
 	server := &http.Server{
