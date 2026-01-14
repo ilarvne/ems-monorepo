@@ -1,0 +1,28 @@
+{
+  "name": "ems-monorepo",
+  "description": "EMS Monorepo",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "nx run-many -t dev",
+    "build": "nx run-many -t build",
+    "start": "nx run-many -t start",
+    "lint": "nx run-many -t lint",
+    "test": "nx run-many -t test",
+    "graph": "nx graph",
+    "affected": "nx affected",
+    "schema:sync": "bun run --filter @repo/db db:push && bun run --filter @repo/db build && bun run --filter @repo/proto build && bun run --filter backend db:seed"
+  },
+  "devDependencies": {
+    "nx": "^21.0.0",
+    "@nx/js": "^21.0.0",
+    "@nx/vite": "^21.0.0",
+    "@nx/react": "^21.0.0",
+    "@nx/nest": "^21.0.0",
+    "@nx/eslint": "^21.0.0",
+    "typescript": "~5.7.0"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "composite": true,
+    "incremental": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": false,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "allowSyntheticDefaultImports": true,
+    "lib": ["ES2022"],
+    "baseUrl": ".",
+    "paths": {
+      "@repo/db": ["packages/db/src"],
+      "@repo/proto": ["packages/proto/src"],
+      "@repo/env": ["packages/env/src"],
+      "@repo/env/*": ["packages/env/src/*"],
+      "@repo/prettier": ["packages/config/prettier"],
+      "@repo/prettier/*": ["packages/config/prettier/*"]
+    }
+  },
+  "exclude": ["node_modules", "dist", ".nx", ".turbo"]
+}
