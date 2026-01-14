@@ -12,6 +12,11 @@
       "!{projectRoot}/src/test-setup.[jt]s",
       "!{projectRoot}/test-setup.[jt]s"
     ],
+    "goSource": [
+      "{projectRoot}/**/*.go",
+      "{projectRoot}/go.mod",
+      "{projectRoot}/go.sum"
+    ],
     "sharedGlobals": ["{workspaceRoot}/.github/workflows/*"]
   },
   "targetDefaults": {
@@ -31,6 +36,10 @@
     "test": {
       "inputs": ["default", "^production"],
       "cache": true
+    },
+    "docker-build": {
+      "dependsOn": ["build"],
+      "cache": false
     }
   },
   "defaultBase": "main",

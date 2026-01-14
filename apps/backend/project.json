@@ -1,0 +1,93 @@
+{
+  "name": "backend",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/backend",
+  "projectType": "application",
+  "tags": ["type:app", "scope:backend"],
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "go build -o dist/server ./cmd/server",
+        "cwd": "apps/backend"
+      },
+      "outputs": ["{projectRoot}/dist"]
+    },
+    "build-prod": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags='-w -s' -o dist/server ./cmd/server",
+        "cwd": "apps/backend"
+      },
+      "outputs": ["{projectRoot}/dist"]
+    },
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "go run ./cmd/server",
+        "cwd": "apps/backend"
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "go run ./cmd/server",
+        "cwd": "apps/backend"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "go test -v ./...",
+        "cwd": "apps/backend"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "golangci-lint run",
+        "cwd": "apps/backend"
+      }
+    },
+    "fmt": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "go fmt ./...",
+        "cwd": "apps/backend"
+      }
+    },
+    "tidy": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "go mod tidy",
+        "cwd": "apps/backend"
+      }
+    },
+    "docker-build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker build -t ems-backend:latest -f apps/backend/Dockerfile .",
+        "cwd": "."
+      }
+    },
+    "docker-run": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker run --rm -p 5555:5555 --env-file .env --network ems-network ems-backend:latest",
+        "cwd": "."
+      }
+    },
+    "generate": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["^generate"],
+      "options": {
+        "commands": [
+          "bun run --filter @repo/proto generate",
+          "cp -r packages/proto/gen/go/* apps/backend/gen/ 2>/dev/null || true"
+        ],
+        "cwd": ".",
+        "parallel": false
+      }
+    }
+  }
+}
