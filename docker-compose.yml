@@ -1,0 +1,175 @@
+services:
+  # ============================================
+  # Database Services
+  # ============================================
+  postgres:
+    image: postgres:16-alpine
+    container_name: ems-postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_MULTIPLE_DATABASES: eventdb,kratos,hydra,spicedb
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./infra/postgres/init-multiple-dbs.sh:/docker-entrypoint-initdb.d/init-multiple-dbs.sh
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  dragonfly:
+    image: docker.dragonflydb.io/dragonflydb/dragonfly
+    container_name: ems-dragonfly
+    restart: unless-stopped
+    ulimits:
+      memlock: -1
+    ports:
+      - "6379:6379"
+    command: ["dragonfly", "--requirepass=${DRAGONFLY_PASSWORD:-secret}", "--cache_mode=true"]
+    volumes:
+      - dragonfly_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${DRAGONFLY_PASSWORD:-secret}", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # ============================================
+  # Ory Kratos (Identity Management)
+  # ============================================
+  kratos-migrate:
+    image: oryd/kratos:v1.3.0
+    container_name: ems-kratos-migrate
+    environment:
+      DSN: postgres://postgres:postgres@postgres:5432/kratos?sslmode=disable
+    command: migrate sql -e --yes
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  kratos:
+    image: oryd/kratos:v1.3.0
+    container_name: ems-kratos
+    restart: unless-stopped
+    ports:
+      - "4433:4433" # Public API
+      - "4434:4434" # Admin API
+    environment:
+      DSN: postgres://postgres:postgres@postgres:5432/kratos?sslmode=disable
+      SECRETS_COOKIE: ${KRATOS_SECRET_COOKIE}
+      SECRETS_CIPHER: ${KRATOS_SECRET_CIPHER}
+      SELFSERVICE_METHODS_OIDC_CONFIG_PROVIDERS_0_CLIENT_ID: ${MICROSOFT_CLIENT_ID}
+      SELFSERVICE_METHODS_OIDC_CONFIG_PROVIDERS_0_CLIENT_SECRET: ${MICROSOFT_CLIENT_SECRET}
+      LOG_LEVEL: debug
+    command: serve -c /etc/config/kratos/kratos.yml --watch-courier
+    volumes:
+      - ./infra/kratos:/etc/config/kratos
+    depends_on:
+      kratos-migrate:
+        condition: service_completed_successfully
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:4433/health/alive"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ============================================
+  # Ory Hydra (OAuth2 / OIDC)
+  # ============================================
+  hydra-migrate:
+    image: oryd/hydra:v2.3.0
+    container_name: ems-hydra-migrate
+    environment:
+      DSN: postgres://postgres:postgres@postgres:5432/hydra?sslmode=disable
+    command: migrate sql -e --yes
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  hydra:
+    image: oryd/hydra:v2.3.0
+    container_name: ems-hydra
+    restart: unless-stopped
+    ports:
+      - "4444:4444" # Public API
+      - "4445:4445" # Admin API
+    environment:
+      DSN: postgres://postgres:postgres@postgres:5432/hydra?sslmode=disable
+      HYDRA_SECRET_SYSTEM: ${HYDRA_SECRET_SYSTEM}
+      HYDRA_SECRET_COOKIE: ${HYDRA_SECRET_COOKIE}
+      HYDRA_OIDC_SALT: ${HYDRA_OIDC_SALT}
+      LOG_LEVEL: debug
+    command: serve all --config /etc/config/hydra/hydra.yml --dev
+    volumes:
+      - ./infra/hydra:/etc/config/hydra
+    depends_on:
+      hydra-migrate:
+        condition: service_completed_successfully
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:4444/health/alive"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ============================================
+  # SpiceDB (Authorization / Zanzibar)
+  # ============================================
+  spicedb-migrate:
+    image: authzed/spicedb:v1.35.0
+    container_name: ems-spicedb-migrate
+    command: migrate head --datastore-engine=postgres --datastore-conn-uri="postgres://postgres:postgres@postgres:5432/spicedb?sslmode=disable"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  spicedb:
+    image: authzed/spicedb:v1.35.0
+    container_name: ems-spicedb
+    restart: unless-stopped
+    ports:
+      - "50051:50051" # gRPC API
+      - "8443:8080"   # HTTP Gateway (mapped to 8443 to avoid conflicts)
+      - "9095:9090"   # Metrics (mapped to 9095 to avoid conflicts)
+    command: >
+      serve
+      --grpc-preshared-key=${SPICEDB_PRESHARED_KEY}
+      --datastore-engine=postgres
+      --datastore-conn-uri="postgres://postgres:postgres@postgres:5432/spicedb?sslmode=disable"
+      --http-enabled=true
+    depends_on:
+      spicedb-migrate:
+        condition: service_completed_successfully
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "grpc_health_probe", "-addr=localhost:50051"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ============================================
+  # Development Tools
+  # ============================================
+  mailslurper:
+    image: oryd/mailslurper:latest-smtps
+    container_name: ems-mailslurper
+    ports:
+      - "4436:4436" # Web UI
+      - "4437:4437" # API
+      - "1025:1025" # SMTP
+
+volumes:
+  postgres_data:
+  dragonfly_data:
+
+networks:
+  default:
+    name: ems-network

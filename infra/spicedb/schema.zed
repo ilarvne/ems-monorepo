@@ -1,0 +1,59 @@
+/**
+ * SpiceDB Authorization Schema for EMS
+ * 
+ * This schema implements RBAC + ReBAC (Relationship-Based Access Control)
+ * following the Google Zanzibar model.
+ */
+
+definition user {}
+
+definition organization {
+    // Direct relations
+    relation owner: user
+    relation admin: user
+    relation member: user
+
+    // Computed permissions
+    permission manage = owner + admin
+    permission view = owner + admin + member
+    permission create_event = owner + admin
+    permission invite_member = owner + admin
+    permission remove_member = owner + admin
+}
+
+definition event {
+    // Relations
+    relation parent_org: organization
+    relation creator: user
+    relation moderator: user
+
+    // Permissions inherited from organization or direct
+    permission view = creator + moderator + parent_org->view
+    permission edit = creator + moderator + parent_org->manage
+    permission delete = creator + parent_org->manage
+    permission manage_registrations = creator + moderator + parent_org->admin
+    permission check_in_attendees = creator + moderator + parent_org->member
+}
+
+definition event_registration {
+    // Relations
+    relation event: event
+    relation registrant: user
+
+    // Permissions
+    permission view = registrant + event->manage_registrations
+    permission cancel = registrant + event->manage_registrations
+    permission check_in = event->check_in_attendees
+}
+
+definition tag {
+    // Relations
+    relation parent_org: organization
+    relation creator: user
+
+    // Permissions
+    permission view = creator + parent_org->view
+    permission edit = creator + parent_org->manage
+    permission delete = creator + parent_org->manage
+    permission assign_to_event = parent_org->create_event
+}

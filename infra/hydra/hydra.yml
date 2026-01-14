@@ -1,0 +1,78 @@
+version: v2.3.0
+
+dsn: postgres://postgres:postgres@postgres:5432/hydra?sslmode=disable
+
+serve:
+  public:
+    cors:
+      enabled: true
+      allowed_origins:
+        - http://localhost:3000
+        - http://localhost:5173
+        - http://localhost:6868
+      allowed_methods:
+        - POST
+        - GET
+        - PUT
+        - PATCH
+        - DELETE
+      allowed_headers:
+        - Authorization
+        - Cookie
+        - Content-Type
+
+urls:
+  self:
+    issuer: http://localhost:4444
+  consent: http://localhost:5173/auth/consent
+  login: http://localhost:5173/auth/login
+  logout: http://localhost:5173/auth/logout
+
+secrets:
+  system:
+    - $HYDRA_SECRET_SYSTEM
+  cookie:
+    - $HYDRA_SECRET_COOKIE
+
+oidc:
+  subject_identifiers:
+    supported_types:
+      - pairwise
+      - public
+    pairwise:
+      salt: $HYDRA_OIDC_SALT
+
+ttl:
+  access_token: 1h
+  refresh_token: 720h
+  id_token: 1h
+  auth_code: 10m
+  login_consent_request: 30m
+
+oauth2:
+  expose_internal_errors: true
+  hashers:
+    algorithm: bcrypt
+    bcrypt:
+      cost: 10
+
+log:
+  level: debug
+  format: text
+  leak_sensitive_values: true
+
+webfinger:
+  oidc_discovery:
+    supported_claims:
+      - email
+      - email_verified
+      - name
+      - given_name
+      - family_name
+      - picture
+    supported_scope:
+      - openid
+      - offline
+      - offline_access
+      - email
+      - profile
