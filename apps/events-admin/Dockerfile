@@ -6,11 +6,13 @@
 FROM oven/bun:1 AS deps
 WORKDIR /app
 
-# Copy package files
+# Copy package files for all workspace packages needed
 COPY package.json bun.lock* ./
 COPY apps/events-admin/package.json ./apps/events-admin/
 COPY packages/proto/package.json ./packages/proto/
 COPY packages/prettier/package.json ./packages/prettier/
+COPY packages/ui/package.json ./packages/ui/
+COPY packages/env/package.json ./packages/env/
 
 # Install dependencies
 RUN bun install
