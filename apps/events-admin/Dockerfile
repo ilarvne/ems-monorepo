@@ -21,9 +21,10 @@ RUN bun install
 FROM oven/bun:1 AS builder
 WORKDIR /app
 
-# Copy dependencies from deps stage
+# Copy dependencies from deps stage (includes hoisted deps with @bufbuild/protobuf)
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/apps/events-admin/node_modules ./apps/events-admin/node_modules
+COPY --from=deps /app/packages/proto/node_modules ./packages/proto/node_modules
 
 # Copy source files
 COPY packages/ ./packages/
