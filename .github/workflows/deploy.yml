@@ -1,7 +1,9 @@
 name: Deploy to Azure
 
 on:
-  push:
+  workflow_run:
+    workflows: ["Build & Push to ACR"]
+    types: [completed]
     branches: [main]
   workflow_dispatch:
 
@@ -17,6 +19,8 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    # Only deploy if the build workflow succeeded
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -41,43 +45,53 @@ jobs:
 
       - name: Deploy/Update Backend Container App
         run: |
-          az containerapp create \
-            --name $BACKEND_APP \
-            --resource-group $RESOURCE_GROUP \
-            --environment $CONTAINER_APP_ENV \
-            --image ${{ steps.images.outputs.BACKEND_IMAGE }} \
-            --target-port 8080 \
-            --ingress external \
-            --cpu 0.5 \
-            --memory 1 \
-            --registry-server ${{ env.REGISTRY }} \
-            --registry-username 00000000-0000-0000-0000-000000000000 \
-            --registry-password $(az acr login --name $REGISTRY_NAME --expose-token --output tsv --query accessToken) \
-            2>/dev/null || \
-          az containerapp update \
-            --name $BACKEND_APP \
-            --resource-group $RESOURCE_GROUP \
-            --image ${{ steps.images.outputs.BACKEND_IMAGE }}
+          # Check if container app exists
+          if az containerapp show --name $BACKEND_APP --resource-group $RESOURCE_GROUP &>/dev/null; then
+            echo "Updating existing backend container app..."
+            az containerapp update \
+              --name $BACKEND_APP \
+              --resource-group $RESOURCE_GROUP \
+              --image ${{ steps.images.outputs.BACKEND_IMAGE }}
+          else
+            echo "Creating new backend container app..."
+            az containerapp create \
+              --name $BACKEND_APP \
+              --resource-group $RESOURCE_GROUP \
+              --environment $CONTAINER_APP_ENV \
+              --image ${{ steps.images.outputs.BACKEND_IMAGE }} \
+              --target-port 8080 \
+              --ingress external \
+              --cpu 0.5 \
+              --memory 1 \
+              --registry-server ${{ env.REGISTRY }} \
+              --registry-username 00000000-0000-0000-0000-000000000000 \
+              --registry-password "$(az acr login --name $REGISTRY_NAME --expose-token --output tsv --query accessToken)"
+          fi
 
       - name: Deploy/Update Frontend Container App
         run: |
-          az containerapp create \
-            --name $FRONTEND_APP \
-            --resource-group $RESOURCE_GROUP \
-            --environment $CONTAINER_APP_ENV \
-            --image ${{ steps.images.outputs.FRONTEND_IMAGE }} \
-            --target-port 3000 \
-            --ingress external \
-            --cpu 0.5 \
-            --memory 1 \
-            --registry-server ${{ env.REGISTRY }} \
-            --registry-username 00000000-0000-0000-0000-000000000000 \
-            --registry-password $(az acr login --name $REGISTRY_NAME --expose-token --output tsv --query accessToken) \
-            2>/dev/null || \
-          az containerapp update \
-            --name $FRONTEND_APP \
-            --resource-group $RESOURCE_GROUP \
-            --image ${{ steps.images.outputs.FRONTEND_IMAGE }}
+          # Check if container app exists
+          if az containerapp show --name $FRONTEND_APP --resource-group $RESOURCE_GROUP &>/dev/null; then
+            echo "Updating existing frontend container app..."
+            az containerapp update \
+              --name $FRONTEND_APP \
+              --resource-group $RESOURCE_GROUP \
+              --image ${{ steps.images.outputs.FRONTEND_IMAGE }}
+          else
+            echo "Creating new frontend container app..."
+            az containerapp create \
+              --name $FRONTEND_APP \
+              --resource-group $RESOURCE_GROUP \
+              --environment $CONTAINER_APP_ENV \
+              --image ${{ steps.images.outputs.FRONTEND_IMAGE }} \
+              --target-port 3000 \
+              --ingress external \
+              --cpu 0.5 \
+              --memory 1 \
+              --registry-server ${{ env.REGISTRY }} \
+              --registry-username 00000000-0000-0000-0000-000000000000 \
+              --registry-password "$(az acr login --name $REGISTRY_NAME --expose-token --output tsv --query accessToken)"
+          fi
 
       - name: Get deployment URLs
         run: |
