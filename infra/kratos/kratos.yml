@@ -11,6 +11,7 @@ serve:
         - http://localhost:3000
         - http://localhost:5173
         - http://localhost:6868
+        - http://localhost:6869
       allowed_methods:
         - POST
         - GET
@@ -28,11 +29,12 @@ serve:
     base_url: http://kratos:4434/
 
 selfservice:
-  default_browser_return_url: http://localhost:5173/
+  default_browser_return_url: http://localhost:6868/
   allowed_return_urls:
     - http://localhost:5173
     - http://localhost:3000
     - http://localhost:6868
+    - http://localhost:6869
 
   methods:
     password:
@@ -64,36 +66,36 @@ selfservice:
 
   flows:
     error:
-      ui_url: http://localhost:5173/auth/error
+      ui_url: http://localhost:6868/auth/error
 
     settings:
-      ui_url: http://localhost:5173/auth/settings
+      ui_url: http://localhost:6868/auth/settings
       privileged_session_max_age: 15m
       required_aal: highest_available
 
     recovery:
       enabled: true
-      ui_url: http://localhost:5173/auth/recovery
+      ui_url: http://localhost:6868/auth/recovery
       use: code
 
     verification:
       enabled: true
-      ui_url: http://localhost:5173/auth/verification
+      ui_url: http://localhost:6868/auth/verification
       use: code
       after:
-        default_browser_return_url: http://localhost:5173/
+        default_browser_return_url: http://localhost:6868/
 
     logout:
       after:
-        default_browser_return_url: http://localhost:5173/auth/login
+        default_browser_return_url: http://localhost:6868/auth/login
 
     login:
-      ui_url: http://localhost:5173/auth/login
+      ui_url: http://localhost:6868/auth/login
       lifespan: 10m
 
     registration:
       lifespan: 10m
-      ui_url: http://localhost:5173/auth/registration
+      ui_url: http://localhost:6868/auth/registration
       after:
         password:
           hooks:

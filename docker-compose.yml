@@ -20,6 +20,8 @@ services:
       SPICEDB_ENDPOINT: spicedb:50051
       SPICEDB_PRESHARED_KEY: ${SPICEDB_PRESHARED_KEY}
       SPICEDB_INSECURE: "true"
+      MEILISEARCH_URL: http://meilisearch:7700
+      MEILISEARCH_MASTER_KEY: ${MEILISEARCH_MASTER_KEY:-masterKey123}
       LOG_LEVEL: debug
     depends_on:
       postgres:
@@ -27,6 +29,8 @@ services:
       kratos:
         condition: service_healthy
       spicedb:
+        condition: service_healthy
+      meilisearch:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "wget", "-q", "--spider", "http://localhost:5555/health"]
@@ -40,6 +44,10 @@ services:
     build:
       context: .
       dockerfile: apps/events-admin/Dockerfile
+      args:
+        VITE_API_URL: http://localhost:5555
+        VITE_KRATOS_PUBLIC_URL: http://localhost:4433
+        VITE_HYDRA_PUBLIC_URL: http://localhost:4444
     container_name: ems-events-admin
     restart: unless-stopped
     ports:
@@ -106,6 +114,9 @@ services:
     image: oryd/kratos:v1.3.0
     container_name: ems-kratos
     restart: unless-stopped
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
     ports:
       - "4433:4433" # Public API
       - "4434:4434" # Admin API
@@ -217,9 +228,32 @@ services:
       - "4437:4437" # API
       - "1025:1025" # SMTP
 
+  # ============================================
+  # Meilisearch (Full-text Search)
+  # ============================================
+  meilisearch:
+    image: getmeili/meilisearch:v1.16
+    container_name: ems-meilisearch
+    restart: unless-stopped
+    ports:
+      - "7700:7700"
+    environment:
+      MEILI_MASTER_KEY: ${MEILISEARCH_MASTER_KEY:-masterKey123}
+      MEILI_ENV: development
+      MEILI_DB_PATH: /meili_data
+    volumes:
+      - meili_data:/meili_data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7700/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
 volumes:
   postgres_data:
   dragonfly_data:
+  meili_data:
 
 networks:
   default:

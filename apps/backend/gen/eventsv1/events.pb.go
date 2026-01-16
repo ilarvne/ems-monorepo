@@ -3688,6 +3688,7 @@ func (x *ListEventsForAdminRequest) GetOrganizationId() int32 {
 type ListEventsForAdminResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Events        []*Event               `protobuf:"bytes,1,rep,name=events,proto3" json:"events,omitempty"`
+	Total         int32                  `protobuf:"varint,2,opt,name=total,proto3" json:"total,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -3727,6 +3728,13 @@ func (x *ListEventsForAdminResponse) GetEvents() []*Event {
 		return x.Events
 	}
 	return nil
+}
+
+func (x *ListEventsForAdminResponse) GetTotal() int32 {
+	if x != nil {
+		return x.Total
+	}
+	return 0
 }
 
 // Event Registration messages
@@ -6583,9 +6591,10 @@ const file_events_proto_rawDesc = "" +
 	"\x0forganization_id\x18\x04 \x01(\x05H\x01R\x0eorganizationId\x88\x01\x01B\n" +
 	"\n" +
 	"\b_user_idB\x12\n" +
-	"\x10_organization_id\"F\n" +
+	"\x10_organization_id\"\\\n" +
 	"\x1aListEventsForAdminResponse\x12(\n" +
-	"\x06events\x18\x01 \x03(\v2\x10.events.v1.EventR\x06events\"M\n" +
+	"\x06events\x18\x01 \x03(\v2\x10.events.v1.EventR\x06events\x12\x14\n" +
+	"\x05total\x18\x02 \x01(\x05R\x05total\"M\n" +
 	"\x17RegisterForEventRequest\x12\x19\n" +
 	"\bevent_id\x18\x01 \x01(\x05R\aeventId\x12\x17\n" +
 	"\auser_id\x18\x02 \x01(\x05R\x06userId\"\\\n" +

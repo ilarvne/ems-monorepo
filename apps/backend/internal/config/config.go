@@ -26,22 +26,28 @@ type Config struct {
 	SpiceDBPresharedKey string
 	SpiceDBInsecure     bool
 
+	// Meilisearch
+	MeilisearchURL       string
+	MeilisearchMasterKey string
+
 	// Logging
 	LogLevel string
 }
 
 func Load() *Config {
 	return &Config{
-		Port:                getEnv("PORT", "5555"),
-		Host:                getEnv("HOST", "0.0.0.0"),
-		DatabaseURL:         getEnv("DATABASE_URL", "postgres://postgres:postgres@localhost:5432/eventdb?sslmode=disable"),
-		CORSOrigins:         strings.Split(getEnv("CORS_ORIGINS", "http://localhost:5173,http://localhost:6868"), ","),
-		KratosPublicURL:     getEnv("KRATOS_PUBLIC_URL", "http://localhost:4433"),
-		KratosAdminURL:      getEnv("KRATOS_ADMIN_URL", "http://localhost:4434"),
-		SpiceDBEndpoint:     getEnv("SPICEDB_ENDPOINT", "localhost:50051"),
-		SpiceDBPresharedKey: getEnv("SPICEDB_PRESHARED_KEY", "foobar"),
-		SpiceDBInsecure:     getEnvBool("SPICEDB_INSECURE", true),
-		LogLevel:            getEnv("LOG_LEVEL", "debug"),
+		Port:                 getEnv("PORT", "5555"),
+		Host:                 getEnv("HOST", "0.0.0.0"),
+		DatabaseURL:          getEnv("DATABASE_URL", "postgres://postgres:postgres@localhost:5432/eventdb?sslmode=disable"),
+		CORSOrigins:          strings.Split(getEnv("CORS_ORIGINS", "http://localhost:5173,http://localhost:6868,http://localhost:6869"), ","),
+		KratosPublicURL:      getEnv("KRATOS_PUBLIC_URL", "http://localhost:4433"),
+		KratosAdminURL:       getEnv("KRATOS_ADMIN_URL", "http://localhost:4434"),
+		SpiceDBEndpoint:      getEnv("SPICEDB_ENDPOINT", "localhost:50051"),
+		SpiceDBPresharedKey:  getEnv("SPICEDB_PRESHARED_KEY", "foobar"),
+		SpiceDBInsecure:      getEnvBool("SPICEDB_INSECURE", true),
+		MeilisearchURL:       getEnv("MEILISEARCH_URL", "http://localhost:7700"),
+		MeilisearchMasterKey: getEnv("MEILISEARCH_MASTER_KEY", "masterKey123"),
+		LogLevel:             getEnv("LOG_LEVEL", "debug"),
 	}
 }
 

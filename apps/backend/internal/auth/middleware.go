@@ -34,6 +34,8 @@ func NewMiddleware(kratosClient *ory.APIClient) func(http.Handler) http.Handler 
 			cookie := r.Header.Get("Cookie")
 			sessionToken := extractBearerToken(r.Header.Get("Authorization"))
 
+			slog.Debug("Auth middleware", "hasCookie", cookie != "", "hasToken", sessionToken != "", "path", r.URL.Path)
+
 			// Build the ToSession request
 			req := kratosClient.FrontendAPI.ToSession(ctx)
 			if cookie != "" {
@@ -48,7 +50,7 @@ func NewMiddleware(kratosClient *ory.APIClient) func(http.Handler) http.Handler 
 			if err != nil {
 				// Not authenticated - proceed without user context
 				// Public endpoints will work, protected endpoints will check for user_id
-				slog.Debug("No valid session", "error", err)
+				slog.Debug("No valid session", "error", err, "cookieLen", len(cookie))
 				next.ServeHTTP(w, r)
 				return
 			}
