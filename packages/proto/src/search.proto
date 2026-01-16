@@ -1,0 +1,79 @@
+syntax = "proto3";
+
+package search.v1;
+
+option go_package = "github.com/studyverse/ems-backend/gen/searchv1";
+
+// SearchResultType represents the type of entity in the search result
+enum SearchResultType {
+  SEARCH_RESULT_TYPE_UNSPECIFIED = 0;
+  SEARCH_RESULT_TYPE_EVENT = 1;
+  SEARCH_RESULT_TYPE_ORGANIZATION = 2;
+  SEARCH_RESULT_TYPE_USER = 3;
+  SEARCH_RESULT_TYPE_TAG = 4;
+}
+
+// SearchResult represents a single search result item
+message SearchResult {
+  SearchResultType type = 1;
+  int32 id = 2;
+  string title = 3;
+  optional string description = 4;
+  optional string image_url = 5;
+}
+
+// GlobalSearchRequest is the request for global search across all entities
+message GlobalSearchRequest {
+  string query = 1;
+  int32 limit = 2; // Maximum results per type (default 10)
+  repeated SearchResultType types = 3; // Optional: filter by specific types
+}
+
+// GlobalSearchResponse contains the search results
+message GlobalSearchResponse {
+  repeated SearchResult results = 1;
+  int64 total_hits = 2;
+  int64 processing_time_ms = 3;
+  string query = 4;
+}
+
+// SearchEventsRequest is for searching only events
+message SearchEventsRequest {
+  string query = 1;
+  int32 limit = 2;
+  optional int32 organization_id = 3;
+  repeated int32 tag_ids = 4;
+}
+
+// SearchEventsResponse contains event search results
+message SearchEventsResponse {
+  repeated SearchResult results = 1;
+  int64 total_hits = 2;
+}
+
+// ReindexRequest triggers a full reindex of all data
+message ReindexRequest {
+  repeated string indexes = 1; // Optional: specific indexes to reindex, empty = all
+}
+
+// ReindexResponse contains the reindex status
+message ReindexResponse {
+  bool success = 1;
+  string message = 2;
+  int32 events_indexed = 3;
+  int32 organizations_indexed = 4;
+  int32 users_indexed = 5;
+  int32 tags_indexed = 6;
+}
+
+// SearchService provides search functionality across all entities
+service SearchService {
+  // GlobalSearch performs a search across all entity types
+  rpc GlobalSearch(GlobalSearchRequest) returns (GlobalSearchResponse);
+
+  // SearchEvents searches only events with optional filters
+  rpc SearchEvents(SearchEventsRequest) returns (SearchEventsResponse);
+
+  // Reindex triggers a full reindex of the search engine
+  rpc Reindex(ReindexRequest) returns (ReindexResponse);
+}
