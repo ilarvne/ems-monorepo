@@ -59,8 +59,8 @@ func (s *StatisticsService) GetDashboardStatistics(ctx context.Context, req *con
 
 		// Get stats for this event
 		var regs, attended int32
-		s.pool.QueryRow(ctx, `SELECT COUNT(*) FROM event_registrations WHERE event_id = $1 AND status = 'registered'`, id).Scan(&regs)
-		s.pool.QueryRow(ctx, `
+		_ = s.pool.QueryRow(ctx, `SELECT COUNT(*) FROM event_registrations WHERE event_id = $1 AND status = 'registered'`, id).Scan(&regs)
+		_ = s.pool.QueryRow(ctx, `
 			SELECT COUNT(*) FROM event_attendance ea
 			INNER JOIN event_registrations er ON er.id = ea.registration_id
 			WHERE er.event_id = $1 AND ea.status = 'attended'
@@ -97,18 +97,18 @@ func (s *StatisticsService) GetEventStatistics(ctx context.Context, req *connect
 	slog.Debug("GetEventStatistics", "eventId", req.Msg.EventId)
 
 	var totalRegs, totalAttended, checkedIn, noShow int32
-	s.pool.QueryRow(ctx, `SELECT COUNT(*) FROM event_registrations WHERE event_id = $1 AND status = 'registered'`, req.Msg.EventId).Scan(&totalRegs)
-	s.pool.QueryRow(ctx, `
+	_ = s.pool.QueryRow(ctx, `SELECT COUNT(*) FROM event_registrations WHERE event_id = $1 AND status = 'registered'`, req.Msg.EventId).Scan(&totalRegs)
+	_ = s.pool.QueryRow(ctx, `
 		SELECT COUNT(*) FROM event_attendance ea
 		INNER JOIN event_registrations er ON er.id = ea.registration_id
 		WHERE er.event_id = $1 AND ea.status = 'attended'
 	`, req.Msg.EventId).Scan(&totalAttended)
-	s.pool.QueryRow(ctx, `
+	_ = s.pool.QueryRow(ctx, `
 		SELECT COUNT(*) FROM event_attendance ea
 		INNER JOIN event_registrations er ON er.id = ea.registration_id
 		WHERE er.event_id = $1 AND ea.status = 'checked_in'
 	`, req.Msg.EventId).Scan(&checkedIn)
-	s.pool.QueryRow(ctx, `
+	_ = s.pool.QueryRow(ctx, `
 		SELECT COUNT(*) FROM event_attendance ea
 		INNER JOIN event_registrations er ON er.id = ea.registration_id
 		WHERE er.event_id = $1 AND ea.status = 'no_show'
