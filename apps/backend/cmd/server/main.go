@@ -14,11 +14,13 @@ import (
 	"golang.org/x/net/http2/h2c"
 
 	"github.com/studyverse/ems-backend/gen/eventsv1/eventsv1connect"
+	"github.com/studyverse/ems-backend/gen/searchv1/searchv1connect"
 	"github.com/studyverse/ems-backend/gen/usersv1/usersv1connect"
 	"github.com/studyverse/ems-backend/internal/auth"
 	"github.com/studyverse/ems-backend/internal/config"
 	"github.com/studyverse/ems-backend/internal/db"
 	"github.com/studyverse/ems-backend/internal/perms"
+	"github.com/studyverse/ems-backend/internal/search"
 	"github.com/studyverse/ems-backend/internal/services"
 )
 
@@ -48,11 +50,24 @@ func main() {
 			"endpoint", cfg.SpiceDBEndpoint,
 			"error", err,
 		)
+		// Create a nil-safe client that logs warnings
+		permsClient = nil
 	} else {
 		slog.Info("SpiceDB client initialized", "endpoint", cfg.SpiceDBEndpoint)
 	}
-	// Store permsClient for later use in services
-	_ = permsClient
+
+	// Initialize Meilisearch client for search
+	var searchClient *search.Client
+	searchClient, err = search.NewClient(cfg.MeilisearchURL, cfg.MeilisearchMasterKey)
+	if err != nil {
+		slog.Warn("Failed to initialize Meilisearch client - search will be unavailable",
+			"url", cfg.MeilisearchURL,
+			"error", err,
+		)
+		searchClient = nil
+	} else {
+		slog.Info("Meilisearch client initialized", "url", cfg.MeilisearchURL)
+	}
 
 	// Connect to database
 	ctx := context.Background()
@@ -66,17 +81,18 @@ func main() {
 	slog.Info("Connected to database")
 
 	// Initialize queries
-	queries := db.NewQueries(pool)
+	queries := db.New(pool)
 
-	// Initialize services
-	eventsService := services.NewEventsService(queries)
-	organizationsService := services.NewOrganizationsService(queries)
+	// Initialize services with permsClient for authorization
+	eventsService := services.NewEventsService(queries, pool, permsClient, searchClient)
+	organizationsService := services.NewOrganizationsService(queries, permsClient, searchClient)
 	organizationTypesService := services.NewOrganizationTypesService(queries)
-	tagsService := services.NewTagsService(queries)
+	tagsService := services.NewTagsService(queries, permsClient, searchClient)
 	eventRegistrationsService := services.NewEventRegistrationsService(queries)
 	eventAttendanceService := services.NewEventAttendanceService(queries)
 	statisticsService := services.NewStatisticsService(queries, pool)
-	usersService := services.NewUsersService(queries)
+	usersService := services.NewUsersService(queries, permsClient, searchClient)
+	searchService := services.NewSearchService(searchClient, queries)
 
 	// Setup HTTP mux
 	mux := http.NewServeMux()
@@ -95,6 +111,9 @@ func main() {
 
 	// Users service
 	mux.Handle(usersv1connect.NewUsersServiceHandler(usersService, interceptors))
+
+	// Search service
+	mux.Handle(searchv1connect.NewSearchServiceHandler(searchService, interceptors))
 
 	// Health check endpoint
 	mux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
