@@ -44,12 +44,15 @@ RUN chown -R appuser:appgroup /app
 # Switch to non-root user
 USER appuser
 
-# Expose port
-EXPOSE 5555
+# Expose port (Azure Container Apps expects 8080)
+EXPOSE 8080
+
+# Set PORT env var for the app
+ENV PORT=8080
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
-    CMD wget -q --spider http://localhost:5555/health || exit 1
+    CMD wget -q --spider http://localhost:8080/health || exit 1
 
 # Run the binary
 ENTRYPOINT ["/app/server"]

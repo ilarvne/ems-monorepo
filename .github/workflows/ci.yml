@@ -1,0 +1,98 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main, develop]
+  push:
+    branches: [main, develop]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Lint TypeScript
+        run: bun run lint
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+          cache: true
+          cache-dependency-path: 'apps/backend/go.sum'
+
+      - name: Lint Go
+        run: |
+          cd apps/backend
+          go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+          golangci-lint run
+
+  build-frontend:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Build Frontend
+        run: bun run --filter events-admin build
+
+      - name: TypeCheck Frontend
+        run: bun run --filter events-admin typecheck
+
+  build-backend:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+          cache: true
+          cache-dependency-path: 'apps/backend/go.sum'
+
+      - name: Build Backend
+        run: |
+          cd apps/backend
+          go build -o ems-backend ./cmd/server/main.go
+
+      - name: Run Go Tests
+        run: |
+          cd apps/backend
+          go test -v -race ./...
+
+  affected:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Show affected projects
+        run: bunx nx affected --base=origin/main --head=HEAD --plain
+
+      - name: Build affected
+        run: bunx nx affected --base=origin/main --head=HEAD --target=build
