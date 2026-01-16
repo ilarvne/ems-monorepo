@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package search.v1;
 
-option go_package = "github.com/studyverse/ems-backend/gen/searchv1";
+option go_package = "github.com/studyverse/ems-backend/gen/searchv1;searchv1";
 
 // SearchResultType represents the type of entity in the search result
 enum SearchResultType {

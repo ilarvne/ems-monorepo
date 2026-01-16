@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.11
 // 	protoc        (unknown)
-// source: events.proto
+// source: eventsv1/events.proto
 
 package eventsv1
 
@@ -55,11 +55,11 @@ func (x EventFormat) String() string {
 }
 
 func (EventFormat) Descriptor() protoreflect.EnumDescriptor {
-	return file_events_proto_enumTypes[0].Descriptor()
+	return file_eventsv1_events_proto_enumTypes[0].Descriptor()
 }
 
 func (EventFormat) Type() protoreflect.EnumType {
-	return &file_events_proto_enumTypes[0]
+	return &file_eventsv1_events_proto_enumTypes[0]
 }
 
 func (x EventFormat) Number() protoreflect.EnumNumber {
@@ -68,7 +68,7 @@ func (x EventFormat) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use EventFormat.Descriptor instead.
 func (EventFormat) EnumDescriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{0}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{0}
 }
 
 type OrganizationStatus int32
@@ -107,11 +107,11 @@ func (x OrganizationStatus) String() string {
 }
 
 func (OrganizationStatus) Descriptor() protoreflect.EnumDescriptor {
-	return file_events_proto_enumTypes[1].Descriptor()
+	return file_eventsv1_events_proto_enumTypes[1].Descriptor()
 }
 
 func (OrganizationStatus) Type() protoreflect.EnumType {
-	return &file_events_proto_enumTypes[1]
+	return &file_eventsv1_events_proto_enumTypes[1]
 }
 
 func (x OrganizationStatus) Number() protoreflect.EnumNumber {
@@ -120,7 +120,7 @@ func (x OrganizationStatus) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use OrganizationStatus.Descriptor instead.
 func (OrganizationStatus) EnumDescriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{1}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{1}
 }
 
 type RegistrationStatus int32
@@ -159,11 +159,11 @@ func (x RegistrationStatus) String() string {
 }
 
 func (RegistrationStatus) Descriptor() protoreflect.EnumDescriptor {
-	return file_events_proto_enumTypes[2].Descriptor()
+	return file_eventsv1_events_proto_enumTypes[2].Descriptor()
 }
 
 func (RegistrationStatus) Type() protoreflect.EnumType {
-	return &file_events_proto_enumTypes[2]
+	return &file_eventsv1_events_proto_enumTypes[2]
 }
 
 func (x RegistrationStatus) Number() protoreflect.EnumNumber {
@@ -172,7 +172,7 @@ func (x RegistrationStatus) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use RegistrationStatus.Descriptor instead.
 func (RegistrationStatus) EnumDescriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{2}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{2}
 }
 
 type AttendanceStatus int32
@@ -211,11 +211,11 @@ func (x AttendanceStatus) String() string {
 }
 
 func (AttendanceStatus) Descriptor() protoreflect.EnumDescriptor {
-	return file_events_proto_enumTypes[3].Descriptor()
+	return file_eventsv1_events_proto_enumTypes[3].Descriptor()
 }
 
 func (AttendanceStatus) Type() protoreflect.EnumType {
-	return &file_events_proto_enumTypes[3]
+	return &file_eventsv1_events_proto_enumTypes[3]
 }
 
 func (x AttendanceStatus) Number() protoreflect.EnumNumber {
@@ -224,7 +224,7 @@ func (x AttendanceStatus) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use AttendanceStatus.Descriptor instead.
 func (AttendanceStatus) EnumDescriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{3}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{3}
 }
 
 // Messages
@@ -240,7 +240,7 @@ type OrganizationType struct {
 
 func (x *OrganizationType) Reset() {
 	*x = OrganizationType{}
-	mi := &file_events_proto_msgTypes[0]
+	mi := &file_eventsv1_events_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -252,7 +252,7 @@ func (x *OrganizationType) String() string {
 func (*OrganizationType) ProtoMessage() {}
 
 func (x *OrganizationType) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[0]
+	mi := &file_eventsv1_events_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -265,7 +265,7 @@ func (x *OrganizationType) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use OrganizationType.ProtoReflect.Descriptor instead.
 func (*OrganizationType) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{0}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *OrganizationType) GetId() int32 {
@@ -319,7 +319,7 @@ type Organization struct {
 
 func (x *Organization) Reset() {
 	*x = Organization{}
-	mi := &file_events_proto_msgTypes[1]
+	mi := &file_eventsv1_events_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -331,7 +331,7 @@ func (x *Organization) String() string {
 func (*Organization) ProtoMessage() {}
 
 func (x *Organization) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[1]
+	mi := &file_eventsv1_events_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -344,7 +344,7 @@ func (x *Organization) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Organization.ProtoReflect.Descriptor instead.
 func (*Organization) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{1}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *Organization) GetId() int32 {
@@ -464,7 +464,7 @@ type Tag struct {
 
 func (x *Tag) Reset() {
 	*x = Tag{}
-	mi := &file_events_proto_msgTypes[2]
+	mi := &file_eventsv1_events_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -476,7 +476,7 @@ func (x *Tag) String() string {
 func (*Tag) ProtoMessage() {}
 
 func (x *Tag) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[2]
+	mi := &file_eventsv1_events_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -489,7 +489,7 @@ func (x *Tag) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Tag.ProtoReflect.Descriptor instead.
 func (*Tag) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{2}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *Tag) GetId() int32 {
@@ -545,7 +545,7 @@ type Event struct {
 
 func (x *Event) Reset() {
 	*x = Event{}
-	mi := &file_events_proto_msgTypes[3]
+	mi := &file_eventsv1_events_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -557,7 +557,7 @@ func (x *Event) String() string {
 func (*Event) ProtoMessage() {}
 
 func (x *Event) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[3]
+	mi := &file_eventsv1_events_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -570,7 +570,7 @@ func (x *Event) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Event.ProtoReflect.Descriptor instead.
 func (*Event) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{3}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *Event) GetId() int32 {
@@ -708,7 +708,7 @@ type EventRegistration struct {
 
 func (x *EventRegistration) Reset() {
 	*x = EventRegistration{}
-	mi := &file_events_proto_msgTypes[4]
+	mi := &file_eventsv1_events_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -720,7 +720,7 @@ func (x *EventRegistration) String() string {
 func (*EventRegistration) ProtoMessage() {}
 
 func (x *EventRegistration) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[4]
+	mi := &file_eventsv1_events_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -733,7 +733,7 @@ func (x *EventRegistration) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EventRegistration.ProtoReflect.Descriptor instead.
 func (*EventRegistration) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{4}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *EventRegistration) GetId() int32 {
@@ -808,7 +808,7 @@ type EventAttendance struct {
 
 func (x *EventAttendance) Reset() {
 	*x = EventAttendance{}
-	mi := &file_events_proto_msgTypes[5]
+	mi := &file_eventsv1_events_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -820,7 +820,7 @@ func (x *EventAttendance) String() string {
 func (*EventAttendance) ProtoMessage() {}
 
 func (x *EventAttendance) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[5]
+	mi := &file_eventsv1_events_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -833,7 +833,7 @@ func (x *EventAttendance) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EventAttendance.ProtoReflect.Descriptor instead.
 func (*EventAttendance) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{5}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *EventAttendance) GetId() int32 {
@@ -906,7 +906,7 @@ type EventStatistics struct {
 
 func (x *EventStatistics) Reset() {
 	*x = EventStatistics{}
-	mi := &file_events_proto_msgTypes[6]
+	mi := &file_eventsv1_events_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -918,7 +918,7 @@ func (x *EventStatistics) String() string {
 func (*EventStatistics) ProtoMessage() {}
 
 func (x *EventStatistics) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[6]
+	mi := &file_eventsv1_events_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -931,7 +931,7 @@ func (x *EventStatistics) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EventStatistics.ProtoReflect.Descriptor instead.
 func (*EventStatistics) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{6}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *EventStatistics) GetTotalEvents() int32 {
@@ -990,7 +990,7 @@ type EventStats struct {
 
 func (x *EventStats) Reset() {
 	*x = EventStats{}
-	mi := &file_events_proto_msgTypes[7]
+	mi := &file_eventsv1_events_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1002,7 +1002,7 @@ func (x *EventStats) String() string {
 func (*EventStats) ProtoMessage() {}
 
 func (x *EventStats) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[7]
+	mi := &file_eventsv1_events_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1015,7 +1015,7 @@ func (x *EventStats) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EventStats.ProtoReflect.Descriptor instead.
 func (*EventStats) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{7}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *EventStats) GetEventId() int32 {
@@ -1081,7 +1081,7 @@ type CreateOrganizationRequest struct {
 
 func (x *CreateOrganizationRequest) Reset() {
 	*x = CreateOrganizationRequest{}
-	mi := &file_events_proto_msgTypes[8]
+	mi := &file_eventsv1_events_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1093,7 +1093,7 @@ func (x *CreateOrganizationRequest) String() string {
 func (*CreateOrganizationRequest) ProtoMessage() {}
 
 func (x *CreateOrganizationRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[8]
+	mi := &file_eventsv1_events_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1106,7 +1106,7 @@ func (x *CreateOrganizationRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateOrganizationRequest.ProtoReflect.Descriptor instead.
 func (*CreateOrganizationRequest) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{8}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *CreateOrganizationRequest) GetTitle() string {
@@ -1202,7 +1202,7 @@ type CreateOrganizationResponse struct {
 
 func (x *CreateOrganizationResponse) Reset() {
 	*x = CreateOrganizationResponse{}
-	mi := &file_events_proto_msgTypes[9]
+	mi := &file_eventsv1_events_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1214,7 +1214,7 @@ func (x *CreateOrganizationResponse) String() string {
 func (*CreateOrganizationResponse) ProtoMessage() {}
 
 func (x *CreateOrganizationResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[9]
+	mi := &file_eventsv1_events_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1227,7 +1227,7 @@ func (x *CreateOrganizationResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateOrganizationResponse.ProtoReflect.Descriptor instead.
 func (*CreateOrganizationResponse) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{9}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *CreateOrganizationResponse) GetOrganization() *Organization {
@@ -1246,7 +1246,7 @@ type GetOrganizationRequest struct {
 
 func (x *GetOrganizationRequest) Reset() {
 	*x = GetOrganizationRequest{}
-	mi := &file_events_proto_msgTypes[10]
+	mi := &file_eventsv1_events_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1258,7 +1258,7 @@ func (x *GetOrganizationRequest) String() string {
 func (*GetOrganizationRequest) ProtoMessage() {}
 
 func (x *GetOrganizationRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[10]
+	mi := &file_eventsv1_events_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1271,7 +1271,7 @@ func (x *GetOrganizationRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetOrganizationRequest.ProtoReflect.Descriptor instead.
 func (*GetOrganizationRequest) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{10}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *GetOrganizationRequest) GetId() int32 {
@@ -1290,7 +1290,7 @@ type GetOrganizationResponse struct {
 
 func (x *GetOrganizationResponse) Reset() {
 	*x = GetOrganizationResponse{}
-	mi := &file_events_proto_msgTypes[11]
+	mi := &file_eventsv1_events_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1302,7 +1302,7 @@ func (x *GetOrganizationResponse) String() string {
 func (*GetOrganizationResponse) ProtoMessage() {}
 
 func (x *GetOrganizationResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[11]
+	mi := &file_eventsv1_events_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1315,7 +1315,7 @@ func (x *GetOrganizationResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetOrganizationResponse.ProtoReflect.Descriptor instead.
 func (*GetOrganizationResponse) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{11}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *GetOrganizationResponse) GetOrganization() *Organization {
@@ -1335,7 +1335,7 @@ type ListOrganizationsRequest struct {
 
 func (x *ListOrganizationsRequest) Reset() {
 	*x = ListOrganizationsRequest{}
-	mi := &file_events_proto_msgTypes[12]
+	mi := &file_eventsv1_events_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1347,7 +1347,7 @@ func (x *ListOrganizationsRequest) String() string {
 func (*ListOrganizationsRequest) ProtoMessage() {}
 
 func (x *ListOrganizationsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[12]
+	mi := &file_eventsv1_events_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1360,7 +1360,7 @@ func (x *ListOrganizationsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListOrganizationsRequest.ProtoReflect.Descriptor instead.
 func (*ListOrganizationsRequest) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{12}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *ListOrganizationsRequest) GetPage() int32 {
@@ -1387,7 +1387,7 @@ type ListOrganizationsResponse struct {
 
 func (x *ListOrganizationsResponse) Reset() {
 	*x = ListOrganizationsResponse{}
-	mi := &file_events_proto_msgTypes[13]
+	mi := &file_eventsv1_events_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1399,7 +1399,7 @@ func (x *ListOrganizationsResponse) String() string {
 func (*ListOrganizationsResponse) ProtoMessage() {}
 
 func (x *ListOrganizationsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[13]
+	mi := &file_eventsv1_events_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1412,7 +1412,7 @@ func (x *ListOrganizationsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListOrganizationsResponse.ProtoReflect.Descriptor instead.
 func (*ListOrganizationsResponse) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{13}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *ListOrganizationsResponse) GetOrganizations() []*Organization {
@@ -1450,7 +1450,7 @@ type UpdateOrganizationRequest struct {
 
 func (x *UpdateOrganizationRequest) Reset() {
 	*x = UpdateOrganizationRequest{}
-	mi := &file_events_proto_msgTypes[14]
+	mi := &file_eventsv1_events_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1462,7 +1462,7 @@ func (x *UpdateOrganizationRequest) String() string {
 func (*UpdateOrganizationRequest) ProtoMessage() {}
 
 func (x *UpdateOrganizationRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[14]
+	mi := &file_eventsv1_events_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1475,7 +1475,7 @@ func (x *UpdateOrganizationRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateOrganizationRequest.ProtoReflect.Descriptor instead.
 func (*UpdateOrganizationRequest) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{14}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *UpdateOrganizationRequest) GetId() int32 {
@@ -1578,7 +1578,7 @@ type UpdateOrganizationResponse struct {
 
 func (x *UpdateOrganizationResponse) Reset() {
 	*x = UpdateOrganizationResponse{}
-	mi := &file_events_proto_msgTypes[15]
+	mi := &file_eventsv1_events_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1590,7 +1590,7 @@ func (x *UpdateOrganizationResponse) String() string {
 func (*UpdateOrganizationResponse) ProtoMessage() {}
 
 func (x *UpdateOrganizationResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[15]
+	mi := &file_eventsv1_events_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1603,7 +1603,7 @@ func (x *UpdateOrganizationResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateOrganizationResponse.ProtoReflect.Descriptor instead.
 func (*UpdateOrganizationResponse) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{15}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *UpdateOrganizationResponse) GetOrganization() *Organization {
@@ -1622,7 +1622,7 @@ type DeleteOrganizationRequest struct {
 
 func (x *DeleteOrganizationRequest) Reset() {
 	*x = DeleteOrganizationRequest{}
-	mi := &file_events_proto_msgTypes[16]
+	mi := &file_eventsv1_events_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1634,7 +1634,7 @@ func (x *DeleteOrganizationRequest) String() string {
 func (*DeleteOrganizationRequest) ProtoMessage() {}
 
 func (x *DeleteOrganizationRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[16]
+	mi := &file_eventsv1_events_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1647,7 +1647,7 @@ func (x *DeleteOrganizationRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteOrganizationRequest.ProtoReflect.Descriptor instead.
 func (*DeleteOrganizationRequest) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{16}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *DeleteOrganizationRequest) GetId() int32 {
@@ -1666,7 +1666,7 @@ type DeleteOrganizationResponse struct {
 
 func (x *DeleteOrganizationResponse) Reset() {
 	*x = DeleteOrganizationResponse{}
-	mi := &file_events_proto_msgTypes[17]
+	mi := &file_eventsv1_events_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1678,7 +1678,7 @@ func (x *DeleteOrganizationResponse) String() string {
 func (*DeleteOrganizationResponse) ProtoMessage() {}
 
 func (x *DeleteOrganizationResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[17]
+	mi := &file_eventsv1_events_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1691,7 +1691,7 @@ func (x *DeleteOrganizationResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteOrganizationResponse.ProtoReflect.Descriptor instead.
 func (*DeleteOrganizationResponse) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{17}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *DeleteOrganizationResponse) GetSuccess() bool {
@@ -1711,7 +1711,7 @@ type CreateOrganizationTypeRequest struct {
 
 func (x *CreateOrganizationTypeRequest) Reset() {
 	*x = CreateOrganizationTypeRequest{}
-	mi := &file_events_proto_msgTypes[18]
+	mi := &file_eventsv1_events_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1723,7 +1723,7 @@ func (x *CreateOrganizationTypeRequest) String() string {
 func (*CreateOrganizationTypeRequest) ProtoMessage() {}
 
 func (x *CreateOrganizationTypeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[18]
+	mi := &file_eventsv1_events_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1736,7 +1736,7 @@ func (x *CreateOrganizationTypeRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateOrganizationTypeRequest.ProtoReflect.Descriptor instead.
 func (*CreateOrganizationTypeRequest) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{18}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *CreateOrganizationTypeRequest) GetTitle() string {
@@ -1755,7 +1755,7 @@ type CreateOrganizationTypeResponse struct {
 
 func (x *CreateOrganizationTypeResponse) Reset() {
 	*x = CreateOrganizationTypeResponse{}
-	mi := &file_events_proto_msgTypes[19]
+	mi := &file_eventsv1_events_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1767,7 +1767,7 @@ func (x *CreateOrganizationTypeResponse) String() string {
 func (*CreateOrganizationTypeResponse) ProtoMessage() {}
 
 func (x *CreateOrganizationTypeResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[19]
+	mi := &file_eventsv1_events_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1780,7 +1780,7 @@ func (x *CreateOrganizationTypeResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateOrganizationTypeResponse.ProtoReflect.Descriptor instead.
 func (*CreateOrganizationTypeResponse) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{19}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *CreateOrganizationTypeResponse) GetOrganizationType() *OrganizationType {
@@ -1799,7 +1799,7 @@ type GetOrganizationTypeRequest struct {
 
 func (x *GetOrganizationTypeRequest) Reset() {
 	*x = GetOrganizationTypeRequest{}
-	mi := &file_events_proto_msgTypes[20]
+	mi := &file_eventsv1_events_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1811,7 +1811,7 @@ func (x *GetOrganizationTypeRequest) String() string {
 func (*GetOrganizationTypeRequest) ProtoMessage() {}
 
 func (x *GetOrganizationTypeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[20]
+	mi := &file_eventsv1_events_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1824,7 +1824,7 @@ func (x *GetOrganizationTypeRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetOrganizationTypeRequest.ProtoReflect.Descriptor instead.
 func (*GetOrganizationTypeRequest) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{20}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *GetOrganizationTypeRequest) GetId() int32 {
@@ -1843,7 +1843,7 @@ type GetOrganizationTypeResponse struct {
 
 func (x *GetOrganizationTypeResponse) Reset() {
 	*x = GetOrganizationTypeResponse{}
-	mi := &file_events_proto_msgTypes[21]
+	mi := &file_eventsv1_events_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1855,7 +1855,7 @@ func (x *GetOrganizationTypeResponse) String() string {
 func (*GetOrganizationTypeResponse) ProtoMessage() {}
 
 func (x *GetOrganizationTypeResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[21]
+	mi := &file_eventsv1_events_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1868,7 +1868,7 @@ func (x *GetOrganizationTypeResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetOrganizationTypeResponse.ProtoReflect.Descriptor instead.
 func (*GetOrganizationTypeResponse) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{21}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *GetOrganizationTypeResponse) GetOrganizationType() *OrganizationType {
@@ -1888,7 +1888,7 @@ type ListOrganizationTypesRequest struct {
 
 func (x *ListOrganizationTypesRequest) Reset() {
 	*x = ListOrganizationTypesRequest{}
-	mi := &file_events_proto_msgTypes[22]
+	mi := &file_eventsv1_events_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1900,7 +1900,7 @@ func (x *ListOrganizationTypesRequest) String() string {
 func (*ListOrganizationTypesRequest) ProtoMessage() {}
 
 func (x *ListOrganizationTypesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[22]
+	mi := &file_eventsv1_events_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1913,7 +1913,7 @@ func (x *ListOrganizationTypesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListOrganizationTypesRequest.ProtoReflect.Descriptor instead.
 func (*ListOrganizationTypesRequest) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{22}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *ListOrganizationTypesRequest) GetPage() int32 {
@@ -1940,7 +1940,7 @@ type ListOrganizationTypesResponse struct {
 
 func (x *ListOrganizationTypesResponse) Reset() {
 	*x = ListOrganizationTypesResponse{}
-	mi := &file_events_proto_msgTypes[23]
+	mi := &file_eventsv1_events_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1952,7 +1952,7 @@ func (x *ListOrganizationTypesResponse) String() string {
 func (*ListOrganizationTypesResponse) ProtoMessage() {}
 
 func (x *ListOrganizationTypesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[23]
+	mi := &file_eventsv1_events_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1965,7 +1965,7 @@ func (x *ListOrganizationTypesResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListOrganizationTypesResponse.ProtoReflect.Descriptor instead.
 func (*ListOrganizationTypesResponse) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{23}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *ListOrganizationTypesResponse) GetOrganizationTypes() []*OrganizationType {
@@ -1992,7 +1992,7 @@ type UpdateOrganizationTypeRequest struct {
 
 func (x *UpdateOrganizationTypeRequest) Reset() {
 	*x = UpdateOrganizationTypeRequest{}
-	mi := &file_events_proto_msgTypes[24]
+	mi := &file_eventsv1_events_proto_msgTypes[24]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2004,7 +2004,7 @@ func (x *UpdateOrganizationTypeRequest) String() string {
 func (*UpdateOrganizationTypeRequest) ProtoMessage() {}
 
 func (x *UpdateOrganizationTypeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[24]
+	mi := &file_eventsv1_events_proto_msgTypes[24]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2017,7 +2017,7 @@ func (x *UpdateOrganizationTypeRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateOrganizationTypeRequest.ProtoReflect.Descriptor instead.
 func (*UpdateOrganizationTypeRequest) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{24}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{24}
 }
 
 func (x *UpdateOrganizationTypeRequest) GetId() int32 {
@@ -2043,7 +2043,7 @@ type UpdateOrganizationTypeResponse struct {
 
 func (x *UpdateOrganizationTypeResponse) Reset() {
 	*x = UpdateOrganizationTypeResponse{}
-	mi := &file_events_proto_msgTypes[25]
+	mi := &file_eventsv1_events_proto_msgTypes[25]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2055,7 +2055,7 @@ func (x *UpdateOrganizationTypeResponse) String() string {
 func (*UpdateOrganizationTypeResponse) ProtoMessage() {}
 
 func (x *UpdateOrganizationTypeResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[25]
+	mi := &file_eventsv1_events_proto_msgTypes[25]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2068,7 +2068,7 @@ func (x *UpdateOrganizationTypeResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateOrganizationTypeResponse.ProtoReflect.Descriptor instead.
 func (*UpdateOrganizationTypeResponse) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{25}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{25}
 }
 
 func (x *UpdateOrganizationTypeResponse) GetOrganizationType() *OrganizationType {
@@ -2087,7 +2087,7 @@ type DeleteOrganizationTypeRequest struct {
 
 func (x *DeleteOrganizationTypeRequest) Reset() {
 	*x = DeleteOrganizationTypeRequest{}
-	mi := &file_events_proto_msgTypes[26]
+	mi := &file_eventsv1_events_proto_msgTypes[26]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2099,7 +2099,7 @@ func (x *DeleteOrganizationTypeRequest) String() string {
 func (*DeleteOrganizationTypeRequest) ProtoMessage() {}
 
 func (x *DeleteOrganizationTypeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[26]
+	mi := &file_eventsv1_events_proto_msgTypes[26]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2112,7 +2112,7 @@ func (x *DeleteOrganizationTypeRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteOrganizationTypeRequest.ProtoReflect.Descriptor instead.
 func (*DeleteOrganizationTypeRequest) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{26}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{26}
 }
 
 func (x *DeleteOrganizationTypeRequest) GetId() int32 {
@@ -2131,7 +2131,7 @@ type DeleteOrganizationTypeResponse struct {
 
 func (x *DeleteOrganizationTypeResponse) Reset() {
 	*x = DeleteOrganizationTypeResponse{}
-	mi := &file_events_proto_msgTypes[27]
+	mi := &file_eventsv1_events_proto_msgTypes[27]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2143,7 +2143,7 @@ func (x *DeleteOrganizationTypeResponse) String() string {
 func (*DeleteOrganizationTypeResponse) ProtoMessage() {}
 
 func (x *DeleteOrganizationTypeResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[27]
+	mi := &file_eventsv1_events_proto_msgTypes[27]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2156,7 +2156,7 @@ func (x *DeleteOrganizationTypeResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteOrganizationTypeResponse.ProtoReflect.Descriptor instead.
 func (*DeleteOrganizationTypeResponse) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{27}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{27}
 }
 
 func (x *DeleteOrganizationTypeResponse) GetSuccess() bool {
@@ -2185,7 +2185,7 @@ type CreateEventRequest struct {
 
 func (x *CreateEventRequest) Reset() {
 	*x = CreateEventRequest{}
-	mi := &file_events_proto_msgTypes[28]
+	mi := &file_eventsv1_events_proto_msgTypes[28]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2197,7 +2197,7 @@ func (x *CreateEventRequest) String() string {
 func (*CreateEventRequest) ProtoMessage() {}
 
 func (x *CreateEventRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[28]
+	mi := &file_eventsv1_events_proto_msgTypes[28]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2210,7 +2210,7 @@ func (x *CreateEventRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateEventRequest.ProtoReflect.Descriptor instead.
 func (*CreateEventRequest) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{28}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{28}
 }
 
 func (x *CreateEventRequest) GetTitle() string {
@@ -2292,7 +2292,7 @@ type CreateEventResponse struct {
 
 func (x *CreateEventResponse) Reset() {
 	*x = CreateEventResponse{}
-	mi := &file_events_proto_msgTypes[29]
+	mi := &file_eventsv1_events_proto_msgTypes[29]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2304,7 +2304,7 @@ func (x *CreateEventResponse) String() string {
 func (*CreateEventResponse) ProtoMessage() {}
 
 func (x *CreateEventResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[29]
+	mi := &file_eventsv1_events_proto_msgTypes[29]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2317,7 +2317,7 @@ func (x *CreateEventResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateEventResponse.ProtoReflect.Descriptor instead.
 func (*CreateEventResponse) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{29}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{29}
 }
 
 func (x *CreateEventResponse) GetEvent() *Event {
@@ -2336,7 +2336,7 @@ type GetEventRequest struct {
 
 func (x *GetEventRequest) Reset() {
 	*x = GetEventRequest{}
-	mi := &file_events_proto_msgTypes[30]
+	mi := &file_eventsv1_events_proto_msgTypes[30]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2348,7 +2348,7 @@ func (x *GetEventRequest) String() string {
 func (*GetEventRequest) ProtoMessage() {}
 
 func (x *GetEventRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[30]
+	mi := &file_eventsv1_events_proto_msgTypes[30]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2361,7 +2361,7 @@ func (x *GetEventRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetEventRequest.ProtoReflect.Descriptor instead.
 func (*GetEventRequest) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{30}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{30}
 }
 
 func (x *GetEventRequest) GetId() int32 {
@@ -2380,7 +2380,7 @@ type GetEventResponse struct {
 
 func (x *GetEventResponse) Reset() {
 	*x = GetEventResponse{}
-	mi := &file_events_proto_msgTypes[31]
+	mi := &file_eventsv1_events_proto_msgTypes[31]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2392,7 +2392,7 @@ func (x *GetEventResponse) String() string {
 func (*GetEventResponse) ProtoMessage() {}
 
 func (x *GetEventResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[31]
+	mi := &file_eventsv1_events_proto_msgTypes[31]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2405,7 +2405,7 @@ func (x *GetEventResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetEventResponse.ProtoReflect.Descriptor instead.
 func (*GetEventResponse) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{31}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{31}
 }
 
 func (x *GetEventResponse) GetEvent() *Event {
@@ -2428,7 +2428,7 @@ type ListEventsRequest struct {
 
 func (x *ListEventsRequest) Reset() {
 	*x = ListEventsRequest{}
-	mi := &file_events_proto_msgTypes[32]
+	mi := &file_eventsv1_events_proto_msgTypes[32]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2440,7 +2440,7 @@ func (x *ListEventsRequest) String() string {
 func (*ListEventsRequest) ProtoMessage() {}
 
 func (x *ListEventsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[32]
+	mi := &file_eventsv1_events_proto_msgTypes[32]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2453,7 +2453,7 @@ func (x *ListEventsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListEventsRequest.ProtoReflect.Descriptor instead.
 func (*ListEventsRequest) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{32}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{32}
 }
 
 func (x *ListEventsRequest) GetPage() int32 {
@@ -2501,7 +2501,7 @@ type ListEventsResponse struct {
 
 func (x *ListEventsResponse) Reset() {
 	*x = ListEventsResponse{}
-	mi := &file_events_proto_msgTypes[33]
+	mi := &file_eventsv1_events_proto_msgTypes[33]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2513,7 +2513,7 @@ func (x *ListEventsResponse) String() string {
 func (*ListEventsResponse) ProtoMessage() {}
 
 func (x *ListEventsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[33]
+	mi := &file_eventsv1_events_proto_msgTypes[33]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2526,7 +2526,7 @@ func (x *ListEventsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListEventsResponse.ProtoReflect.Descriptor instead.
 func (*ListEventsResponse) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{33}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{33}
 }
 
 func (x *ListEventsResponse) GetEvents() []*Event {
@@ -2562,7 +2562,7 @@ type UpdateEventRequest struct {
 
 func (x *UpdateEventRequest) Reset() {
 	*x = UpdateEventRequest{}
-	mi := &file_events_proto_msgTypes[34]
+	mi := &file_eventsv1_events_proto_msgTypes[34]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2574,7 +2574,7 @@ func (x *UpdateEventRequest) String() string {
 func (*UpdateEventRequest) ProtoMessage() {}
 
 func (x *UpdateEventRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[34]
+	mi := &file_eventsv1_events_proto_msgTypes[34]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2587,7 +2587,7 @@ func (x *UpdateEventRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateEventRequest.ProtoReflect.Descriptor instead.
 func (*UpdateEventRequest) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{34}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{34}
 }
 
 func (x *UpdateEventRequest) GetId() int32 {
@@ -2676,7 +2676,7 @@ type UpdateEventResponse struct {
 
 func (x *UpdateEventResponse) Reset() {
 	*x = UpdateEventResponse{}
-	mi := &file_events_proto_msgTypes[35]
+	mi := &file_eventsv1_events_proto_msgTypes[35]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2688,7 +2688,7 @@ func (x *UpdateEventResponse) String() string {
 func (*UpdateEventResponse) ProtoMessage() {}
 
 func (x *UpdateEventResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[35]
+	mi := &file_eventsv1_events_proto_msgTypes[35]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2701,7 +2701,7 @@ func (x *UpdateEventResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateEventResponse.ProtoReflect.Descriptor instead.
 func (*UpdateEventResponse) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{35}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{35}
 }
 
 func (x *UpdateEventResponse) GetEvent() *Event {
@@ -2720,7 +2720,7 @@ type DeleteEventRequest struct {
 
 func (x *DeleteEventRequest) Reset() {
 	*x = DeleteEventRequest{}
-	mi := &file_events_proto_msgTypes[36]
+	mi := &file_eventsv1_events_proto_msgTypes[36]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2732,7 +2732,7 @@ func (x *DeleteEventRequest) String() string {
 func (*DeleteEventRequest) ProtoMessage() {}
 
 func (x *DeleteEventRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[36]
+	mi := &file_eventsv1_events_proto_msgTypes[36]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2745,7 +2745,7 @@ func (x *DeleteEventRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteEventRequest.ProtoReflect.Descriptor instead.
 func (*DeleteEventRequest) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{36}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{36}
 }
 
 func (x *DeleteEventRequest) GetId() int32 {
@@ -2764,7 +2764,7 @@ type DeleteEventResponse struct {
 
 func (x *DeleteEventResponse) Reset() {
 	*x = DeleteEventResponse{}
-	mi := &file_events_proto_msgTypes[37]
+	mi := &file_eventsv1_events_proto_msgTypes[37]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2776,7 +2776,7 @@ func (x *DeleteEventResponse) String() string {
 func (*DeleteEventResponse) ProtoMessage() {}
 
 func (x *DeleteEventResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[37]
+	mi := &file_eventsv1_events_proto_msgTypes[37]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2789,7 +2789,7 @@ func (x *DeleteEventResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteEventResponse.ProtoReflect.Descriptor instead.
 func (*DeleteEventResponse) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{37}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{37}
 }
 
 func (x *DeleteEventResponse) GetSuccess() bool {
@@ -2809,7 +2809,7 @@ type CreateTagRequest struct {
 
 func (x *CreateTagRequest) Reset() {
 	*x = CreateTagRequest{}
-	mi := &file_events_proto_msgTypes[38]
+	mi := &file_eventsv1_events_proto_msgTypes[38]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2821,7 +2821,7 @@ func (x *CreateTagRequest) String() string {
 func (*CreateTagRequest) ProtoMessage() {}
 
 func (x *CreateTagRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[38]
+	mi := &file_eventsv1_events_proto_msgTypes[38]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2834,7 +2834,7 @@ func (x *CreateTagRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateTagRequest.ProtoReflect.Descriptor instead.
 func (*CreateTagRequest) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{38}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{38}
 }
 
 func (x *CreateTagRequest) GetName() string {
@@ -2853,7 +2853,7 @@ type CreateTagResponse struct {
 
 func (x *CreateTagResponse) Reset() {
 	*x = CreateTagResponse{}
-	mi := &file_events_proto_msgTypes[39]
+	mi := &file_eventsv1_events_proto_msgTypes[39]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2865,7 +2865,7 @@ func (x *CreateTagResponse) String() string {
 func (*CreateTagResponse) ProtoMessage() {}
 
 func (x *CreateTagResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[39]
+	mi := &file_eventsv1_events_proto_msgTypes[39]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2878,7 +2878,7 @@ func (x *CreateTagResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateTagResponse.ProtoReflect.Descriptor instead.
 func (*CreateTagResponse) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{39}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{39}
 }
 
 func (x *CreateTagResponse) GetTag() *Tag {
@@ -2897,7 +2897,7 @@ type GetTagRequest struct {
 
 func (x *GetTagRequest) Reset() {
 	*x = GetTagRequest{}
-	mi := &file_events_proto_msgTypes[40]
+	mi := &file_eventsv1_events_proto_msgTypes[40]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2909,7 +2909,7 @@ func (x *GetTagRequest) String() string {
 func (*GetTagRequest) ProtoMessage() {}
 
 func (x *GetTagRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[40]
+	mi := &file_eventsv1_events_proto_msgTypes[40]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2922,7 +2922,7 @@ func (x *GetTagRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetTagRequest.ProtoReflect.Descriptor instead.
 func (*GetTagRequest) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{40}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{40}
 }
 
 func (x *GetTagRequest) GetId() int32 {
@@ -2941,7 +2941,7 @@ type GetTagResponse struct {
 
 func (x *GetTagResponse) Reset() {
 	*x = GetTagResponse{}
-	mi := &file_events_proto_msgTypes[41]
+	mi := &file_eventsv1_events_proto_msgTypes[41]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2953,7 +2953,7 @@ func (x *GetTagResponse) String() string {
 func (*GetTagResponse) ProtoMessage() {}
 
 func (x *GetTagResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[41]
+	mi := &file_eventsv1_events_proto_msgTypes[41]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2966,7 +2966,7 @@ func (x *GetTagResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetTagResponse.ProtoReflect.Descriptor instead.
 func (*GetTagResponse) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{41}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{41}
 }
 
 func (x *GetTagResponse) GetTag() *Tag {
@@ -2986,7 +2986,7 @@ type ListTagsRequest struct {
 
 func (x *ListTagsRequest) Reset() {
 	*x = ListTagsRequest{}
-	mi := &file_events_proto_msgTypes[42]
+	mi := &file_eventsv1_events_proto_msgTypes[42]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2998,7 +2998,7 @@ func (x *ListTagsRequest) String() string {
 func (*ListTagsRequest) ProtoMessage() {}
 
 func (x *ListTagsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[42]
+	mi := &file_eventsv1_events_proto_msgTypes[42]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3011,7 +3011,7 @@ func (x *ListTagsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListTagsRequest.ProtoReflect.Descriptor instead.
 func (*ListTagsRequest) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{42}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{42}
 }
 
 func (x *ListTagsRequest) GetPage() int32 {
@@ -3038,7 +3038,7 @@ type ListTagsResponse struct {
 
 func (x *ListTagsResponse) Reset() {
 	*x = ListTagsResponse{}
-	mi := &file_events_proto_msgTypes[43]
+	mi := &file_eventsv1_events_proto_msgTypes[43]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3050,7 +3050,7 @@ func (x *ListTagsResponse) String() string {
 func (*ListTagsResponse) ProtoMessage() {}
 
 func (x *ListTagsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[43]
+	mi := &file_eventsv1_events_proto_msgTypes[43]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3063,7 +3063,7 @@ func (x *ListTagsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListTagsResponse.ProtoReflect.Descriptor instead.
 func (*ListTagsResponse) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{43}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{43}
 }
 
 func (x *ListTagsResponse) GetTags() []*Tag {
@@ -3090,7 +3090,7 @@ type UpdateTagRequest struct {
 
 func (x *UpdateTagRequest) Reset() {
 	*x = UpdateTagRequest{}
-	mi := &file_events_proto_msgTypes[44]
+	mi := &file_eventsv1_events_proto_msgTypes[44]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3102,7 +3102,7 @@ func (x *UpdateTagRequest) String() string {
 func (*UpdateTagRequest) ProtoMessage() {}
 
 func (x *UpdateTagRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[44]
+	mi := &file_eventsv1_events_proto_msgTypes[44]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3115,7 +3115,7 @@ func (x *UpdateTagRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateTagRequest.ProtoReflect.Descriptor instead.
 func (*UpdateTagRequest) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{44}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{44}
 }
 
 func (x *UpdateTagRequest) GetId() int32 {
@@ -3141,7 +3141,7 @@ type UpdateTagResponse struct {
 
 func (x *UpdateTagResponse) Reset() {
 	*x = UpdateTagResponse{}
-	mi := &file_events_proto_msgTypes[45]
+	mi := &file_eventsv1_events_proto_msgTypes[45]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3153,7 +3153,7 @@ func (x *UpdateTagResponse) String() string {
 func (*UpdateTagResponse) ProtoMessage() {}
 
 func (x *UpdateTagResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[45]
+	mi := &file_eventsv1_events_proto_msgTypes[45]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3166,7 +3166,7 @@ func (x *UpdateTagResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateTagResponse.ProtoReflect.Descriptor instead.
 func (*UpdateTagResponse) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{45}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{45}
 }
 
 func (x *UpdateTagResponse) GetTag() *Tag {
@@ -3185,7 +3185,7 @@ type DeleteTagRequest struct {
 
 func (x *DeleteTagRequest) Reset() {
 	*x = DeleteTagRequest{}
-	mi := &file_events_proto_msgTypes[46]
+	mi := &file_eventsv1_events_proto_msgTypes[46]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3197,7 +3197,7 @@ func (x *DeleteTagRequest) String() string {
 func (*DeleteTagRequest) ProtoMessage() {}
 
 func (x *DeleteTagRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[46]
+	mi := &file_eventsv1_events_proto_msgTypes[46]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3210,7 +3210,7 @@ func (x *DeleteTagRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteTagRequest.ProtoReflect.Descriptor instead.
 func (*DeleteTagRequest) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{46}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{46}
 }
 
 func (x *DeleteTagRequest) GetId() int32 {
@@ -3229,7 +3229,7 @@ type DeleteTagResponse struct {
 
 func (x *DeleteTagResponse) Reset() {
 	*x = DeleteTagResponse{}
-	mi := &file_events_proto_msgTypes[47]
+	mi := &file_eventsv1_events_proto_msgTypes[47]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3241,7 +3241,7 @@ func (x *DeleteTagResponse) String() string {
 func (*DeleteTagResponse) ProtoMessage() {}
 
 func (x *DeleteTagResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[47]
+	mi := &file_eventsv1_events_proto_msgTypes[47]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3254,7 +3254,7 @@ func (x *DeleteTagResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteTagResponse.ProtoReflect.Descriptor instead.
 func (*DeleteTagResponse) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{47}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{47}
 }
 
 func (x *DeleteTagResponse) GetSuccess() bool {
@@ -3274,7 +3274,7 @@ type GetPublishableOrganizationsRequest struct {
 
 func (x *GetPublishableOrganizationsRequest) Reset() {
 	*x = GetPublishableOrganizationsRequest{}
-	mi := &file_events_proto_msgTypes[48]
+	mi := &file_eventsv1_events_proto_msgTypes[48]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3286,7 +3286,7 @@ func (x *GetPublishableOrganizationsRequest) String() string {
 func (*GetPublishableOrganizationsRequest) ProtoMessage() {}
 
 func (x *GetPublishableOrganizationsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[48]
+	mi := &file_eventsv1_events_proto_msgTypes[48]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3299,7 +3299,7 @@ func (x *GetPublishableOrganizationsRequest) ProtoReflect() protoreflect.Message
 
 // Deprecated: Use GetPublishableOrganizationsRequest.ProtoReflect.Descriptor instead.
 func (*GetPublishableOrganizationsRequest) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{48}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{48}
 }
 
 func (x *GetPublishableOrganizationsRequest) GetUserId() int32 {
@@ -3318,7 +3318,7 @@ type GetPublishableOrganizationsResponse struct {
 
 func (x *GetPublishableOrganizationsResponse) Reset() {
 	*x = GetPublishableOrganizationsResponse{}
-	mi := &file_events_proto_msgTypes[49]
+	mi := &file_eventsv1_events_proto_msgTypes[49]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3330,7 +3330,7 @@ func (x *GetPublishableOrganizationsResponse) String() string {
 func (*GetPublishableOrganizationsResponse) ProtoMessage() {}
 
 func (x *GetPublishableOrganizationsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[49]
+	mi := &file_eventsv1_events_proto_msgTypes[49]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3343,7 +3343,7 @@ func (x *GetPublishableOrganizationsResponse) ProtoReflect() protoreflect.Messag
 
 // Deprecated: Use GetPublishableOrganizationsResponse.ProtoReflect.Descriptor instead.
 func (*GetPublishableOrganizationsResponse) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{49}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{49}
 }
 
 func (x *GetPublishableOrganizationsResponse) GetOrganizations() []*Organization {
@@ -3362,7 +3362,7 @@ type GetUserOrganizationsRequest struct {
 
 func (x *GetUserOrganizationsRequest) Reset() {
 	*x = GetUserOrganizationsRequest{}
-	mi := &file_events_proto_msgTypes[50]
+	mi := &file_eventsv1_events_proto_msgTypes[50]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3374,7 +3374,7 @@ func (x *GetUserOrganizationsRequest) String() string {
 func (*GetUserOrganizationsRequest) ProtoMessage() {}
 
 func (x *GetUserOrganizationsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[50]
+	mi := &file_eventsv1_events_proto_msgTypes[50]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3387,7 +3387,7 @@ func (x *GetUserOrganizationsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetUserOrganizationsRequest.ProtoReflect.Descriptor instead.
 func (*GetUserOrganizationsRequest) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{50}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{50}
 }
 
 func (x *GetUserOrganizationsRequest) GetUserId() int32 {
@@ -3406,7 +3406,7 @@ type GetUserOrganizationsResponse struct {
 
 func (x *GetUserOrganizationsResponse) Reset() {
 	*x = GetUserOrganizationsResponse{}
-	mi := &file_events_proto_msgTypes[51]
+	mi := &file_eventsv1_events_proto_msgTypes[51]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3418,7 +3418,7 @@ func (x *GetUserOrganizationsResponse) String() string {
 func (*GetUserOrganizationsResponse) ProtoMessage() {}
 
 func (x *GetUserOrganizationsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[51]
+	mi := &file_eventsv1_events_proto_msgTypes[51]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3431,7 +3431,7 @@ func (x *GetUserOrganizationsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetUserOrganizationsResponse.ProtoReflect.Descriptor instead.
 func (*GetUserOrganizationsResponse) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{51}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{51}
 }
 
 func (x *GetUserOrganizationsResponse) GetOrganizations() []*Organization {
@@ -3450,7 +3450,7 @@ type GetEventsByTagIdRequest struct {
 
 func (x *GetEventsByTagIdRequest) Reset() {
 	*x = GetEventsByTagIdRequest{}
-	mi := &file_events_proto_msgTypes[52]
+	mi := &file_eventsv1_events_proto_msgTypes[52]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3462,7 +3462,7 @@ func (x *GetEventsByTagIdRequest) String() string {
 func (*GetEventsByTagIdRequest) ProtoMessage() {}
 
 func (x *GetEventsByTagIdRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[52]
+	mi := &file_eventsv1_events_proto_msgTypes[52]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3475,7 +3475,7 @@ func (x *GetEventsByTagIdRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetEventsByTagIdRequest.ProtoReflect.Descriptor instead.
 func (*GetEventsByTagIdRequest) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{52}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{52}
 }
 
 func (x *GetEventsByTagIdRequest) GetTagId() int32 {
@@ -3494,7 +3494,7 @@ type GetEventsByTagIdResponse struct {
 
 func (x *GetEventsByTagIdResponse) Reset() {
 	*x = GetEventsByTagIdResponse{}
-	mi := &file_events_proto_msgTypes[53]
+	mi := &file_eventsv1_events_proto_msgTypes[53]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3506,7 +3506,7 @@ func (x *GetEventsByTagIdResponse) String() string {
 func (*GetEventsByTagIdResponse) ProtoMessage() {}
 
 func (x *GetEventsByTagIdResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[53]
+	mi := &file_eventsv1_events_proto_msgTypes[53]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3519,7 +3519,7 @@ func (x *GetEventsByTagIdResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetEventsByTagIdResponse.ProtoReflect.Descriptor instead.
 func (*GetEventsByTagIdResponse) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{53}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{53}
 }
 
 func (x *GetEventsByTagIdResponse) GetEvents() []*Event {
@@ -3538,7 +3538,7 @@ type GetUserSubscribedEventsRequest struct {
 
 func (x *GetUserSubscribedEventsRequest) Reset() {
 	*x = GetUserSubscribedEventsRequest{}
-	mi := &file_events_proto_msgTypes[54]
+	mi := &file_eventsv1_events_proto_msgTypes[54]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3550,7 +3550,7 @@ func (x *GetUserSubscribedEventsRequest) String() string {
 func (*GetUserSubscribedEventsRequest) ProtoMessage() {}
 
 func (x *GetUserSubscribedEventsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[54]
+	mi := &file_eventsv1_events_proto_msgTypes[54]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3563,7 +3563,7 @@ func (x *GetUserSubscribedEventsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetUserSubscribedEventsRequest.ProtoReflect.Descriptor instead.
 func (*GetUserSubscribedEventsRequest) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{54}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{54}
 }
 
 func (x *GetUserSubscribedEventsRequest) GetUserId() int32 {
@@ -3582,7 +3582,7 @@ type GetUserSubscribedEventsResponse struct {
 
 func (x *GetUserSubscribedEventsResponse) Reset() {
 	*x = GetUserSubscribedEventsResponse{}
-	mi := &file_events_proto_msgTypes[55]
+	mi := &file_eventsv1_events_proto_msgTypes[55]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3594,7 +3594,7 @@ func (x *GetUserSubscribedEventsResponse) String() string {
 func (*GetUserSubscribedEventsResponse) ProtoMessage() {}
 
 func (x *GetUserSubscribedEventsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[55]
+	mi := &file_eventsv1_events_proto_msgTypes[55]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3607,7 +3607,7 @@ func (x *GetUserSubscribedEventsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetUserSubscribedEventsResponse.ProtoReflect.Descriptor instead.
 func (*GetUserSubscribedEventsResponse) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{55}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{55}
 }
 
 func (x *GetUserSubscribedEventsResponse) GetEvents() []*Event {
@@ -3629,7 +3629,7 @@ type ListEventsForAdminRequest struct {
 
 func (x *ListEventsForAdminRequest) Reset() {
 	*x = ListEventsForAdminRequest{}
-	mi := &file_events_proto_msgTypes[56]
+	mi := &file_eventsv1_events_proto_msgTypes[56]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3641,7 +3641,7 @@ func (x *ListEventsForAdminRequest) String() string {
 func (*ListEventsForAdminRequest) ProtoMessage() {}
 
 func (x *ListEventsForAdminRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[56]
+	mi := &file_eventsv1_events_proto_msgTypes[56]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3654,7 +3654,7 @@ func (x *ListEventsForAdminRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListEventsForAdminRequest.ProtoReflect.Descriptor instead.
 func (*ListEventsForAdminRequest) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{56}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{56}
 }
 
 func (x *ListEventsForAdminRequest) GetPage() int32 {
@@ -3695,7 +3695,7 @@ type ListEventsForAdminResponse struct {
 
 func (x *ListEventsForAdminResponse) Reset() {
 	*x = ListEventsForAdminResponse{}
-	mi := &file_events_proto_msgTypes[57]
+	mi := &file_eventsv1_events_proto_msgTypes[57]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3707,7 +3707,7 @@ func (x *ListEventsForAdminResponse) String() string {
 func (*ListEventsForAdminResponse) ProtoMessage() {}
 
 func (x *ListEventsForAdminResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[57]
+	mi := &file_eventsv1_events_proto_msgTypes[57]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3720,7 +3720,7 @@ func (x *ListEventsForAdminResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListEventsForAdminResponse.ProtoReflect.Descriptor instead.
 func (*ListEventsForAdminResponse) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{57}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{57}
 }
 
 func (x *ListEventsForAdminResponse) GetEvents() []*Event {
@@ -3748,7 +3748,7 @@ type RegisterForEventRequest struct {
 
 func (x *RegisterForEventRequest) Reset() {
 	*x = RegisterForEventRequest{}
-	mi := &file_events_proto_msgTypes[58]
+	mi := &file_eventsv1_events_proto_msgTypes[58]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3760,7 +3760,7 @@ func (x *RegisterForEventRequest) String() string {
 func (*RegisterForEventRequest) ProtoMessage() {}
 
 func (x *RegisterForEventRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[58]
+	mi := &file_eventsv1_events_proto_msgTypes[58]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3773,7 +3773,7 @@ func (x *RegisterForEventRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RegisterForEventRequest.ProtoReflect.Descriptor instead.
 func (*RegisterForEventRequest) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{58}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{58}
 }
 
 func (x *RegisterForEventRequest) GetEventId() int32 {
@@ -3799,7 +3799,7 @@ type RegisterForEventResponse struct {
 
 func (x *RegisterForEventResponse) Reset() {
 	*x = RegisterForEventResponse{}
-	mi := &file_events_proto_msgTypes[59]
+	mi := &file_eventsv1_events_proto_msgTypes[59]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3811,7 +3811,7 @@ func (x *RegisterForEventResponse) String() string {
 func (*RegisterForEventResponse) ProtoMessage() {}
 
 func (x *RegisterForEventResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[59]
+	mi := &file_eventsv1_events_proto_msgTypes[59]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3824,7 +3824,7 @@ func (x *RegisterForEventResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RegisterForEventResponse.ProtoReflect.Descriptor instead.
 func (*RegisterForEventResponse) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{59}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{59}
 }
 
 func (x *RegisterForEventResponse) GetRegistration() *EventRegistration {
@@ -3843,7 +3843,7 @@ type CancelRegistrationRequest struct {
 
 func (x *CancelRegistrationRequest) Reset() {
 	*x = CancelRegistrationRequest{}
-	mi := &file_events_proto_msgTypes[60]
+	mi := &file_eventsv1_events_proto_msgTypes[60]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3855,7 +3855,7 @@ func (x *CancelRegistrationRequest) String() string {
 func (*CancelRegistrationRequest) ProtoMessage() {}
 
 func (x *CancelRegistrationRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[60]
+	mi := &file_eventsv1_events_proto_msgTypes[60]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3868,7 +3868,7 @@ func (x *CancelRegistrationRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CancelRegistrationRequest.ProtoReflect.Descriptor instead.
 func (*CancelRegistrationRequest) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{60}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{60}
 }
 
 func (x *CancelRegistrationRequest) GetRegistrationId() int32 {
@@ -3887,7 +3887,7 @@ type CancelRegistrationResponse struct {
 
 func (x *CancelRegistrationResponse) Reset() {
 	*x = CancelRegistrationResponse{}
-	mi := &file_events_proto_msgTypes[61]
+	mi := &file_eventsv1_events_proto_msgTypes[61]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3899,7 +3899,7 @@ func (x *CancelRegistrationResponse) String() string {
 func (*CancelRegistrationResponse) ProtoMessage() {}
 
 func (x *CancelRegistrationResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[61]
+	mi := &file_eventsv1_events_proto_msgTypes[61]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3912,7 +3912,7 @@ func (x *CancelRegistrationResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CancelRegistrationResponse.ProtoReflect.Descriptor instead.
 func (*CancelRegistrationResponse) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{61}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{61}
 }
 
 func (x *CancelRegistrationResponse) GetSuccess() bool {
@@ -3933,7 +3933,7 @@ type GetEventRegistrationsRequest struct {
 
 func (x *GetEventRegistrationsRequest) Reset() {
 	*x = GetEventRegistrationsRequest{}
-	mi := &file_events_proto_msgTypes[62]
+	mi := &file_eventsv1_events_proto_msgTypes[62]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3945,7 +3945,7 @@ func (x *GetEventRegistrationsRequest) String() string {
 func (*GetEventRegistrationsRequest) ProtoMessage() {}
 
 func (x *GetEventRegistrationsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[62]
+	mi := &file_eventsv1_events_proto_msgTypes[62]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3958,7 +3958,7 @@ func (x *GetEventRegistrationsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetEventRegistrationsRequest.ProtoReflect.Descriptor instead.
 func (*GetEventRegistrationsRequest) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{62}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{62}
 }
 
 func (x *GetEventRegistrationsRequest) GetEventId() int32 {
@@ -3992,7 +3992,7 @@ type GetEventRegistrationsResponse struct {
 
 func (x *GetEventRegistrationsResponse) Reset() {
 	*x = GetEventRegistrationsResponse{}
-	mi := &file_events_proto_msgTypes[63]
+	mi := &file_eventsv1_events_proto_msgTypes[63]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4004,7 +4004,7 @@ func (x *GetEventRegistrationsResponse) String() string {
 func (*GetEventRegistrationsResponse) ProtoMessage() {}
 
 func (x *GetEventRegistrationsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[63]
+	mi := &file_eventsv1_events_proto_msgTypes[63]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4017,7 +4017,7 @@ func (x *GetEventRegistrationsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetEventRegistrationsResponse.ProtoReflect.Descriptor instead.
 func (*GetEventRegistrationsResponse) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{63}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{63}
 }
 
 func (x *GetEventRegistrationsResponse) GetRegistrations() []*EventRegistration {
@@ -4043,7 +4043,7 @@ type GetUserRegistrationsRequest struct {
 
 func (x *GetUserRegistrationsRequest) Reset() {
 	*x = GetUserRegistrationsRequest{}
-	mi := &file_events_proto_msgTypes[64]
+	mi := &file_eventsv1_events_proto_msgTypes[64]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4055,7 +4055,7 @@ func (x *GetUserRegistrationsRequest) String() string {
 func (*GetUserRegistrationsRequest) ProtoMessage() {}
 
 func (x *GetUserRegistrationsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[64]
+	mi := &file_eventsv1_events_proto_msgTypes[64]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4068,7 +4068,7 @@ func (x *GetUserRegistrationsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetUserRegistrationsRequest.ProtoReflect.Descriptor instead.
 func (*GetUserRegistrationsRequest) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{64}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{64}
 }
 
 func (x *GetUserRegistrationsRequest) GetUserId() int32 {
@@ -4087,7 +4087,7 @@ type GetUserRegistrationsResponse struct {
 
 func (x *GetUserRegistrationsResponse) Reset() {
 	*x = GetUserRegistrationsResponse{}
-	mi := &file_events_proto_msgTypes[65]
+	mi := &file_eventsv1_events_proto_msgTypes[65]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4099,7 +4099,7 @@ func (x *GetUserRegistrationsResponse) String() string {
 func (*GetUserRegistrationsResponse) ProtoMessage() {}
 
 func (x *GetUserRegistrationsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[65]
+	mi := &file_eventsv1_events_proto_msgTypes[65]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4112,7 +4112,7 @@ func (x *GetUserRegistrationsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetUserRegistrationsResponse.ProtoReflect.Descriptor instead.
 func (*GetUserRegistrationsResponse) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{65}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{65}
 }
 
 func (x *GetUserRegistrationsResponse) GetRegistrations() []*EventRegistration {
@@ -4134,7 +4134,7 @@ type CheckInAttendeeRequest struct {
 
 func (x *CheckInAttendeeRequest) Reset() {
 	*x = CheckInAttendeeRequest{}
-	mi := &file_events_proto_msgTypes[66]
+	mi := &file_eventsv1_events_proto_msgTypes[66]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4146,7 +4146,7 @@ func (x *CheckInAttendeeRequest) String() string {
 func (*CheckInAttendeeRequest) ProtoMessage() {}
 
 func (x *CheckInAttendeeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[66]
+	mi := &file_eventsv1_events_proto_msgTypes[66]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4159,7 +4159,7 @@ func (x *CheckInAttendeeRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CheckInAttendeeRequest.ProtoReflect.Descriptor instead.
 func (*CheckInAttendeeRequest) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{66}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{66}
 }
 
 func (x *CheckInAttendeeRequest) GetRegistrationId() int32 {
@@ -4192,7 +4192,7 @@ type CheckInAttendeeResponse struct {
 
 func (x *CheckInAttendeeResponse) Reset() {
 	*x = CheckInAttendeeResponse{}
-	mi := &file_events_proto_msgTypes[67]
+	mi := &file_eventsv1_events_proto_msgTypes[67]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4204,7 +4204,7 @@ func (x *CheckInAttendeeResponse) String() string {
 func (*CheckInAttendeeResponse) ProtoMessage() {}
 
 func (x *CheckInAttendeeResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[67]
+	mi := &file_eventsv1_events_proto_msgTypes[67]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4217,7 +4217,7 @@ func (x *CheckInAttendeeResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CheckInAttendeeResponse.ProtoReflect.Descriptor instead.
 func (*CheckInAttendeeResponse) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{67}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{67}
 }
 
 func (x *CheckInAttendeeResponse) GetAttendance() *EventAttendance {
@@ -4238,7 +4238,7 @@ type MarkAttendanceRequest struct {
 
 func (x *MarkAttendanceRequest) Reset() {
 	*x = MarkAttendanceRequest{}
-	mi := &file_events_proto_msgTypes[68]
+	mi := &file_eventsv1_events_proto_msgTypes[68]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4250,7 +4250,7 @@ func (x *MarkAttendanceRequest) String() string {
 func (*MarkAttendanceRequest) ProtoMessage() {}
 
 func (x *MarkAttendanceRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[68]
+	mi := &file_eventsv1_events_proto_msgTypes[68]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4263,7 +4263,7 @@ func (x *MarkAttendanceRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MarkAttendanceRequest.ProtoReflect.Descriptor instead.
 func (*MarkAttendanceRequest) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{68}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{68}
 }
 
 func (x *MarkAttendanceRequest) GetRegistrationId() int32 {
@@ -4296,7 +4296,7 @@ type MarkAttendanceResponse struct {
 
 func (x *MarkAttendanceResponse) Reset() {
 	*x = MarkAttendanceResponse{}
-	mi := &file_events_proto_msgTypes[69]
+	mi := &file_eventsv1_events_proto_msgTypes[69]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4308,7 +4308,7 @@ func (x *MarkAttendanceResponse) String() string {
 func (*MarkAttendanceResponse) ProtoMessage() {}
 
 func (x *MarkAttendanceResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[69]
+	mi := &file_eventsv1_events_proto_msgTypes[69]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4321,7 +4321,7 @@ func (x *MarkAttendanceResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MarkAttendanceResponse.ProtoReflect.Descriptor instead.
 func (*MarkAttendanceResponse) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{69}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{69}
 }
 
 func (x *MarkAttendanceResponse) GetAttendance() *EventAttendance {
@@ -4340,7 +4340,7 @@ type GetEventAttendanceRequest struct {
 
 func (x *GetEventAttendanceRequest) Reset() {
 	*x = GetEventAttendanceRequest{}
-	mi := &file_events_proto_msgTypes[70]
+	mi := &file_eventsv1_events_proto_msgTypes[70]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4352,7 +4352,7 @@ func (x *GetEventAttendanceRequest) String() string {
 func (*GetEventAttendanceRequest) ProtoMessage() {}
 
 func (x *GetEventAttendanceRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[70]
+	mi := &file_eventsv1_events_proto_msgTypes[70]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4365,7 +4365,7 @@ func (x *GetEventAttendanceRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetEventAttendanceRequest.ProtoReflect.Descriptor instead.
 func (*GetEventAttendanceRequest) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{70}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{70}
 }
 
 func (x *GetEventAttendanceRequest) GetEventId() int32 {
@@ -4387,7 +4387,7 @@ type GetEventAttendanceResponse struct {
 
 func (x *GetEventAttendanceResponse) Reset() {
 	*x = GetEventAttendanceResponse{}
-	mi := &file_events_proto_msgTypes[71]
+	mi := &file_eventsv1_events_proto_msgTypes[71]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4399,7 +4399,7 @@ func (x *GetEventAttendanceResponse) String() string {
 func (*GetEventAttendanceResponse) ProtoMessage() {}
 
 func (x *GetEventAttendanceResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[71]
+	mi := &file_eventsv1_events_proto_msgTypes[71]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4412,7 +4412,7 @@ func (x *GetEventAttendanceResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetEventAttendanceResponse.ProtoReflect.Descriptor instead.
 func (*GetEventAttendanceResponse) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{71}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{71}
 }
 
 func (x *GetEventAttendanceResponse) GetAttendance() []*EventAttendance {
@@ -4452,7 +4452,7 @@ type GetDashboardStatisticsRequest struct {
 
 func (x *GetDashboardStatisticsRequest) Reset() {
 	*x = GetDashboardStatisticsRequest{}
-	mi := &file_events_proto_msgTypes[72]
+	mi := &file_eventsv1_events_proto_msgTypes[72]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4464,7 +4464,7 @@ func (x *GetDashboardStatisticsRequest) String() string {
 func (*GetDashboardStatisticsRequest) ProtoMessage() {}
 
 func (x *GetDashboardStatisticsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[72]
+	mi := &file_eventsv1_events_proto_msgTypes[72]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4477,7 +4477,7 @@ func (x *GetDashboardStatisticsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetDashboardStatisticsRequest.ProtoReflect.Descriptor instead.
 func (*GetDashboardStatisticsRequest) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{72}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{72}
 }
 
 type GetDashboardStatisticsResponse struct {
@@ -4489,7 +4489,7 @@ type GetDashboardStatisticsResponse struct {
 
 func (x *GetDashboardStatisticsResponse) Reset() {
 	*x = GetDashboardStatisticsResponse{}
-	mi := &file_events_proto_msgTypes[73]
+	mi := &file_eventsv1_events_proto_msgTypes[73]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4501,7 +4501,7 @@ func (x *GetDashboardStatisticsResponse) String() string {
 func (*GetDashboardStatisticsResponse) ProtoMessage() {}
 
 func (x *GetDashboardStatisticsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[73]
+	mi := &file_eventsv1_events_proto_msgTypes[73]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4514,7 +4514,7 @@ func (x *GetDashboardStatisticsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetDashboardStatisticsResponse.ProtoReflect.Descriptor instead.
 func (*GetDashboardStatisticsResponse) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{73}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{73}
 }
 
 func (x *GetDashboardStatisticsResponse) GetStatistics() *EventStatistics {
@@ -4533,7 +4533,7 @@ type GetEventStatisticsRequest struct {
 
 func (x *GetEventStatisticsRequest) Reset() {
 	*x = GetEventStatisticsRequest{}
-	mi := &file_events_proto_msgTypes[74]
+	mi := &file_eventsv1_events_proto_msgTypes[74]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4545,7 +4545,7 @@ func (x *GetEventStatisticsRequest) String() string {
 func (*GetEventStatisticsRequest) ProtoMessage() {}
 
 func (x *GetEventStatisticsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[74]
+	mi := &file_eventsv1_events_proto_msgTypes[74]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4558,7 +4558,7 @@ func (x *GetEventStatisticsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetEventStatisticsRequest.ProtoReflect.Descriptor instead.
 func (*GetEventStatisticsRequest) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{74}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{74}
 }
 
 func (x *GetEventStatisticsRequest) GetEventId() int32 {
@@ -4581,7 +4581,7 @@ type GetEventStatisticsResponse struct {
 
 func (x *GetEventStatisticsResponse) Reset() {
 	*x = GetEventStatisticsResponse{}
-	mi := &file_events_proto_msgTypes[75]
+	mi := &file_eventsv1_events_proto_msgTypes[75]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4593,7 +4593,7 @@ func (x *GetEventStatisticsResponse) String() string {
 func (*GetEventStatisticsResponse) ProtoMessage() {}
 
 func (x *GetEventStatisticsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[75]
+	mi := &file_eventsv1_events_proto_msgTypes[75]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4606,7 +4606,7 @@ func (x *GetEventStatisticsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetEventStatisticsResponse.ProtoReflect.Descriptor instead.
 func (*GetEventStatisticsResponse) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{75}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{75}
 }
 
 func (x *GetEventStatisticsResponse) GetTotalRegistrations() int32 {
@@ -4655,7 +4655,7 @@ type TagDistribution struct {
 
 func (x *TagDistribution) Reset() {
 	*x = TagDistribution{}
-	mi := &file_events_proto_msgTypes[76]
+	mi := &file_eventsv1_events_proto_msgTypes[76]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4667,7 +4667,7 @@ func (x *TagDistribution) String() string {
 func (*TagDistribution) ProtoMessage() {}
 
 func (x *TagDistribution) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[76]
+	mi := &file_eventsv1_events_proto_msgTypes[76]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4680,7 +4680,7 @@ func (x *TagDistribution) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TagDistribution.ProtoReflect.Descriptor instead.
 func (*TagDistribution) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{76}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{76}
 }
 
 func (x *TagDistribution) GetTagId() int32 {
@@ -4714,7 +4714,7 @@ type GetEventTagsDistributionByMonthRequest struct {
 
 func (x *GetEventTagsDistributionByMonthRequest) Reset() {
 	*x = GetEventTagsDistributionByMonthRequest{}
-	mi := &file_events_proto_msgTypes[77]
+	mi := &file_eventsv1_events_proto_msgTypes[77]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4726,7 +4726,7 @@ func (x *GetEventTagsDistributionByMonthRequest) String() string {
 func (*GetEventTagsDistributionByMonthRequest) ProtoMessage() {}
 
 func (x *GetEventTagsDistributionByMonthRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[77]
+	mi := &file_eventsv1_events_proto_msgTypes[77]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4739,7 +4739,7 @@ func (x *GetEventTagsDistributionByMonthRequest) ProtoReflect() protoreflect.Mes
 
 // Deprecated: Use GetEventTagsDistributionByMonthRequest.ProtoReflect.Descriptor instead.
 func (*GetEventTagsDistributionByMonthRequest) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{77}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{77}
 }
 
 func (x *GetEventTagsDistributionByMonthRequest) GetYear() int32 {
@@ -4766,7 +4766,7 @@ type GetEventTagsDistributionByMonthResponse struct {
 
 func (x *GetEventTagsDistributionByMonthResponse) Reset() {
 	*x = GetEventTagsDistributionByMonthResponse{}
-	mi := &file_events_proto_msgTypes[78]
+	mi := &file_eventsv1_events_proto_msgTypes[78]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4778,7 +4778,7 @@ func (x *GetEventTagsDistributionByMonthResponse) String() string {
 func (*GetEventTagsDistributionByMonthResponse) ProtoMessage() {}
 
 func (x *GetEventTagsDistributionByMonthResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[78]
+	mi := &file_eventsv1_events_proto_msgTypes[78]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4791,7 +4791,7 @@ func (x *GetEventTagsDistributionByMonthResponse) ProtoReflect() protoreflect.Me
 
 // Deprecated: Use GetEventTagsDistributionByMonthResponse.ProtoReflect.Descriptor instead.
 func (*GetEventTagsDistributionByMonthResponse) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{78}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{78}
 }
 
 func (x *GetEventTagsDistributionByMonthResponse) GetTags() []*TagDistribution {
@@ -4819,7 +4819,7 @@ type EventActivity struct {
 
 func (x *EventActivity) Reset() {
 	*x = EventActivity{}
-	mi := &file_events_proto_msgTypes[79]
+	mi := &file_eventsv1_events_proto_msgTypes[79]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4831,7 +4831,7 @@ func (x *EventActivity) String() string {
 func (*EventActivity) ProtoMessage() {}
 
 func (x *EventActivity) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[79]
+	mi := &file_eventsv1_events_proto_msgTypes[79]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4844,7 +4844,7 @@ func (x *EventActivity) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EventActivity.ProtoReflect.Descriptor instead.
 func (*EventActivity) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{79}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{79}
 }
 
 func (x *EventActivity) GetDate() string {
@@ -4877,7 +4877,7 @@ type GetEventActivityByYearRequest struct {
 
 func (x *GetEventActivityByYearRequest) Reset() {
 	*x = GetEventActivityByYearRequest{}
-	mi := &file_events_proto_msgTypes[80]
+	mi := &file_eventsv1_events_proto_msgTypes[80]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4889,7 +4889,7 @@ func (x *GetEventActivityByYearRequest) String() string {
 func (*GetEventActivityByYearRequest) ProtoMessage() {}
 
 func (x *GetEventActivityByYearRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[80]
+	mi := &file_eventsv1_events_proto_msgTypes[80]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4902,7 +4902,7 @@ func (x *GetEventActivityByYearRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetEventActivityByYearRequest.ProtoReflect.Descriptor instead.
 func (*GetEventActivityByYearRequest) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{80}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{80}
 }
 
 func (x *GetEventActivityByYearRequest) GetYear() int32 {
@@ -4922,7 +4922,7 @@ type GetEventActivityByYearResponse struct {
 
 func (x *GetEventActivityByYearResponse) Reset() {
 	*x = GetEventActivityByYearResponse{}
-	mi := &file_events_proto_msgTypes[81]
+	mi := &file_eventsv1_events_proto_msgTypes[81]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4934,7 +4934,7 @@ func (x *GetEventActivityByYearResponse) String() string {
 func (*GetEventActivityByYearResponse) ProtoMessage() {}
 
 func (x *GetEventActivityByYearResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[81]
+	mi := &file_eventsv1_events_proto_msgTypes[81]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4947,7 +4947,7 @@ func (x *GetEventActivityByYearResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetEventActivityByYearResponse.ProtoReflect.Descriptor instead.
 func (*GetEventActivityByYearResponse) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{81}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{81}
 }
 
 func (x *GetEventActivityByYearResponse) GetActivities() []*EventActivity {
@@ -4975,7 +4975,7 @@ type EventStatsSummary struct {
 
 func (x *EventStatsSummary) Reset() {
 	*x = EventStatsSummary{}
-	mi := &file_events_proto_msgTypes[82]
+	mi := &file_eventsv1_events_proto_msgTypes[82]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4987,7 +4987,7 @@ func (x *EventStatsSummary) String() string {
 func (*EventStatsSummary) ProtoMessage() {}
 
 func (x *EventStatsSummary) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[82]
+	mi := &file_eventsv1_events_proto_msgTypes[82]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5000,7 +5000,7 @@ func (x *EventStatsSummary) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EventStatsSummary.ProtoReflect.Descriptor instead.
 func (*EventStatsSummary) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{82}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{82}
 }
 
 func (x *EventStatsSummary) GetTotalEvents() int32 {
@@ -5032,7 +5032,7 @@ type GetOverallStatisticsRequest struct {
 
 func (x *GetOverallStatisticsRequest) Reset() {
 	*x = GetOverallStatisticsRequest{}
-	mi := &file_events_proto_msgTypes[83]
+	mi := &file_eventsv1_events_proto_msgTypes[83]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5044,7 +5044,7 @@ func (x *GetOverallStatisticsRequest) String() string {
 func (*GetOverallStatisticsRequest) ProtoMessage() {}
 
 func (x *GetOverallStatisticsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[83]
+	mi := &file_eventsv1_events_proto_msgTypes[83]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5057,7 +5057,7 @@ func (x *GetOverallStatisticsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetOverallStatisticsRequest.ProtoReflect.Descriptor instead.
 func (*GetOverallStatisticsRequest) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{83}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{83}
 }
 
 type GetOverallStatisticsResponse struct {
@@ -5076,7 +5076,7 @@ type GetOverallStatisticsResponse struct {
 
 func (x *GetOverallStatisticsResponse) Reset() {
 	*x = GetOverallStatisticsResponse{}
-	mi := &file_events_proto_msgTypes[84]
+	mi := &file_eventsv1_events_proto_msgTypes[84]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5088,7 +5088,7 @@ func (x *GetOverallStatisticsResponse) String() string {
 func (*GetOverallStatisticsResponse) ProtoMessage() {}
 
 func (x *GetOverallStatisticsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[84]
+	mi := &file_eventsv1_events_proto_msgTypes[84]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5101,7 +5101,7 @@ func (x *GetOverallStatisticsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetOverallStatisticsResponse.ProtoReflect.Descriptor instead.
 func (*GetOverallStatisticsResponse) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{84}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{84}
 }
 
 func (x *GetOverallStatisticsResponse) GetTotalEvents() int32 {
@@ -5171,7 +5171,7 @@ type EventTrend struct {
 
 func (x *EventTrend) Reset() {
 	*x = EventTrend{}
-	mi := &file_events_proto_msgTypes[85]
+	mi := &file_eventsv1_events_proto_msgTypes[85]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5183,7 +5183,7 @@ func (x *EventTrend) String() string {
 func (*EventTrend) ProtoMessage() {}
 
 func (x *EventTrend) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[85]
+	mi := &file_eventsv1_events_proto_msgTypes[85]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5196,7 +5196,7 @@ func (x *EventTrend) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EventTrend.ProtoReflect.Descriptor instead.
 func (*EventTrend) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{85}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{85}
 }
 
 func (x *EventTrend) GetDate() string {
@@ -5229,7 +5229,7 @@ type GetEventTrendsRequest struct {
 
 func (x *GetEventTrendsRequest) Reset() {
 	*x = GetEventTrendsRequest{}
-	mi := &file_events_proto_msgTypes[86]
+	mi := &file_eventsv1_events_proto_msgTypes[86]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5241,7 +5241,7 @@ func (x *GetEventTrendsRequest) String() string {
 func (*GetEventTrendsRequest) ProtoMessage() {}
 
 func (x *GetEventTrendsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[86]
+	mi := &file_eventsv1_events_proto_msgTypes[86]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5254,7 +5254,7 @@ func (x *GetEventTrendsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetEventTrendsRequest.ProtoReflect.Descriptor instead.
 func (*GetEventTrendsRequest) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{86}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{86}
 }
 
 func (x *GetEventTrendsRequest) GetDays() int32 {
@@ -5273,7 +5273,7 @@ type GetEventTrendsResponse struct {
 
 func (x *GetEventTrendsResponse) Reset() {
 	*x = GetEventTrendsResponse{}
-	mi := &file_events_proto_msgTypes[87]
+	mi := &file_eventsv1_events_proto_msgTypes[87]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5285,7 +5285,7 @@ func (x *GetEventTrendsResponse) String() string {
 func (*GetEventTrendsResponse) ProtoMessage() {}
 
 func (x *GetEventTrendsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[87]
+	mi := &file_eventsv1_events_proto_msgTypes[87]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5298,7 +5298,7 @@ func (x *GetEventTrendsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetEventTrendsResponse.ProtoReflect.Descriptor instead.
 func (*GetEventTrendsResponse) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{87}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{87}
 }
 
 func (x *GetEventTrendsResponse) GetTrends() []*EventTrend {
@@ -5323,7 +5323,7 @@ type ClubLeaderboard struct {
 
 func (x *ClubLeaderboard) Reset() {
 	*x = ClubLeaderboard{}
-	mi := &file_events_proto_msgTypes[88]
+	mi := &file_eventsv1_events_proto_msgTypes[88]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5335,7 +5335,7 @@ func (x *ClubLeaderboard) String() string {
 func (*ClubLeaderboard) ProtoMessage() {}
 
 func (x *ClubLeaderboard) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[88]
+	mi := &file_eventsv1_events_proto_msgTypes[88]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5348,7 +5348,7 @@ func (x *ClubLeaderboard) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ClubLeaderboard.ProtoReflect.Descriptor instead.
 func (*ClubLeaderboard) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{88}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{88}
 }
 
 func (x *ClubLeaderboard) GetOrganizationId() int32 {
@@ -5410,7 +5410,7 @@ type GetTopPerformingClubsRequest struct {
 
 func (x *GetTopPerformingClubsRequest) Reset() {
 	*x = GetTopPerformingClubsRequest{}
-	mi := &file_events_proto_msgTypes[89]
+	mi := &file_eventsv1_events_proto_msgTypes[89]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5422,7 +5422,7 @@ func (x *GetTopPerformingClubsRequest) String() string {
 func (*GetTopPerformingClubsRequest) ProtoMessage() {}
 
 func (x *GetTopPerformingClubsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[89]
+	mi := &file_eventsv1_events_proto_msgTypes[89]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5435,7 +5435,7 @@ func (x *GetTopPerformingClubsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetTopPerformingClubsRequest.ProtoReflect.Descriptor instead.
 func (*GetTopPerformingClubsRequest) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{89}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{89}
 }
 
 func (x *GetTopPerformingClubsRequest) GetLimit() int32 {
@@ -5461,7 +5461,7 @@ type GetTopPerformingClubsResponse struct {
 
 func (x *GetTopPerformingClubsResponse) Reset() {
 	*x = GetTopPerformingClubsResponse{}
-	mi := &file_events_proto_msgTypes[90]
+	mi := &file_eventsv1_events_proto_msgTypes[90]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5473,7 +5473,7 @@ func (x *GetTopPerformingClubsResponse) String() string {
 func (*GetTopPerformingClubsResponse) ProtoMessage() {}
 
 func (x *GetTopPerformingClubsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[90]
+	mi := &file_eventsv1_events_proto_msgTypes[90]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5486,7 +5486,7 @@ func (x *GetTopPerformingClubsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetTopPerformingClubsResponse.ProtoReflect.Descriptor instead.
 func (*GetTopPerformingClubsResponse) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{90}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{90}
 }
 
 func (x *GetTopPerformingClubsResponse) GetClubs() []*ClubLeaderboard {
@@ -5504,7 +5504,7 @@ type GetUserEngagementLevelsRequest struct {
 
 func (x *GetUserEngagementLevelsRequest) Reset() {
 	*x = GetUserEngagementLevelsRequest{}
-	mi := &file_events_proto_msgTypes[91]
+	mi := &file_eventsv1_events_proto_msgTypes[91]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5516,7 +5516,7 @@ func (x *GetUserEngagementLevelsRequest) String() string {
 func (*GetUserEngagementLevelsRequest) ProtoMessage() {}
 
 func (x *GetUserEngagementLevelsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[91]
+	mi := &file_eventsv1_events_proto_msgTypes[91]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5529,7 +5529,7 @@ func (x *GetUserEngagementLevelsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetUserEngagementLevelsRequest.ProtoReflect.Descriptor instead.
 func (*GetUserEngagementLevelsRequest) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{91}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{91}
 }
 
 type UserEngagementLevel struct {
@@ -5543,7 +5543,7 @@ type UserEngagementLevel struct {
 
 func (x *UserEngagementLevel) Reset() {
 	*x = UserEngagementLevel{}
-	mi := &file_events_proto_msgTypes[92]
+	mi := &file_eventsv1_events_proto_msgTypes[92]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5555,7 +5555,7 @@ func (x *UserEngagementLevel) String() string {
 func (*UserEngagementLevel) ProtoMessage() {}
 
 func (x *UserEngagementLevel) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[92]
+	mi := &file_eventsv1_events_proto_msgTypes[92]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5568,7 +5568,7 @@ func (x *UserEngagementLevel) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UserEngagementLevel.ProtoReflect.Descriptor instead.
 func (*UserEngagementLevel) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{92}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{92}
 }
 
 func (x *UserEngagementLevel) GetLevel() string {
@@ -5605,7 +5605,7 @@ type GetUserEngagementLevelsResponse struct {
 
 func (x *GetUserEngagementLevelsResponse) Reset() {
 	*x = GetUserEngagementLevelsResponse{}
-	mi := &file_events_proto_msgTypes[93]
+	mi := &file_eventsv1_events_proto_msgTypes[93]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5617,7 +5617,7 @@ func (x *GetUserEngagementLevelsResponse) String() string {
 func (*GetUserEngagementLevelsResponse) ProtoMessage() {}
 
 func (x *GetUserEngagementLevelsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[93]
+	mi := &file_eventsv1_events_proto_msgTypes[93]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5630,7 +5630,7 @@ func (x *GetUserEngagementLevelsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetUserEngagementLevelsResponse.ProtoReflect.Descriptor instead.
 func (*GetUserEngagementLevelsResponse) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{93}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{93}
 }
 
 func (x *GetUserEngagementLevelsResponse) GetLevels() []*UserEngagementLevel {
@@ -5685,7 +5685,7 @@ type TopPerformingEvent struct {
 
 func (x *TopPerformingEvent) Reset() {
 	*x = TopPerformingEvent{}
-	mi := &file_events_proto_msgTypes[94]
+	mi := &file_eventsv1_events_proto_msgTypes[94]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5697,7 +5697,7 @@ func (x *TopPerformingEvent) String() string {
 func (*TopPerformingEvent) ProtoMessage() {}
 
 func (x *TopPerformingEvent) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[94]
+	mi := &file_eventsv1_events_proto_msgTypes[94]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5710,7 +5710,7 @@ func (x *TopPerformingEvent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TopPerformingEvent.ProtoReflect.Descriptor instead.
 func (*TopPerformingEvent) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{94}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{94}
 }
 
 func (x *TopPerformingEvent) GetId() int32 {
@@ -5779,7 +5779,7 @@ type GetTopPerformingEventsRequest struct {
 
 func (x *GetTopPerformingEventsRequest) Reset() {
 	*x = GetTopPerformingEventsRequest{}
-	mi := &file_events_proto_msgTypes[95]
+	mi := &file_eventsv1_events_proto_msgTypes[95]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5791,7 +5791,7 @@ func (x *GetTopPerformingEventsRequest) String() string {
 func (*GetTopPerformingEventsRequest) ProtoMessage() {}
 
 func (x *GetTopPerformingEventsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[95]
+	mi := &file_eventsv1_events_proto_msgTypes[95]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5804,7 +5804,7 @@ func (x *GetTopPerformingEventsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetTopPerformingEventsRequest.ProtoReflect.Descriptor instead.
 func (*GetTopPerformingEventsRequest) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{95}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{95}
 }
 
 func (x *GetTopPerformingEventsRequest) GetLimit() int32 {
@@ -5830,7 +5830,7 @@ type GetTopPerformingEventsResponse struct {
 
 func (x *GetTopPerformingEventsResponse) Reset() {
 	*x = GetTopPerformingEventsResponse{}
-	mi := &file_events_proto_msgTypes[96]
+	mi := &file_eventsv1_events_proto_msgTypes[96]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5842,7 +5842,7 @@ func (x *GetTopPerformingEventsResponse) String() string {
 func (*GetTopPerformingEventsResponse) ProtoMessage() {}
 
 func (x *GetTopPerformingEventsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[96]
+	mi := &file_eventsv1_events_proto_msgTypes[96]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5855,7 +5855,7 @@ func (x *GetTopPerformingEventsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetTopPerformingEventsResponse.ProtoReflect.Descriptor instead.
 func (*GetTopPerformingEventsResponse) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{96}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{96}
 }
 
 func (x *GetTopPerformingEventsResponse) GetEvents() []*TopPerformingEvent {
@@ -5883,7 +5883,7 @@ type LowRegistrationEvent struct {
 
 func (x *LowRegistrationEvent) Reset() {
 	*x = LowRegistrationEvent{}
-	mi := &file_events_proto_msgTypes[97]
+	mi := &file_eventsv1_events_proto_msgTypes[97]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5895,7 +5895,7 @@ func (x *LowRegistrationEvent) String() string {
 func (*LowRegistrationEvent) ProtoMessage() {}
 
 func (x *LowRegistrationEvent) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[97]
+	mi := &file_eventsv1_events_proto_msgTypes[97]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5908,7 +5908,7 @@ func (x *LowRegistrationEvent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LowRegistrationEvent.ProtoReflect.Descriptor instead.
 func (*LowRegistrationEvent) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{97}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{97}
 }
 
 func (x *LowRegistrationEvent) GetId() int32 {
@@ -5984,7 +5984,7 @@ type GetLowRegistrationEventsRequest struct {
 
 func (x *GetLowRegistrationEventsRequest) Reset() {
 	*x = GetLowRegistrationEventsRequest{}
-	mi := &file_events_proto_msgTypes[98]
+	mi := &file_eventsv1_events_proto_msgTypes[98]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5996,7 +5996,7 @@ func (x *GetLowRegistrationEventsRequest) String() string {
 func (*GetLowRegistrationEventsRequest) ProtoMessage() {}
 
 func (x *GetLowRegistrationEventsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[98]
+	mi := &file_eventsv1_events_proto_msgTypes[98]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6009,7 +6009,7 @@ func (x *GetLowRegistrationEventsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetLowRegistrationEventsRequest.ProtoReflect.Descriptor instead.
 func (*GetLowRegistrationEventsRequest) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{98}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{98}
 }
 
 func (x *GetLowRegistrationEventsRequest) GetThreshold() int32 {
@@ -6035,7 +6035,7 @@ type GetLowRegistrationEventsResponse struct {
 
 func (x *GetLowRegistrationEventsResponse) Reset() {
 	*x = GetLowRegistrationEventsResponse{}
-	mi := &file_events_proto_msgTypes[99]
+	mi := &file_eventsv1_events_proto_msgTypes[99]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6047,7 +6047,7 @@ func (x *GetLowRegistrationEventsResponse) String() string {
 func (*GetLowRegistrationEventsResponse) ProtoMessage() {}
 
 func (x *GetLowRegistrationEventsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[99]
+	mi := &file_eventsv1_events_proto_msgTypes[99]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6060,7 +6060,7 @@ func (x *GetLowRegistrationEventsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetLowRegistrationEventsResponse.ProtoReflect.Descriptor instead.
 func (*GetLowRegistrationEventsResponse) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{99}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{99}
 }
 
 func (x *GetLowRegistrationEventsResponse) GetEvents() []*LowRegistrationEvent {
@@ -6087,7 +6087,7 @@ type OrganizationActivity struct {
 
 func (x *OrganizationActivity) Reset() {
 	*x = OrganizationActivity{}
-	mi := &file_events_proto_msgTypes[100]
+	mi := &file_eventsv1_events_proto_msgTypes[100]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6099,7 +6099,7 @@ func (x *OrganizationActivity) String() string {
 func (*OrganizationActivity) ProtoMessage() {}
 
 func (x *OrganizationActivity) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[100]
+	mi := &file_eventsv1_events_proto_msgTypes[100]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6112,7 +6112,7 @@ func (x *OrganizationActivity) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use OrganizationActivity.ProtoReflect.Descriptor instead.
 func (*OrganizationActivity) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{100}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{100}
 }
 
 func (x *OrganizationActivity) GetId() int32 {
@@ -6180,7 +6180,7 @@ type GetOrganizationActivityRequest struct {
 
 func (x *GetOrganizationActivityRequest) Reset() {
 	*x = GetOrganizationActivityRequest{}
-	mi := &file_events_proto_msgTypes[101]
+	mi := &file_eventsv1_events_proto_msgTypes[101]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6192,7 +6192,7 @@ func (x *GetOrganizationActivityRequest) String() string {
 func (*GetOrganizationActivityRequest) ProtoMessage() {}
 
 func (x *GetOrganizationActivityRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[101]
+	mi := &file_eventsv1_events_proto_msgTypes[101]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6205,7 +6205,7 @@ func (x *GetOrganizationActivityRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetOrganizationActivityRequest.ProtoReflect.Descriptor instead.
 func (*GetOrganizationActivityRequest) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{101}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{101}
 }
 
 func (x *GetOrganizationActivityRequest) GetLimit() int32 {
@@ -6224,7 +6224,7 @@ type GetOrganizationActivityResponse struct {
 
 func (x *GetOrganizationActivityResponse) Reset() {
 	*x = GetOrganizationActivityResponse{}
-	mi := &file_events_proto_msgTypes[102]
+	mi := &file_eventsv1_events_proto_msgTypes[102]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6236,7 +6236,7 @@ func (x *GetOrganizationActivityResponse) String() string {
 func (*GetOrganizationActivityResponse) ProtoMessage() {}
 
 func (x *GetOrganizationActivityResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_events_proto_msgTypes[102]
+	mi := &file_eventsv1_events_proto_msgTypes[102]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6249,7 +6249,7 @@ func (x *GetOrganizationActivityResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetOrganizationActivityResponse.ProtoReflect.Descriptor instead.
 func (*GetOrganizationActivityResponse) Descriptor() ([]byte, []int) {
-	return file_events_proto_rawDescGZIP(), []int{102}
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{102}
 }
 
 func (x *GetOrganizationActivityResponse) GetOrganizations() []*OrganizationActivity {
@@ -6259,11 +6259,123 @@ func (x *GetOrganizationActivityResponse) GetOrganizations() []*OrganizationActi
 	return nil
 }
 
-var File_events_proto protoreflect.FileDescriptor
+type GetEventImageUploadUrlRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Filename      string                 `protobuf:"bytes,1,opt,name=filename,proto3" json:"filename,omitempty"`
+	ContentType   string                 `protobuf:"bytes,2,opt,name=content_type,json=contentType,proto3" json:"content_type,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
 
-const file_events_proto_rawDesc = "" +
+func (x *GetEventImageUploadUrlRequest) Reset() {
+	*x = GetEventImageUploadUrlRequest{}
+	mi := &file_eventsv1_events_proto_msgTypes[103]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetEventImageUploadUrlRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetEventImageUploadUrlRequest) ProtoMessage() {}
+
+func (x *GetEventImageUploadUrlRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_eventsv1_events_proto_msgTypes[103]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetEventImageUploadUrlRequest.ProtoReflect.Descriptor instead.
+func (*GetEventImageUploadUrlRequest) Descriptor() ([]byte, []int) {
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{103}
+}
+
+func (x *GetEventImageUploadUrlRequest) GetFilename() string {
+	if x != nil {
+		return x.Filename
+	}
+	return ""
+}
+
+func (x *GetEventImageUploadUrlRequest) GetContentType() string {
+	if x != nil {
+		return x.ContentType
+	}
+	return ""
+}
+
+type GetEventImageUploadUrlResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	UploadUrl     string                 `protobuf:"bytes,1,opt,name=upload_url,json=uploadUrl,proto3" json:"upload_url,omitempty"`
+	PublicUrl     string                 `protobuf:"bytes,2,opt,name=public_url,json=publicUrl,proto3" json:"public_url,omitempty"`
+	ObjectKey     string                 `protobuf:"bytes,3,opt,name=object_key,json=objectKey,proto3" json:"object_key,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetEventImageUploadUrlResponse) Reset() {
+	*x = GetEventImageUploadUrlResponse{}
+	mi := &file_eventsv1_events_proto_msgTypes[104]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetEventImageUploadUrlResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetEventImageUploadUrlResponse) ProtoMessage() {}
+
+func (x *GetEventImageUploadUrlResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_eventsv1_events_proto_msgTypes[104]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetEventImageUploadUrlResponse.ProtoReflect.Descriptor instead.
+func (*GetEventImageUploadUrlResponse) Descriptor() ([]byte, []int) {
+	return file_eventsv1_events_proto_rawDescGZIP(), []int{104}
+}
+
+func (x *GetEventImageUploadUrlResponse) GetUploadUrl() string {
+	if x != nil {
+		return x.UploadUrl
+	}
+	return ""
+}
+
+func (x *GetEventImageUploadUrlResponse) GetPublicUrl() string {
+	if x != nil {
+		return x.PublicUrl
+	}
+	return ""
+}
+
+func (x *GetEventImageUploadUrlResponse) GetObjectKey() string {
+	if x != nil {
+		return x.ObjectKey
+	}
+	return ""
+}
+
+var File_eventsv1_events_proto protoreflect.FileDescriptor
+
+const file_eventsv1_events_proto_rawDesc = "" +
 	"\n" +
-	"\fevents.proto\x12\tevents.v1\"v\n" +
+	"\x15eventsv1/events.proto\x12\tevents.v1\"v\n" +
 	"\x10OrganizationType\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x05R\x02id\x12\x14\n" +
 	"\x05title\x18\x02 \x01(\tR\x05title\x12\x1d\n" +
@@ -6786,7 +6898,17 @@ const file_events_proto_rawDesc = "" +
 	"\x1eGetOrganizationActivityRequest\x12\x14\n" +
 	"\x05limit\x18\x01 \x01(\x05R\x05limit\"h\n" +
 	"\x1fGetOrganizationActivityResponse\x12E\n" +
-	"\rorganizations\x18\x01 \x03(\v2\x1f.events.v1.OrganizationActivityR\rorganizations*^\n" +
+	"\rorganizations\x18\x01 \x03(\v2\x1f.events.v1.OrganizationActivityR\rorganizations\"^\n" +
+	"\x1dGetEventImageUploadUrlRequest\x12\x1a\n" +
+	"\bfilename\x18\x01 \x01(\tR\bfilename\x12!\n" +
+	"\fcontent_type\x18\x02 \x01(\tR\vcontentType\"}\n" +
+	"\x1eGetEventImageUploadUrlResponse\x12\x1d\n" +
+	"\n" +
+	"upload_url\x18\x01 \x01(\tR\tuploadUrl\x12\x1d\n" +
+	"\n" +
+	"public_url\x18\x02 \x01(\tR\tpublicUrl\x12\x1d\n" +
+	"\n" +
+	"object_key\x18\x03 \x01(\tR\tobjectKey*^\n" +
 	"\vEventFormat\x12\x1c\n" +
 	"\x18EVENT_FORMAT_UNSPECIFIED\x10\x00\x12\x17\n" +
 	"\x13EVENT_FORMAT_ONLINE\x10\x01\x12\x18\n" +
@@ -6819,7 +6941,7 @@ const file_events_proto_rawDesc = "" +
 	"\x13GetOrganizationType\x12%.events.v1.GetOrganizationTypeRequest\x1a&.events.v1.GetOrganizationTypeResponse\x12j\n" +
 	"\x15ListOrganizationTypes\x12'.events.v1.ListOrganizationTypesRequest\x1a(.events.v1.ListOrganizationTypesResponse\x12m\n" +
 	"\x16UpdateOrganizationType\x12(.events.v1.UpdateOrganizationTypeRequest\x1a).events.v1.UpdateOrganizationTypeResponse\x12m\n" +
-	"\x16DeleteOrganizationType\x12(.events.v1.DeleteOrganizationTypeRequest\x1a).events.v1.DeleteOrganizationTypeResponse2\xbb\x05\n" +
+	"\x16DeleteOrganizationType\x12(.events.v1.DeleteOrganizationTypeRequest\x1a).events.v1.DeleteOrganizationTypeResponse2\xaa\x06\n" +
 	"\rEventsService\x12L\n" +
 	"\vCreateEvent\x12\x1d.events.v1.CreateEventRequest\x1a\x1e.events.v1.CreateEventResponse\x12C\n" +
 	"\bGetEvent\x12\x1a.events.v1.GetEventRequest\x1a\x1b.events.v1.GetEventResponse\x12I\n" +
@@ -6829,7 +6951,8 @@ const file_events_proto_rawDesc = "" +
 	"\vUpdateEvent\x12\x1d.events.v1.UpdateEventRequest\x1a\x1e.events.v1.UpdateEventResponse\x12L\n" +
 	"\vDeleteEvent\x12\x1d.events.v1.DeleteEventRequest\x1a\x1e.events.v1.DeleteEventResponse\x12[\n" +
 	"\x10GetEventsByTagId\x12\".events.v1.GetEventsByTagIdRequest\x1a#.events.v1.GetEventsByTagIdResponse\x12p\n" +
-	"\x17GetUserSubscribedEvents\x12).events.v1.GetUserSubscribedEventsRequest\x1a*.events.v1.GetUserSubscribedEventsResponse2\xe9\x02\n" +
+	"\x17GetUserSubscribedEvents\x12).events.v1.GetUserSubscribedEventsRequest\x1a*.events.v1.GetUserSubscribedEventsResponse\x12m\n" +
+	"\x16GetEventImageUploadUrl\x12(.events.v1.GetEventImageUploadUrlRequest\x1a).events.v1.GetEventImageUploadUrlResponse2\xe9\x02\n" +
 	"\vTagsService\x12F\n" +
 	"\tCreateTag\x12\x1b.events.v1.CreateTagRequest\x1a\x1c.events.v1.CreateTagResponse\x12=\n" +
 	"\x06GetTag\x12\x18.events.v1.GetTagRequest\x1a\x19.events.v1.GetTagResponse\x12C\n" +
@@ -6856,25 +6979,25 @@ const file_events_proto_rawDesc = "" +
 	"\x17GetUserEngagementLevels\x12).events.v1.GetUserEngagementLevelsRequest\x1a*.events.v1.GetUserEngagementLevelsResponse\x12m\n" +
 	"\x16GetTopPerformingEvents\x12(.events.v1.GetTopPerformingEventsRequest\x1a).events.v1.GetTopPerformingEventsResponse\x12s\n" +
 	"\x18GetLowRegistrationEvents\x12*.events.v1.GetLowRegistrationEventsRequest\x1a+.events.v1.GetLowRegistrationEventsResponse\x12p\n" +
-	"\x17GetOrganizationActivity\x12).events.v1.GetOrganizationActivityRequest\x1a*.events.v1.GetOrganizationActivityResponseB\x91\x01\n" +
-	"\rcom.events.v1B\vEventsProtoP\x01Z.github.com/studyverse/ems-backend/gen/eventsv1\xa2\x02\x03EXX\xaa\x02\tEvents.V1\xca\x02\tEvents\\V1\xe2\x02\x15Events\\V1\\GPBMetadata\xea\x02\n" +
+	"\x17GetOrganizationActivity\x12).events.v1.GetOrganizationActivityRequest\x1a*.events.v1.GetOrganizationActivityResponseB\x9a\x01\n" +
+	"\rcom.events.v1B\vEventsProtoP\x01Z7github.com/studyverse/ems-backend/gen/eventsv1;eventsv1\xa2\x02\x03EXX\xaa\x02\tEvents.V1\xca\x02\tEvents\\V1\xe2\x02\x15Events\\V1\\GPBMetadata\xea\x02\n" +
 	"Events::V1b\x06proto3"
 
 var (
-	file_events_proto_rawDescOnce sync.Once
-	file_events_proto_rawDescData []byte
+	file_eventsv1_events_proto_rawDescOnce sync.Once
+	file_eventsv1_events_proto_rawDescData []byte
 )
 
-func file_events_proto_rawDescGZIP() []byte {
-	file_events_proto_rawDescOnce.Do(func() {
-		file_events_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_events_proto_rawDesc), len(file_events_proto_rawDesc)))
+func file_eventsv1_events_proto_rawDescGZIP() []byte {
+	file_eventsv1_events_proto_rawDescOnce.Do(func() {
+		file_eventsv1_events_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_eventsv1_events_proto_rawDesc), len(file_eventsv1_events_proto_rawDesc)))
 	})
-	return file_events_proto_rawDescData
+	return file_eventsv1_events_proto_rawDescData
 }
 
-var file_events_proto_enumTypes = make([]protoimpl.EnumInfo, 4)
-var file_events_proto_msgTypes = make([]protoimpl.MessageInfo, 103)
-var file_events_proto_goTypes = []any{
+var file_eventsv1_events_proto_enumTypes = make([]protoimpl.EnumInfo, 4)
+var file_eventsv1_events_proto_msgTypes = make([]protoimpl.MessageInfo, 105)
+var file_eventsv1_events_proto_goTypes = []any{
 	(EventFormat)(0),                                // 0: events.v1.EventFormat
 	(OrganizationStatus)(0),                         // 1: events.v1.OrganizationStatus
 	(RegistrationStatus)(0),                         // 2: events.v1.RegistrationStatus
@@ -6982,8 +7105,10 @@ var file_events_proto_goTypes = []any{
 	(*OrganizationActivity)(nil),                    // 104: events.v1.OrganizationActivity
 	(*GetOrganizationActivityRequest)(nil),          // 105: events.v1.GetOrganizationActivityRequest
 	(*GetOrganizationActivityResponse)(nil),         // 106: events.v1.GetOrganizationActivityResponse
+	(*GetEventImageUploadUrlRequest)(nil),           // 107: events.v1.GetEventImageUploadUrlRequest
+	(*GetEventImageUploadUrlResponse)(nil),          // 108: events.v1.GetEventImageUploadUrlResponse
 }
-var file_events_proto_depIdxs = []int32{
+var file_eventsv1_events_proto_depIdxs = []int32{
 	1,   // 0: events.v1.Organization.status:type_name -> events.v1.OrganizationStatus
 	0,   // 1: events.v1.Event.format:type_name -> events.v1.EventFormat
 	5,   // 2: events.v1.Event.organization:type_name -> events.v1.Organization
@@ -7054,119 +7179,121 @@ var file_events_proto_depIdxs = []int32{
 	40,  // 67: events.v1.EventsService.DeleteEvent:input_type -> events.v1.DeleteEventRequest
 	56,  // 68: events.v1.EventsService.GetEventsByTagId:input_type -> events.v1.GetEventsByTagIdRequest
 	58,  // 69: events.v1.EventsService.GetUserSubscribedEvents:input_type -> events.v1.GetUserSubscribedEventsRequest
-	42,  // 70: events.v1.TagsService.CreateTag:input_type -> events.v1.CreateTagRequest
-	44,  // 71: events.v1.TagsService.GetTag:input_type -> events.v1.GetTagRequest
-	46,  // 72: events.v1.TagsService.ListTags:input_type -> events.v1.ListTagsRequest
-	48,  // 73: events.v1.TagsService.UpdateTag:input_type -> events.v1.UpdateTagRequest
-	50,  // 74: events.v1.TagsService.DeleteTag:input_type -> events.v1.DeleteTagRequest
-	62,  // 75: events.v1.EventRegistrationsService.RegisterForEvent:input_type -> events.v1.RegisterForEventRequest
-	64,  // 76: events.v1.EventRegistrationsService.CancelRegistration:input_type -> events.v1.CancelRegistrationRequest
-	66,  // 77: events.v1.EventRegistrationsService.GetEventRegistrations:input_type -> events.v1.GetEventRegistrationsRequest
-	68,  // 78: events.v1.EventRegistrationsService.GetUserRegistrations:input_type -> events.v1.GetUserRegistrationsRequest
-	70,  // 79: events.v1.EventAttendanceService.CheckInAttendee:input_type -> events.v1.CheckInAttendeeRequest
-	72,  // 80: events.v1.EventAttendanceService.MarkAttendance:input_type -> events.v1.MarkAttendanceRequest
-	74,  // 81: events.v1.EventAttendanceService.GetEventAttendance:input_type -> events.v1.GetEventAttendanceRequest
-	76,  // 82: events.v1.StatisticsService.GetDashboardStatistics:input_type -> events.v1.GetDashboardStatisticsRequest
-	78,  // 83: events.v1.StatisticsService.GetEventStatistics:input_type -> events.v1.GetEventStatisticsRequest
-	81,  // 84: events.v1.StatisticsService.GetEventTagsDistributionByMonth:input_type -> events.v1.GetEventTagsDistributionByMonthRequest
-	84,  // 85: events.v1.StatisticsService.GetEventActivityByYear:input_type -> events.v1.GetEventActivityByYearRequest
-	87,  // 86: events.v1.StatisticsService.GetOverallStatistics:input_type -> events.v1.GetOverallStatisticsRequest
-	90,  // 87: events.v1.StatisticsService.GetEventTrends:input_type -> events.v1.GetEventTrendsRequest
-	93,  // 88: events.v1.StatisticsService.GetTopPerformingClubs:input_type -> events.v1.GetTopPerformingClubsRequest
-	95,  // 89: events.v1.StatisticsService.GetUserEngagementLevels:input_type -> events.v1.GetUserEngagementLevelsRequest
-	99,  // 90: events.v1.StatisticsService.GetTopPerformingEvents:input_type -> events.v1.GetTopPerformingEventsRequest
-	102, // 91: events.v1.StatisticsService.GetLowRegistrationEvents:input_type -> events.v1.GetLowRegistrationEventsRequest
-	105, // 92: events.v1.StatisticsService.GetOrganizationActivity:input_type -> events.v1.GetOrganizationActivityRequest
-	13,  // 93: events.v1.OrganizationsService.CreateOrganization:output_type -> events.v1.CreateOrganizationResponse
-	15,  // 94: events.v1.OrganizationsService.GetOrganization:output_type -> events.v1.GetOrganizationResponse
-	17,  // 95: events.v1.OrganizationsService.ListOrganizations:output_type -> events.v1.ListOrganizationsResponse
-	19,  // 96: events.v1.OrganizationsService.UpdateOrganization:output_type -> events.v1.UpdateOrganizationResponse
-	21,  // 97: events.v1.OrganizationsService.DeleteOrganization:output_type -> events.v1.DeleteOrganizationResponse
-	53,  // 98: events.v1.OrganizationsService.GetPublishableOrganizations:output_type -> events.v1.GetPublishableOrganizationsResponse
-	55,  // 99: events.v1.OrganizationsService.GetUserOrganizations:output_type -> events.v1.GetUserOrganizationsResponse
-	23,  // 100: events.v1.OrganizationTypesService.CreateOrganizationType:output_type -> events.v1.CreateOrganizationTypeResponse
-	25,  // 101: events.v1.OrganizationTypesService.GetOrganizationType:output_type -> events.v1.GetOrganizationTypeResponse
-	27,  // 102: events.v1.OrganizationTypesService.ListOrganizationTypes:output_type -> events.v1.ListOrganizationTypesResponse
-	29,  // 103: events.v1.OrganizationTypesService.UpdateOrganizationType:output_type -> events.v1.UpdateOrganizationTypeResponse
-	31,  // 104: events.v1.OrganizationTypesService.DeleteOrganizationType:output_type -> events.v1.DeleteOrganizationTypeResponse
-	33,  // 105: events.v1.EventsService.CreateEvent:output_type -> events.v1.CreateEventResponse
-	35,  // 106: events.v1.EventsService.GetEvent:output_type -> events.v1.GetEventResponse
-	37,  // 107: events.v1.EventsService.ListEvents:output_type -> events.v1.ListEventsResponse
-	61,  // 108: events.v1.EventsService.ListEventsForAdmin:output_type -> events.v1.ListEventsForAdminResponse
-	39,  // 109: events.v1.EventsService.UpdateEvent:output_type -> events.v1.UpdateEventResponse
-	41,  // 110: events.v1.EventsService.DeleteEvent:output_type -> events.v1.DeleteEventResponse
-	57,  // 111: events.v1.EventsService.GetEventsByTagId:output_type -> events.v1.GetEventsByTagIdResponse
-	59,  // 112: events.v1.EventsService.GetUserSubscribedEvents:output_type -> events.v1.GetUserSubscribedEventsResponse
-	43,  // 113: events.v1.TagsService.CreateTag:output_type -> events.v1.CreateTagResponse
-	45,  // 114: events.v1.TagsService.GetTag:output_type -> events.v1.GetTagResponse
-	47,  // 115: events.v1.TagsService.ListTags:output_type -> events.v1.ListTagsResponse
-	49,  // 116: events.v1.TagsService.UpdateTag:output_type -> events.v1.UpdateTagResponse
-	51,  // 117: events.v1.TagsService.DeleteTag:output_type -> events.v1.DeleteTagResponse
-	63,  // 118: events.v1.EventRegistrationsService.RegisterForEvent:output_type -> events.v1.RegisterForEventResponse
-	65,  // 119: events.v1.EventRegistrationsService.CancelRegistration:output_type -> events.v1.CancelRegistrationResponse
-	67,  // 120: events.v1.EventRegistrationsService.GetEventRegistrations:output_type -> events.v1.GetEventRegistrationsResponse
-	69,  // 121: events.v1.EventRegistrationsService.GetUserRegistrations:output_type -> events.v1.GetUserRegistrationsResponse
-	71,  // 122: events.v1.EventAttendanceService.CheckInAttendee:output_type -> events.v1.CheckInAttendeeResponse
-	73,  // 123: events.v1.EventAttendanceService.MarkAttendance:output_type -> events.v1.MarkAttendanceResponse
-	75,  // 124: events.v1.EventAttendanceService.GetEventAttendance:output_type -> events.v1.GetEventAttendanceResponse
-	77,  // 125: events.v1.StatisticsService.GetDashboardStatistics:output_type -> events.v1.GetDashboardStatisticsResponse
-	79,  // 126: events.v1.StatisticsService.GetEventStatistics:output_type -> events.v1.GetEventStatisticsResponse
-	82,  // 127: events.v1.StatisticsService.GetEventTagsDistributionByMonth:output_type -> events.v1.GetEventTagsDistributionByMonthResponse
-	85,  // 128: events.v1.StatisticsService.GetEventActivityByYear:output_type -> events.v1.GetEventActivityByYearResponse
-	88,  // 129: events.v1.StatisticsService.GetOverallStatistics:output_type -> events.v1.GetOverallStatisticsResponse
-	91,  // 130: events.v1.StatisticsService.GetEventTrends:output_type -> events.v1.GetEventTrendsResponse
-	94,  // 131: events.v1.StatisticsService.GetTopPerformingClubs:output_type -> events.v1.GetTopPerformingClubsResponse
-	97,  // 132: events.v1.StatisticsService.GetUserEngagementLevels:output_type -> events.v1.GetUserEngagementLevelsResponse
-	100, // 133: events.v1.StatisticsService.GetTopPerformingEvents:output_type -> events.v1.GetTopPerformingEventsResponse
-	103, // 134: events.v1.StatisticsService.GetLowRegistrationEvents:output_type -> events.v1.GetLowRegistrationEventsResponse
-	106, // 135: events.v1.StatisticsService.GetOrganizationActivity:output_type -> events.v1.GetOrganizationActivityResponse
-	93,  // [93:136] is the sub-list for method output_type
-	50,  // [50:93] is the sub-list for method input_type
+	107, // 70: events.v1.EventsService.GetEventImageUploadUrl:input_type -> events.v1.GetEventImageUploadUrlRequest
+	42,  // 71: events.v1.TagsService.CreateTag:input_type -> events.v1.CreateTagRequest
+	44,  // 72: events.v1.TagsService.GetTag:input_type -> events.v1.GetTagRequest
+	46,  // 73: events.v1.TagsService.ListTags:input_type -> events.v1.ListTagsRequest
+	48,  // 74: events.v1.TagsService.UpdateTag:input_type -> events.v1.UpdateTagRequest
+	50,  // 75: events.v1.TagsService.DeleteTag:input_type -> events.v1.DeleteTagRequest
+	62,  // 76: events.v1.EventRegistrationsService.RegisterForEvent:input_type -> events.v1.RegisterForEventRequest
+	64,  // 77: events.v1.EventRegistrationsService.CancelRegistration:input_type -> events.v1.CancelRegistrationRequest
+	66,  // 78: events.v1.EventRegistrationsService.GetEventRegistrations:input_type -> events.v1.GetEventRegistrationsRequest
+	68,  // 79: events.v1.EventRegistrationsService.GetUserRegistrations:input_type -> events.v1.GetUserRegistrationsRequest
+	70,  // 80: events.v1.EventAttendanceService.CheckInAttendee:input_type -> events.v1.CheckInAttendeeRequest
+	72,  // 81: events.v1.EventAttendanceService.MarkAttendance:input_type -> events.v1.MarkAttendanceRequest
+	74,  // 82: events.v1.EventAttendanceService.GetEventAttendance:input_type -> events.v1.GetEventAttendanceRequest
+	76,  // 83: events.v1.StatisticsService.GetDashboardStatistics:input_type -> events.v1.GetDashboardStatisticsRequest
+	78,  // 84: events.v1.StatisticsService.GetEventStatistics:input_type -> events.v1.GetEventStatisticsRequest
+	81,  // 85: events.v1.StatisticsService.GetEventTagsDistributionByMonth:input_type -> events.v1.GetEventTagsDistributionByMonthRequest
+	84,  // 86: events.v1.StatisticsService.GetEventActivityByYear:input_type -> events.v1.GetEventActivityByYearRequest
+	87,  // 87: events.v1.StatisticsService.GetOverallStatistics:input_type -> events.v1.GetOverallStatisticsRequest
+	90,  // 88: events.v1.StatisticsService.GetEventTrends:input_type -> events.v1.GetEventTrendsRequest
+	93,  // 89: events.v1.StatisticsService.GetTopPerformingClubs:input_type -> events.v1.GetTopPerformingClubsRequest
+	95,  // 90: events.v1.StatisticsService.GetUserEngagementLevels:input_type -> events.v1.GetUserEngagementLevelsRequest
+	99,  // 91: events.v1.StatisticsService.GetTopPerformingEvents:input_type -> events.v1.GetTopPerformingEventsRequest
+	102, // 92: events.v1.StatisticsService.GetLowRegistrationEvents:input_type -> events.v1.GetLowRegistrationEventsRequest
+	105, // 93: events.v1.StatisticsService.GetOrganizationActivity:input_type -> events.v1.GetOrganizationActivityRequest
+	13,  // 94: events.v1.OrganizationsService.CreateOrganization:output_type -> events.v1.CreateOrganizationResponse
+	15,  // 95: events.v1.OrganizationsService.GetOrganization:output_type -> events.v1.GetOrganizationResponse
+	17,  // 96: events.v1.OrganizationsService.ListOrganizations:output_type -> events.v1.ListOrganizationsResponse
+	19,  // 97: events.v1.OrganizationsService.UpdateOrganization:output_type -> events.v1.UpdateOrganizationResponse
+	21,  // 98: events.v1.OrganizationsService.DeleteOrganization:output_type -> events.v1.DeleteOrganizationResponse
+	53,  // 99: events.v1.OrganizationsService.GetPublishableOrganizations:output_type -> events.v1.GetPublishableOrganizationsResponse
+	55,  // 100: events.v1.OrganizationsService.GetUserOrganizations:output_type -> events.v1.GetUserOrganizationsResponse
+	23,  // 101: events.v1.OrganizationTypesService.CreateOrganizationType:output_type -> events.v1.CreateOrganizationTypeResponse
+	25,  // 102: events.v1.OrganizationTypesService.GetOrganizationType:output_type -> events.v1.GetOrganizationTypeResponse
+	27,  // 103: events.v1.OrganizationTypesService.ListOrganizationTypes:output_type -> events.v1.ListOrganizationTypesResponse
+	29,  // 104: events.v1.OrganizationTypesService.UpdateOrganizationType:output_type -> events.v1.UpdateOrganizationTypeResponse
+	31,  // 105: events.v1.OrganizationTypesService.DeleteOrganizationType:output_type -> events.v1.DeleteOrganizationTypeResponse
+	33,  // 106: events.v1.EventsService.CreateEvent:output_type -> events.v1.CreateEventResponse
+	35,  // 107: events.v1.EventsService.GetEvent:output_type -> events.v1.GetEventResponse
+	37,  // 108: events.v1.EventsService.ListEvents:output_type -> events.v1.ListEventsResponse
+	61,  // 109: events.v1.EventsService.ListEventsForAdmin:output_type -> events.v1.ListEventsForAdminResponse
+	39,  // 110: events.v1.EventsService.UpdateEvent:output_type -> events.v1.UpdateEventResponse
+	41,  // 111: events.v1.EventsService.DeleteEvent:output_type -> events.v1.DeleteEventResponse
+	57,  // 112: events.v1.EventsService.GetEventsByTagId:output_type -> events.v1.GetEventsByTagIdResponse
+	59,  // 113: events.v1.EventsService.GetUserSubscribedEvents:output_type -> events.v1.GetUserSubscribedEventsResponse
+	108, // 114: events.v1.EventsService.GetEventImageUploadUrl:output_type -> events.v1.GetEventImageUploadUrlResponse
+	43,  // 115: events.v1.TagsService.CreateTag:output_type -> events.v1.CreateTagResponse
+	45,  // 116: events.v1.TagsService.GetTag:output_type -> events.v1.GetTagResponse
+	47,  // 117: events.v1.TagsService.ListTags:output_type -> events.v1.ListTagsResponse
+	49,  // 118: events.v1.TagsService.UpdateTag:output_type -> events.v1.UpdateTagResponse
+	51,  // 119: events.v1.TagsService.DeleteTag:output_type -> events.v1.DeleteTagResponse
+	63,  // 120: events.v1.EventRegistrationsService.RegisterForEvent:output_type -> events.v1.RegisterForEventResponse
+	65,  // 121: events.v1.EventRegistrationsService.CancelRegistration:output_type -> events.v1.CancelRegistrationResponse
+	67,  // 122: events.v1.EventRegistrationsService.GetEventRegistrations:output_type -> events.v1.GetEventRegistrationsResponse
+	69,  // 123: events.v1.EventRegistrationsService.GetUserRegistrations:output_type -> events.v1.GetUserRegistrationsResponse
+	71,  // 124: events.v1.EventAttendanceService.CheckInAttendee:output_type -> events.v1.CheckInAttendeeResponse
+	73,  // 125: events.v1.EventAttendanceService.MarkAttendance:output_type -> events.v1.MarkAttendanceResponse
+	75,  // 126: events.v1.EventAttendanceService.GetEventAttendance:output_type -> events.v1.GetEventAttendanceResponse
+	77,  // 127: events.v1.StatisticsService.GetDashboardStatistics:output_type -> events.v1.GetDashboardStatisticsResponse
+	79,  // 128: events.v1.StatisticsService.GetEventStatistics:output_type -> events.v1.GetEventStatisticsResponse
+	82,  // 129: events.v1.StatisticsService.GetEventTagsDistributionByMonth:output_type -> events.v1.GetEventTagsDistributionByMonthResponse
+	85,  // 130: events.v1.StatisticsService.GetEventActivityByYear:output_type -> events.v1.GetEventActivityByYearResponse
+	88,  // 131: events.v1.StatisticsService.GetOverallStatistics:output_type -> events.v1.GetOverallStatisticsResponse
+	91,  // 132: events.v1.StatisticsService.GetEventTrends:output_type -> events.v1.GetEventTrendsResponse
+	94,  // 133: events.v1.StatisticsService.GetTopPerformingClubs:output_type -> events.v1.GetTopPerformingClubsResponse
+	97,  // 134: events.v1.StatisticsService.GetUserEngagementLevels:output_type -> events.v1.GetUserEngagementLevelsResponse
+	100, // 135: events.v1.StatisticsService.GetTopPerformingEvents:output_type -> events.v1.GetTopPerformingEventsResponse
+	103, // 136: events.v1.StatisticsService.GetLowRegistrationEvents:output_type -> events.v1.GetLowRegistrationEventsResponse
+	106, // 137: events.v1.StatisticsService.GetOrganizationActivity:output_type -> events.v1.GetOrganizationActivityResponse
+	94,  // [94:138] is the sub-list for method output_type
+	50,  // [50:94] is the sub-list for method input_type
 	50,  // [50:50] is the sub-list for extension type_name
 	50,  // [50:50] is the sub-list for extension extendee
 	0,   // [0:50] is the sub-list for field type_name
 }
 
-func init() { file_events_proto_init() }
-func file_events_proto_init() {
-	if File_events_proto != nil {
+func init() { file_eventsv1_events_proto_init() }
+func file_eventsv1_events_proto_init() {
+	if File_eventsv1_events_proto != nil {
 		return
 	}
-	file_events_proto_msgTypes[1].OneofWrappers = []any{}
-	file_events_proto_msgTypes[3].OneofWrappers = []any{}
-	file_events_proto_msgTypes[4].OneofWrappers = []any{}
-	file_events_proto_msgTypes[5].OneofWrappers = []any{}
-	file_events_proto_msgTypes[8].OneofWrappers = []any{}
-	file_events_proto_msgTypes[14].OneofWrappers = []any{}
-	file_events_proto_msgTypes[24].OneofWrappers = []any{}
-	file_events_proto_msgTypes[28].OneofWrappers = []any{}
-	file_events_proto_msgTypes[32].OneofWrappers = []any{}
-	file_events_proto_msgTypes[34].OneofWrappers = []any{}
-	file_events_proto_msgTypes[44].OneofWrappers = []any{}
-	file_events_proto_msgTypes[56].OneofWrappers = []any{}
-	file_events_proto_msgTypes[62].OneofWrappers = []any{}
-	file_events_proto_msgTypes[66].OneofWrappers = []any{}
-	file_events_proto_msgTypes[68].OneofWrappers = []any{}
-	file_events_proto_msgTypes[88].OneofWrappers = []any{}
-	file_events_proto_msgTypes[94].OneofWrappers = []any{}
-	file_events_proto_msgTypes[97].OneofWrappers = []any{}
-	file_events_proto_msgTypes[100].OneofWrappers = []any{}
+	file_eventsv1_events_proto_msgTypes[1].OneofWrappers = []any{}
+	file_eventsv1_events_proto_msgTypes[3].OneofWrappers = []any{}
+	file_eventsv1_events_proto_msgTypes[4].OneofWrappers = []any{}
+	file_eventsv1_events_proto_msgTypes[5].OneofWrappers = []any{}
+	file_eventsv1_events_proto_msgTypes[8].OneofWrappers = []any{}
+	file_eventsv1_events_proto_msgTypes[14].OneofWrappers = []any{}
+	file_eventsv1_events_proto_msgTypes[24].OneofWrappers = []any{}
+	file_eventsv1_events_proto_msgTypes[28].OneofWrappers = []any{}
+	file_eventsv1_events_proto_msgTypes[32].OneofWrappers = []any{}
+	file_eventsv1_events_proto_msgTypes[34].OneofWrappers = []any{}
+	file_eventsv1_events_proto_msgTypes[44].OneofWrappers = []any{}
+	file_eventsv1_events_proto_msgTypes[56].OneofWrappers = []any{}
+	file_eventsv1_events_proto_msgTypes[62].OneofWrappers = []any{}
+	file_eventsv1_events_proto_msgTypes[66].OneofWrappers = []any{}
+	file_eventsv1_events_proto_msgTypes[68].OneofWrappers = []any{}
+	file_eventsv1_events_proto_msgTypes[88].OneofWrappers = []any{}
+	file_eventsv1_events_proto_msgTypes[94].OneofWrappers = []any{}
+	file_eventsv1_events_proto_msgTypes[97].OneofWrappers = []any{}
+	file_eventsv1_events_proto_msgTypes[100].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_events_proto_rawDesc), len(file_events_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_eventsv1_events_proto_rawDesc), len(file_eventsv1_events_proto_rawDesc)),
 			NumEnums:      4,
-			NumMessages:   103,
+			NumMessages:   105,
 			NumExtensions: 0,
 			NumServices:   7,
 		},
-		GoTypes:           file_events_proto_goTypes,
-		DependencyIndexes: file_events_proto_depIdxs,
-		EnumInfos:         file_events_proto_enumTypes,
-		MessageInfos:      file_events_proto_msgTypes,
+		GoTypes:           file_eventsv1_events_proto_goTypes,
+		DependencyIndexes: file_eventsv1_events_proto_depIdxs,
+		EnumInfos:         file_eventsv1_events_proto_enumTypes,
+		MessageInfos:      file_eventsv1_events_proto_msgTypes,
 	}.Build()
-	File_events_proto = out.File
-	file_events_proto_goTypes = nil
-	file_events_proto_depIdxs = nil
+	File_eventsv1_events_proto = out.File
+	file_eventsv1_events_proto_goTypes = nil
+	file_eventsv1_events_proto_depIdxs = nil
 }

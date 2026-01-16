@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package users.v1;
 
-option go_package = "github.com/studyverse/ems-backend/gen/usersv1";
+option go_package = "github.com/studyverse/ems-backend/gen/usersv1;usersv1";
 
 // Messages
 message User {

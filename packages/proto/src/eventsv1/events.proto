@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package events.v1;
 
-option go_package = "github.com/studyverse/ems-backend/gen/eventsv1";
+option go_package = "github.com/studyverse/ems-backend/gen/eventsv1;eventsv1";
 
 // Enums
 enum EventFormat {
@@ -639,6 +639,17 @@ message GetOrganizationActivityResponse {
   repeated OrganizationActivity organizations = 1;
 }
 
+message GetEventImageUploadUrlRequest {
+  string filename = 1;
+  string content_type = 2;
+}
+
+message GetEventImageUploadUrlResponse {
+  string upload_url = 1;
+  string public_url = 2;
+  string object_key = 3;
+}
+
 // Services
 service OrganizationsService {
   rpc CreateOrganization(CreateOrganizationRequest) returns (CreateOrganizationResponse);
@@ -667,6 +678,8 @@ service EventsService {
   rpc DeleteEvent(DeleteEventRequest) returns (DeleteEventResponse);
   rpc GetEventsByTagId(GetEventsByTagIdRequest) returns (GetEventsByTagIdResponse);
   rpc GetUserSubscribedEvents(GetUserSubscribedEventsRequest) returns (GetUserSubscribedEventsResponse);
+
+  rpc GetEventImageUploadUrl(GetEventImageUploadUrlRequest) returns (GetEventImageUploadUrlResponse);
 }
 
 service TagsService {

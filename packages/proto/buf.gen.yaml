@@ -1,6 +1,8 @@
 version: v2
 managed:
   enabled: true
+  disable:
+    - file_option: go_package
 plugins:
   # Generate TypeScript types and schemas (shared across packages)
   - remote: buf.build/bufbuild/es:v2.10.1
@@ -17,6 +19,10 @@ plugins:
   # Generate Go protobuf types
   - remote: buf.build/protocolbuffers/go
     out: ../../apps/backend/gen
+    opt:
+      - paths=source_relative
   # Generate Go Connect-RPC handlers
   - remote: buf.build/connectrpc/go
     out: ../../apps/backend/gen
+    opt:
+      - paths=source_relative

@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.11
 // 	protoc        (unknown)
-// source: search.proto
+// source: searchv1/search.proto
 
 package searchv1
 
@@ -61,11 +61,11 @@ func (x SearchResultType) String() string {
 }
 
 func (SearchResultType) Descriptor() protoreflect.EnumDescriptor {
-	return file_search_proto_enumTypes[0].Descriptor()
+	return file_searchv1_search_proto_enumTypes[0].Descriptor()
 }
 
 func (SearchResultType) Type() protoreflect.EnumType {
-	return &file_search_proto_enumTypes[0]
+	return &file_searchv1_search_proto_enumTypes[0]
 }
 
 func (x SearchResultType) Number() protoreflect.EnumNumber {
@@ -74,7 +74,7 @@ func (x SearchResultType) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use SearchResultType.Descriptor instead.
 func (SearchResultType) EnumDescriptor() ([]byte, []int) {
-	return file_search_proto_rawDescGZIP(), []int{0}
+	return file_searchv1_search_proto_rawDescGZIP(), []int{0}
 }
 
 // SearchResult represents a single search result item
@@ -91,7 +91,7 @@ type SearchResult struct {
 
 func (x *SearchResult) Reset() {
 	*x = SearchResult{}
-	mi := &file_search_proto_msgTypes[0]
+	mi := &file_searchv1_search_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -103,7 +103,7 @@ func (x *SearchResult) String() string {
 func (*SearchResult) ProtoMessage() {}
 
 func (x *SearchResult) ProtoReflect() protoreflect.Message {
-	mi := &file_search_proto_msgTypes[0]
+	mi := &file_searchv1_search_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -116,7 +116,7 @@ func (x *SearchResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SearchResult.ProtoReflect.Descriptor instead.
 func (*SearchResult) Descriptor() ([]byte, []int) {
-	return file_search_proto_rawDescGZIP(), []int{0}
+	return file_searchv1_search_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *SearchResult) GetType() SearchResultType {
@@ -166,7 +166,7 @@ type GlobalSearchRequest struct {
 
 func (x *GlobalSearchRequest) Reset() {
 	*x = GlobalSearchRequest{}
-	mi := &file_search_proto_msgTypes[1]
+	mi := &file_searchv1_search_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -178,7 +178,7 @@ func (x *GlobalSearchRequest) String() string {
 func (*GlobalSearchRequest) ProtoMessage() {}
 
 func (x *GlobalSearchRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_search_proto_msgTypes[1]
+	mi := &file_searchv1_search_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -191,7 +191,7 @@ func (x *GlobalSearchRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GlobalSearchRequest.ProtoReflect.Descriptor instead.
 func (*GlobalSearchRequest) Descriptor() ([]byte, []int) {
-	return file_search_proto_rawDescGZIP(), []int{1}
+	return file_searchv1_search_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *GlobalSearchRequest) GetQuery() string {
@@ -228,7 +228,7 @@ type GlobalSearchResponse struct {
 
 func (x *GlobalSearchResponse) Reset() {
 	*x = GlobalSearchResponse{}
-	mi := &file_search_proto_msgTypes[2]
+	mi := &file_searchv1_search_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -240,7 +240,7 @@ func (x *GlobalSearchResponse) String() string {
 func (*GlobalSearchResponse) ProtoMessage() {}
 
 func (x *GlobalSearchResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_search_proto_msgTypes[2]
+	mi := &file_searchv1_search_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -253,7 +253,7 @@ func (x *GlobalSearchResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GlobalSearchResponse.ProtoReflect.Descriptor instead.
 func (*GlobalSearchResponse) Descriptor() ([]byte, []int) {
-	return file_search_proto_rawDescGZIP(), []int{2}
+	return file_searchv1_search_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *GlobalSearchResponse) GetResults() []*SearchResult {
@@ -297,7 +297,7 @@ type SearchEventsRequest struct {
 
 func (x *SearchEventsRequest) Reset() {
 	*x = SearchEventsRequest{}
-	mi := &file_search_proto_msgTypes[3]
+	mi := &file_searchv1_search_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -309,7 +309,7 @@ func (x *SearchEventsRequest) String() string {
 func (*SearchEventsRequest) ProtoMessage() {}
 
 func (x *SearchEventsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_search_proto_msgTypes[3]
+	mi := &file_searchv1_search_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -322,7 +322,7 @@ func (x *SearchEventsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SearchEventsRequest.ProtoReflect.Descriptor instead.
 func (*SearchEventsRequest) Descriptor() ([]byte, []int) {
-	return file_search_proto_rawDescGZIP(), []int{3}
+	return file_searchv1_search_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *SearchEventsRequest) GetQuery() string {
@@ -364,7 +364,7 @@ type SearchEventsResponse struct {
 
 func (x *SearchEventsResponse) Reset() {
 	*x = SearchEventsResponse{}
-	mi := &file_search_proto_msgTypes[4]
+	mi := &file_searchv1_search_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -376,7 +376,7 @@ func (x *SearchEventsResponse) String() string {
 func (*SearchEventsResponse) ProtoMessage() {}
 
 func (x *SearchEventsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_search_proto_msgTypes[4]
+	mi := &file_searchv1_search_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -389,7 +389,7 @@ func (x *SearchEventsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SearchEventsResponse.ProtoReflect.Descriptor instead.
 func (*SearchEventsResponse) Descriptor() ([]byte, []int) {
-	return file_search_proto_rawDescGZIP(), []int{4}
+	return file_searchv1_search_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *SearchEventsResponse) GetResults() []*SearchResult {
@@ -416,7 +416,7 @@ type ReindexRequest struct {
 
 func (x *ReindexRequest) Reset() {
 	*x = ReindexRequest{}
-	mi := &file_search_proto_msgTypes[5]
+	mi := &file_searchv1_search_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -428,7 +428,7 @@ func (x *ReindexRequest) String() string {
 func (*ReindexRequest) ProtoMessage() {}
 
 func (x *ReindexRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_search_proto_msgTypes[5]
+	mi := &file_searchv1_search_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -441,7 +441,7 @@ func (x *ReindexRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ReindexRequest.ProtoReflect.Descriptor instead.
 func (*ReindexRequest) Descriptor() ([]byte, []int) {
-	return file_search_proto_rawDescGZIP(), []int{5}
+	return file_searchv1_search_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *ReindexRequest) GetIndexes() []string {
@@ -466,7 +466,7 @@ type ReindexResponse struct {
 
 func (x *ReindexResponse) Reset() {
 	*x = ReindexResponse{}
-	mi := &file_search_proto_msgTypes[6]
+	mi := &file_searchv1_search_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -478,7 +478,7 @@ func (x *ReindexResponse) String() string {
 func (*ReindexResponse) ProtoMessage() {}
 
 func (x *ReindexResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_search_proto_msgTypes[6]
+	mi := &file_searchv1_search_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -491,7 +491,7 @@ func (x *ReindexResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ReindexResponse.ProtoReflect.Descriptor instead.
 func (*ReindexResponse) Descriptor() ([]byte, []int) {
-	return file_search_proto_rawDescGZIP(), []int{6}
+	return file_searchv1_search_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *ReindexResponse) GetSuccess() bool {
@@ -536,11 +536,11 @@ func (x *ReindexResponse) GetTagsIndexed() int32 {
 	return 0
 }
 
-var File_search_proto protoreflect.FileDescriptor
+var File_searchv1_search_proto protoreflect.FileDescriptor
 
-const file_search_proto_rawDesc = "" +
+const file_searchv1_search_proto_rawDesc = "" +
 	"\n" +
-	"\fsearch.proto\x12\tsearch.v1\"\xcc\x01\n" +
+	"\x15searchv1/search.proto\x12\tsearch.v1\"\xcc\x01\n" +
 	"\fSearchResult\x12/\n" +
 	"\x04type\x18\x01 \x01(\x0e2\x1b.search.v1.SearchResultTypeR\x04type\x12\x0e\n" +
 	"\x02id\x18\x02 \x01(\x05R\x02id\x12\x14\n" +
@@ -588,25 +588,25 @@ const file_search_proto_rawDesc = "" +
 	"\rSearchService\x12O\n" +
 	"\fGlobalSearch\x12\x1e.search.v1.GlobalSearchRequest\x1a\x1f.search.v1.GlobalSearchResponse\x12O\n" +
 	"\fSearchEvents\x12\x1e.search.v1.SearchEventsRequest\x1a\x1f.search.v1.SearchEventsResponse\x12@\n" +
-	"\aReindex\x12\x19.search.v1.ReindexRequest\x1a\x1a.search.v1.ReindexResponseB\x91\x01\n" +
-	"\rcom.search.v1B\vSearchProtoP\x01Z.github.com/studyverse/ems-backend/gen/searchv1\xa2\x02\x03SXX\xaa\x02\tSearch.V1\xca\x02\tSearch\\V1\xe2\x02\x15Search\\V1\\GPBMetadata\xea\x02\n" +
+	"\aReindex\x12\x19.search.v1.ReindexRequest\x1a\x1a.search.v1.ReindexResponseB\x9a\x01\n" +
+	"\rcom.search.v1B\vSearchProtoP\x01Z7github.com/studyverse/ems-backend/gen/searchv1;searchv1\xa2\x02\x03SXX\xaa\x02\tSearch.V1\xca\x02\tSearch\\V1\xe2\x02\x15Search\\V1\\GPBMetadata\xea\x02\n" +
 	"Search::V1b\x06proto3"
 
 var (
-	file_search_proto_rawDescOnce sync.Once
-	file_search_proto_rawDescData []byte
+	file_searchv1_search_proto_rawDescOnce sync.Once
+	file_searchv1_search_proto_rawDescData []byte
 )
 
-func file_search_proto_rawDescGZIP() []byte {
-	file_search_proto_rawDescOnce.Do(func() {
-		file_search_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_search_proto_rawDesc), len(file_search_proto_rawDesc)))
+func file_searchv1_search_proto_rawDescGZIP() []byte {
+	file_searchv1_search_proto_rawDescOnce.Do(func() {
+		file_searchv1_search_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_searchv1_search_proto_rawDesc), len(file_searchv1_search_proto_rawDesc)))
 	})
-	return file_search_proto_rawDescData
+	return file_searchv1_search_proto_rawDescData
 }
 
-var file_search_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_search_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
-var file_search_proto_goTypes = []any{
+var file_searchv1_search_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_searchv1_search_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
+var file_searchv1_search_proto_goTypes = []any{
 	(SearchResultType)(0),        // 0: search.v1.SearchResultType
 	(*SearchResult)(nil),         // 1: search.v1.SearchResult
 	(*GlobalSearchRequest)(nil),  // 2: search.v1.GlobalSearchRequest
@@ -616,7 +616,7 @@ var file_search_proto_goTypes = []any{
 	(*ReindexRequest)(nil),       // 6: search.v1.ReindexRequest
 	(*ReindexResponse)(nil),      // 7: search.v1.ReindexResponse
 }
-var file_search_proto_depIdxs = []int32{
+var file_searchv1_search_proto_depIdxs = []int32{
 	0, // 0: search.v1.SearchResult.type:type_name -> search.v1.SearchResultType
 	0, // 1: search.v1.GlobalSearchRequest.types:type_name -> search.v1.SearchResultType
 	1, // 2: search.v1.GlobalSearchResponse.results:type_name -> search.v1.SearchResult
@@ -634,29 +634,29 @@ var file_search_proto_depIdxs = []int32{
 	0, // [0:4] is the sub-list for field type_name
 }
 
-func init() { file_search_proto_init() }
-func file_search_proto_init() {
-	if File_search_proto != nil {
+func init() { file_searchv1_search_proto_init() }
+func file_searchv1_search_proto_init() {
+	if File_searchv1_search_proto != nil {
 		return
 	}
-	file_search_proto_msgTypes[0].OneofWrappers = []any{}
-	file_search_proto_msgTypes[3].OneofWrappers = []any{}
+	file_searchv1_search_proto_msgTypes[0].OneofWrappers = []any{}
+	file_searchv1_search_proto_msgTypes[3].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_search_proto_rawDesc), len(file_search_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_searchv1_search_proto_rawDesc), len(file_searchv1_search_proto_rawDesc)),
 			NumEnums:      1,
 			NumMessages:   7,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_search_proto_goTypes,
-		DependencyIndexes: file_search_proto_depIdxs,
-		EnumInfos:         file_search_proto_enumTypes,
-		MessageInfos:      file_search_proto_msgTypes,
+		GoTypes:           file_searchv1_search_proto_goTypes,
+		DependencyIndexes: file_searchv1_search_proto_depIdxs,
+		EnumInfos:         file_searchv1_search_proto_enumTypes,
+		MessageInfos:      file_searchv1_search_proto_msgTypes,
 	}.Build()
-	File_search_proto = out.File
-	file_search_proto_goTypes = nil
-	file_search_proto_depIdxs = nil
+	File_searchv1_search_proto = out.File
+	file_searchv1_search_proto_goTypes = nil
+	file_searchv1_search_proto_depIdxs = nil
 }
