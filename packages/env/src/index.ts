@@ -49,6 +49,14 @@ export const spicedbEnvSchema = z.object({
 });
 
 /**
+ * Meilisearch configuration
+ */
+export const meilisearchEnvSchema = z.object({
+  MEILISEARCH_URL: z.string().url().default('http://localhost:7700'),
+  MEILISEARCH_MASTER_KEY: z.string().describe('Meilisearch master key for admin operations'),
+});
+
+/**
  * Helper to parse and validate environment
  */
 export function createEnv<T extends z.ZodRawShape>(
@@ -72,3 +80,4 @@ export type CacheEnv = z.infer<typeof cacheEnvSchema>;
 export type KratosEnv = z.infer<typeof kratosEnvSchema>;
 export type HydraEnv = z.infer<typeof hydraEnvSchema>;
 export type SpiceDBEnv = z.infer<typeof spicedbEnvSchema>;
+export type MeilisearchEnv = z.infer<typeof meilisearchEnvSchema>;

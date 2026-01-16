@@ -5,6 +5,7 @@ import {
   cacheEnvSchema,
   kratosEnvSchema,
   spicedbEnvSchema,
+  meilisearchEnvSchema,
   createEnv,
 } from './index.js';
 
@@ -17,6 +18,7 @@ export const backendEnvSchema = sharedEnvSchema
   .merge(cacheEnvSchema)
   .merge(kratosEnvSchema)
   .merge(spicedbEnvSchema)
+  .merge(meilisearchEnvSchema)
   .extend({
     // Server configuration
     PORT: z.coerce.number().default(3000),
