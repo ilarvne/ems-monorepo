@@ -175,7 +175,7 @@ func corsMiddleware(origins []string, next http.Handler) http.Handler {
 		}
 
 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-		w.Header().Set("Access-Control-Allow-Headers", "Accept, Accept-Language, Content-Type, Content-Language, Authorization, Connect-Protocol-Version, Connect-Timeout-Ms, X-Grpc-Timeout, X-User-Agent")
+		w.Header().Set("Access-Control-Allow-Headers", "Accept, Accept-Language, Content-Type, Content-Language, Authorization, Connect-Protocol-Version, Connect-Timeout-Ms, X-Grpc-Timeout, X-User-Agent, X-Session-Token")
 		w.Header().Set("Access-Control-Expose-Headers", "Connect-Content-Encoding, Connect-Timeout-Ms, Grpc-Status, Grpc-Message, Grpc-Status-Details-Bin")
 		w.Header().Set("Access-Control-Max-Age", "86400")
 		w.Header().Set("Access-Control-Allow-Credentials", "true")

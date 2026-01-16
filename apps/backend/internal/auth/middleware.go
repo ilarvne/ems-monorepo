@@ -21,59 +21,67 @@ const (
 	SessionKey ContextKey = "session"
 )
 
-// Middleware creates an HTTP middleware that validates Kratos sessions
+// NewMiddleware creates an HTTP middleware that validates Kratos sessions
 // and injects the user ID into the request context.
+//
+// Expected auth mechanisms:
+// - Browser: Kratos session cookie forwarded automatically by the browser.
+// - Native/CLI: X-Session-Token: <token> or Authorization: Bearer <token>.
+//
 // If the user is not authenticated, the request proceeds without user context
-// (allows public endpoints to work).
+// (public endpoints still work; protected endpoints should call RequireAuth).
 func NewMiddleware(kratosClient *ory.APIClient) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			ctx := r.Context()
 
-			// Try to get session from cookie or Authorization header
 			cookie := r.Header.Get("Cookie")
-			sessionToken := extractBearerToken(r.Header.Get("Authorization"))
-
-			slog.Debug("Auth middleware", "hasCookie", cookie != "", "hasToken", sessionToken != "", "path", r.URL.Path)
-
-			// Build the ToSession request
-			req := kratosClient.FrontendAPI.ToSession(ctx)
-			if cookie != "" {
-				req = req.Cookie(cookie)
-			}
-			if sessionToken != "" {
-				req = req.XSessionToken(sessionToken)
+			sessionToken := r.Header.Get("X-Session-Token")
+			if sessionToken == "" {
+				sessionToken = extractBearerToken(r.Header.Get("Authorization"))
 			}
 
-			// Execute session check
-			session, _, err := req.Execute()
-			if err != nil {
-				// Not authenticated - proceed without user context
-				// Public endpoints will work, protected endpoints will check for user_id
-				slog.Debug("No valid session", "error", err, "cookieLen", len(cookie))
+			// Fast path: no credentials present.
+			if cookie == "" && sessionToken == "" {
 				next.ServeHTTP(w, r)
 				return
 			}
 
-			// Authenticated - inject user info into context
-			if session.Identity != nil {
-				ctx = context.WithValue(ctx, UserIDKey, session.Identity.Id)
+			slog.Debug("Auth middleware", "hasCookie", cookie != "", "hasToken", sessionToken != "", "path", r.URL.Path)
 
-				// Extract email from traits if available
-				if traits, ok := session.Identity.Traits.(map[string]interface{}); ok {
-					if email, ok := traits["email"].(string); ok {
-						ctx = context.WithValue(ctx, UserEmailKey, email)
-					}
+			toSession := kratosClient.FrontendAPI.ToSession(ctx)
+			if cookie != "" {
+				toSession = toSession.Cookie(cookie)
+			}
+			if sessionToken != "" {
+				toSession = toSession.XSessionToken(sessionToken)
+			}
+
+			session, _, err := toSession.Execute()
+			if err != nil {
+				// Treat validation failures as anonymous (not hard-fail middleware).
+				// Caller can decide whether endpoint requires auth.
+				slog.Debug("No valid session", "error", err)
+				next.ServeHTTP(w, r)
+				return
+			}
+
+			if session.Identity == nil {
+				next.ServeHTTP(w, r)
+				return
+			}
+
+			ctx = context.WithValue(ctx, UserIDKey, session.Identity.Id)
+
+			if traits, ok := session.Identity.Traits.(map[string]interface{}); ok {
+				if email, ok := traits["email"].(string); ok {
+					ctx = context.WithValue(ctx, UserEmailKey, email)
 				}
 			}
 
-			// Store full session for advanced use cases
 			ctx = context.WithValue(ctx, SessionKey, session)
 
-			slog.Debug("Authenticated request",
-				"user_id", session.Identity.Id,
-			)
-
+			slog.Debug("Authenticated request", "user_id", session.Identity.Id)
 			next.ServeHTTP(w, r.WithContext(ctx))
 		})
 	}

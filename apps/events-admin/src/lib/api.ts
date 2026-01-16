@@ -38,6 +38,12 @@ export const transport = createConnectTransport({
   baseUrl: import.meta.env.VITE_API_URL || 'http://localhost:5555',
   useBinaryFormat: import.meta.env.PROD,
   interceptors: [errorInterceptor],
+  fetch: (input, init) => {
+    return fetch(input, {
+      ...init,
+      credentials: 'include',
+    })
+  },
 })
 
 /**
