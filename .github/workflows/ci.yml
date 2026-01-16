@@ -32,7 +32,9 @@ jobs:
 
       - name: Download Go dependencies
         working-directory: apps/backend
-        run: go mod download
+        run: |
+          cat go.mod | head -5
+          go mod download
 
       - name: Lint Go
         uses: golangci/golangci-lint-action@v6
