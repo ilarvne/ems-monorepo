@@ -32,15 +32,15 @@ jobs:
           cache-dependency-path: 'apps/backend/go.sum'
 
       - name: Download Go dependencies
-        run: |
-          cd apps/backend
-          go mod download
+        working-directory: apps/backend
+        run: go mod download
 
       - name: Lint Go
         uses: golangci/golangci-lint-action@v6
         with:
           version: v1.59
           working-directory: apps/backend
+          skip-cache: true
 
   build-frontend:
     runs-on: ubuntu-latest
