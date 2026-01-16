@@ -6,5 +6,6 @@ export default defineConfig({
     url: process.env.DATABASE_URL!
   },
   casing: 'snake_case',
-  schema: './src/schema.ts'
+  schema: './src/schema.ts',
+  out: './migrations'
 })
