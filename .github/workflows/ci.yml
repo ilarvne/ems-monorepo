@@ -22,7 +22,7 @@ jobs:
         run: bun install
 
       - name: Lint TypeScript
-        run: bun run lint
+        run: bunx nx run-many -t lint --exclude=backend
 
       - name: Setup Go
         uses: actions/setup-go@v5
@@ -32,10 +32,10 @@ jobs:
           cache-dependency-path: 'apps/backend/go.sum'
 
       - name: Lint Go
-        run: |
-          cd apps/backend
-          go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
-          golangci-lint run
+        uses: golangci/golangci-lint-action@v6
+        with:
+          version: v1.59
+          working-directory: apps/backend
 
   build-frontend:
     runs-on: ubuntu-latest
