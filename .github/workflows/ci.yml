@@ -101,7 +101,7 @@ jobs:
         run: bun install
 
       - name: Show affected projects
-        run: bunx nx affected --base=origin/main --head=HEAD --plain
+        run: bunx nx show projects --affected --base=origin/main --head=HEAD
 
       - name: Build affected
-        run: bunx nx affected --base=origin/main --head=HEAD --target=build
+        run: bunx nx affected -t build --base=origin/main --head=HEAD
