@@ -12,7 +12,6 @@
     "./theme-provider": "./src/components/theme-provider.tsx"
   },
   "scripts": {
-    "lint": "eslint .",
     "type-check": "tsc --noEmit"
   },
   "peerDependencies": {
