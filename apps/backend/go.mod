@@ -1,12 +1,13 @@
 module github.com/studyverse/ems-backend
 
-go 1.25.5
+go 1.23
 
 require (
 	connectrpc.com/connect v1.19.1
 	github.com/authzed/authzed-go v1.7.0
 	github.com/authzed/grpcutil v0.0.0-20260105210157-e237581949c2
 	github.com/jackc/pgx/v5 v5.8.0
+	github.com/meilisearch/meilisearch-go v0.35.1
 	github.com/ory/kratos-client-go v1.3.8
 	golang.org/x/net v0.49.0
 	google.golang.org/grpc v1.78.0
@@ -29,7 +30,6 @@ require (
 	github.com/jackc/puddle/v2 v2.2.2 // indirect
 	github.com/jzelinskie/stringz v0.0.3 // indirect
 	github.com/kr/text v0.2.0 // indirect
-	github.com/meilisearch/meilisearch-go v0.35.1 // indirect
 	github.com/planetscale/vtprotobuf v0.6.1-0.20240319094008-0393e58bdf10 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/samber/lo v1.52.0 // indirect
