@@ -386,6 +386,7 @@ message ListEventsForAdminRequest {
 
 message ListEventsForAdminResponse {
   repeated Event events = 1;
+  int32 total = 2;
 }
 
 // Event Registration messages
