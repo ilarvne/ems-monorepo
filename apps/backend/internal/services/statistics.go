@@ -27,14 +27,14 @@ func (s *StatisticsService) GetDashboardStatistics(ctx context.Context, req *con
 
 	// Get total counts
 	var totalEvents, totalRegs, totalAttendees int32
-	s.pool.QueryRow(ctx, `SELECT COUNT(*) FROM events`).Scan(&totalEvents)
-	s.pool.QueryRow(ctx, `SELECT COUNT(*) FROM event_registrations WHERE status = 'registered'`).Scan(&totalRegs)
-	s.pool.QueryRow(ctx, `SELECT COUNT(*) FROM event_attendance WHERE status = 'attended'`).Scan(&totalAttendees)
+	_ = s.pool.QueryRow(ctx, `SELECT COUNT(*) FROM events`).Scan(&totalEvents)
+	_ = s.pool.QueryRow(ctx, `SELECT COUNT(*) FROM event_registrations WHERE status = 'registered'`).Scan(&totalRegs)
+	_ = s.pool.QueryRow(ctx, `SELECT COUNT(*) FROM event_attendance WHERE status = 'attended'`).Scan(&totalAttendees)
 
 	now := time.Now()
 	var upcomingEvents, pastEvents int32
-	s.pool.QueryRow(ctx, `SELECT COUNT(*) FROM events WHERE start_time >= $1`, now).Scan(&upcomingEvents)
-	s.pool.QueryRow(ctx, `SELECT COUNT(*) FROM events WHERE start_time < $1`, now).Scan(&pastEvents)
+	_ = s.pool.QueryRow(ctx, `SELECT COUNT(*) FROM events WHERE start_time >= $1`, now).Scan(&upcomingEvents)
+	_ = s.pool.QueryRow(ctx, `SELECT COUNT(*) FROM events WHERE start_time < $1`, now).Scan(&pastEvents)
 
 	// Get recent events with stats
 	rows, err := s.pool.Query(ctx, `

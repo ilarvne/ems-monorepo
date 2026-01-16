@@ -109,7 +109,7 @@ func (s *EventsService) CreateEvent(ctx context.Context, req *connect.Request[ev
 	if err != nil {
 		return nil, connect.NewError(connect.CodeInternal, fmt.Errorf("failed to begin transaction: %w", err))
 	}
-	defer tx.Rollback(ctx)
+	defer func() { _ = tx.Rollback(ctx) }()
 
 	qtx := s.queries.WithTx(tx)
 
@@ -359,7 +359,7 @@ func (s *EventsService) UpdateEvent(ctx context.Context, req *connect.Request[ev
 	if err != nil {
 		return nil, connect.NewError(connect.CodeInternal, fmt.Errorf("failed to begin transaction: %w", err))
 	}
-	defer tx.Rollback(ctx)
+	defer func() { _ = tx.Rollback(ctx) }()
 
 	qtx := s.queries.WithTx(tx)
 

@@ -366,6 +366,8 @@ func protoStatusToDB(status eventsv1.OrganizationStatus) db.OrganizationStatus {
 	}
 }
 
+// protoStatusToString converts a proto organization status to a string
+// nolint:unused
 func protoStatusToString(status eventsv1.OrganizationStatus) string {
 	switch status {
 	case eventsv1.OrganizationStatus_ORGANIZATION_STATUS_ARCHIVED:

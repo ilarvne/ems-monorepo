@@ -108,7 +108,7 @@ func (c *Client) initializeIndexes() error {
 			if err != nil {
 				slog.Warn("Failed to update searchable attributes", "index", idx.name, "error", err)
 			} else {
-				c.meili.WaitForTask(task.TaskUID, defaultWaitInterval)
+				_, _ = c.meili.WaitForTask(task.TaskUID, defaultWaitInterval)
 			}
 		}
 
@@ -122,7 +122,7 @@ func (c *Client) initializeIndexes() error {
 			if err != nil {
 				slog.Warn("Failed to update filterable attributes", "index", idx.name, "error", err)
 			} else {
-				c.meili.WaitForTask(task.TaskUID, defaultWaitInterval)
+				_, _ = c.meili.WaitForTask(task.TaskUID, defaultWaitInterval)
 			}
 		}
 
@@ -132,7 +132,7 @@ func (c *Client) initializeIndexes() error {
 			if err != nil {
 				slog.Warn("Failed to update sortable attributes", "index", idx.name, "error", err)
 			} else {
-				c.meili.WaitForTask(task.TaskUID, defaultWaitInterval)
+				_, _ = c.meili.WaitForTask(task.TaskUID, defaultWaitInterval)
 			}
 		}
 

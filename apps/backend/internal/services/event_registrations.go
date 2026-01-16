@@ -42,10 +42,11 @@ func (s *EventRegistrationsService) RegisterForEvent(ctx context.Context, req *c
 		return nil, connect.NewError(connect.CodeInternal, err)
 	}
 	if err == nil {
-		// Found existing registration
+		// Found existing registration - check if cancelled
+		// If cancelled, we could allow re-registration, but for now just return duplicate error
 		if existing.Status == db.RegistrationStatusCancelled {
-			// Allow re-registration logic if needed, but for now duplicate
-			// In a real app we might update the existing one
+			// TODO: Consider allowing re-registration by updating existing record
+			slog.Debug("Found cancelled registration, returning duplicate error", "event_id", req.Msg.EventId, "user_id", req.Msg.UserId)
 		}
 		return nil, connect.NewError(connect.CodeAlreadyExists, nil)
 	}
