@@ -1,7 +1,8 @@
 module github.com/studyverse/ems-backend
 
-go 1.23
+go 1.23.0
 
+toolchain go1.23.5
 
 require (
 	connectrpc.com/connect v1.17.0
