@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"connectrpc.com/connect"
+	"github.com/jackc/pgx/v5"
 	eventsv1 "github.com/studyverse/ems-backend/gen/eventsv1"
 	"github.com/studyverse/ems-backend/gen/eventsv1/eventsv1connect"
 	"github.com/studyverse/ems-backend/internal/db"
@@ -21,27 +22,38 @@ func NewEventRegistrationsService(queries *db.Queries) *EventRegistrationsServic
 }
 
 func (s *EventRegistrationsService) RegisterForEvent(ctx context.Context, req *connect.Request[eventsv1.RegisterForEventRequest]) (*connect.Response[eventsv1.RegisterForEventResponse], error) {
-	slog.Info("RegisterForEvent", "eventId", req.Msg.EventId, "userId", req.Msg.UserId)
+	slog.Debug("RegisterForEvent", "eventId", req.Msg.EventId, "userId", req.Msg.UserId)
 
 	// Check if event exists
-	event, err := s.queries.GetEvent(ctx, req.Msg.EventId)
+	_, err := s.queries.GetEvent(ctx, req.Msg.EventId)
 	if err != nil {
+		if err == pgx.ErrNoRows {
+			return nil, connect.NewError(connect.CodeNotFound, nil)
+		}
 		return nil, connect.NewError(connect.CodeInternal, err)
-	}
-	if event == nil {
-		return nil, connect.NewError(connect.CodeNotFound, nil)
 	}
 
 	// Check if already registered
-	existing, err := s.queries.GetEventRegistrationByEventAndUser(ctx, req.Msg.EventId, req.Msg.UserId)
-	if err != nil {
+	existing, err := s.queries.GetEventRegistrationByEventAndUser(ctx, db.GetEventRegistrationByEventAndUserParams{
+		EventID: req.Msg.EventId,
+		UserID:  req.Msg.UserId,
+	})
+	if err != nil && err != pgx.ErrNoRows {
 		return nil, connect.NewError(connect.CodeInternal, err)
 	}
-	if existing != nil {
+	if err == nil {
+		// Found existing registration
+		if existing.Status == db.RegistrationStatusCancelled {
+			// Allow re-registration logic if needed, but for now duplicate
+			// In a real app we might update the existing one
+		}
 		return nil, connect.NewError(connect.CodeAlreadyExists, nil)
 	}
 
-	reg, err := s.queries.CreateEventRegistration(ctx, req.Msg.EventId, req.Msg.UserId)
+	reg, err := s.queries.CreateEventRegistration(ctx, db.CreateEventRegistrationParams{
+		EventID: req.Msg.EventId,
+		UserID:  req.Msg.UserId,
+	})
 	if err != nil {
 		return nil, connect.NewError(connect.CodeInternal, err)
 	}
@@ -52,14 +64,14 @@ func (s *EventRegistrationsService) RegisterForEvent(ctx context.Context, req *c
 }
 
 func (s *EventRegistrationsService) CancelRegistration(ctx context.Context, req *connect.Request[eventsv1.CancelRegistrationRequest]) (*connect.Response[eventsv1.CancelRegistrationResponse], error) {
-	slog.Info("CancelRegistration", "registrationId", req.Msg.RegistrationId)
+	slog.Debug("CancelRegistration", "registrationId", req.Msg.RegistrationId)
 
-	reg, err := s.queries.GetEventRegistration(ctx, req.Msg.RegistrationId)
+	_, err := s.queries.GetEventRegistration(ctx, req.Msg.RegistrationId)
 	if err != nil {
+		if err == pgx.ErrNoRows {
+			return nil, connect.NewError(connect.CodeNotFound, nil)
+		}
 		return nil, connect.NewError(connect.CodeInternal, err)
-	}
-	if reg == nil {
-		return nil, connect.NewError(connect.CodeNotFound, nil)
 	}
 
 	err = s.queries.CancelEventRegistration(ctx, req.Msg.RegistrationId)
@@ -73,7 +85,7 @@ func (s *EventRegistrationsService) CancelRegistration(ctx context.Context, req 
 }
 
 func (s *EventRegistrationsService) GetEventRegistrations(ctx context.Context, req *connect.Request[eventsv1.GetEventRegistrationsRequest]) (*connect.Response[eventsv1.GetEventRegistrationsResponse], error) {
-	slog.Info("GetEventRegistrations", "eventId", req.Msg.EventId)
+	slog.Debug("GetEventRegistrations", "eventId", req.Msg.EventId)
 
 	page := int32(1)
 	if req.Msg.Page != nil {
@@ -84,24 +96,33 @@ func (s *EventRegistrationsService) GetEventRegistrations(ctx context.Context, r
 		limit = *req.Msg.Limit
 	}
 
-	regs, total, err := s.queries.GetEventRegistrations(ctx, req.Msg.EventId, limit, (page-1)*limit)
+	regs, err := s.queries.GetEventRegistrations(ctx, db.GetEventRegistrationsParams{
+		EventID: req.Msg.EventId,
+		Limit:   limit,
+		Offset:  (page - 1) * limit,
+	})
+	if err != nil {
+		return nil, connect.NewError(connect.CodeInternal, err)
+	}
+
+	total, err := s.queries.CountEventRegistrations(ctx, req.Msg.EventId)
 	if err != nil {
 		return nil, connect.NewError(connect.CodeInternal, err)
 	}
 
 	protoRegs := make([]*eventsv1.EventRegistration, len(regs))
 	for i, r := range regs {
-		protoRegs[i] = dbEventRegistrationToProto(&r)
+		protoRegs[i] = dbEventRegistrationToProto(r)
 	}
 
 	return connect.NewResponse(&eventsv1.GetEventRegistrationsResponse{
 		Registrations: protoRegs,
-		Total:         total,
+		Total:         int32(total),
 	}), nil
 }
 
 func (s *EventRegistrationsService) GetUserRegistrations(ctx context.Context, req *connect.Request[eventsv1.GetUserRegistrationsRequest]) (*connect.Response[eventsv1.GetUserRegistrationsResponse], error) {
-	slog.Info("GetUserRegistrations", "userId", req.Msg.UserId)
+	slog.Debug("GetUserRegistrations", "userId", req.Msg.UserId)
 
 	regs, err := s.queries.GetUserRegistrations(ctx, req.Msg.UserId)
 	if err != nil {
@@ -110,7 +131,7 @@ func (s *EventRegistrationsService) GetUserRegistrations(ctx context.Context, re
 
 	protoRegs := make([]*eventsv1.EventRegistration, len(regs))
 	for i, r := range regs {
-		protoRegs[i] = dbEventRegistrationToProto(&r)
+		protoRegs[i] = dbEventRegistrationToProto(r)
 	}
 
 	return connect.NewResponse(&eventsv1.GetUserRegistrationsResponse{
@@ -118,15 +139,15 @@ func (s *EventRegistrationsService) GetUserRegistrations(ctx context.Context, re
 	}), nil
 }
 
-func dbEventRegistrationToProto(r *db.EventRegistration) *eventsv1.EventRegistration {
+func dbEventRegistrationToProto(r db.EventRegistration) *eventsv1.EventRegistration {
 	reg := &eventsv1.EventRegistration{
 		Id:           r.ID,
 		EventId:      r.EventID,
 		UserId:       r.UserID,
 		Status:       dbRegistrationStatusToProto(r.Status),
-		RegisteredAt: r.RegisteredAt.Format(time.RFC3339),
-		CreatedAt:    r.CreatedAt.Format(time.RFC3339),
-		UpdatedAt:    r.UpdatedAt.Format(time.RFC3339),
+		RegisteredAt: r.RegisteredAt.Time.Format(time.RFC3339),
+		CreatedAt:    r.CreatedAt.Time.Format(time.RFC3339),
+		UpdatedAt:    r.UpdatedAt.Time.Format(time.RFC3339),
 	}
 	if r.CancelledAt.Valid {
 		cancelledAt := r.CancelledAt.Time.Format(time.RFC3339)
@@ -135,13 +156,13 @@ func dbEventRegistrationToProto(r *db.EventRegistration) *eventsv1.EventRegistra
 	return reg
 }
 
-func dbRegistrationStatusToProto(status string) eventsv1.RegistrationStatus {
+func dbRegistrationStatusToProto(status db.RegistrationStatus) eventsv1.RegistrationStatus {
 	switch status {
-	case "registered":
+	case db.RegistrationStatusRegistered:
 		return eventsv1.RegistrationStatus_REGISTRATION_STATUS_REGISTERED
-	case "cancelled":
+	case db.RegistrationStatusCancelled:
 		return eventsv1.RegistrationStatus_REGISTRATION_STATUS_CANCELLED
-	case "waitlist":
+	case db.RegistrationStatusWaitlist:
 		return eventsv1.RegistrationStatus_REGISTRATION_STATUS_WAITLIST
 	default:
 		return eventsv1.RegistrationStatus_REGISTRATION_STATUS_UNSPECIFIED

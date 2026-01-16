@@ -3,8 +3,11 @@ package services
 import (
 	"context"
 	"log/slog"
+	"time"
 
 	"connectrpc.com/connect"
+	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgtype"
 	eventsv1 "github.com/studyverse/ems-backend/gen/eventsv1"
 	"github.com/studyverse/ems-backend/gen/eventsv1/eventsv1connect"
 	"github.com/studyverse/ems-backend/internal/db"
@@ -20,7 +23,7 @@ func NewOrganizationTypesService(queries *db.Queries) *OrganizationTypesService 
 }
 
 func (s *OrganizationTypesService) CreateOrganizationType(ctx context.Context, req *connect.Request[eventsv1.CreateOrganizationTypeRequest]) (*connect.Response[eventsv1.CreateOrganizationTypeResponse], error) {
-	slog.Info("CreateOrganizationType", "title", req.Msg.Title)
+	slog.Debug("CreateOrganizationType", "title", req.Msg.Title)
 
 	ot, err := s.queries.CreateOrganizationType(ctx, req.Msg.Title)
 	if err != nil {
@@ -33,14 +36,14 @@ func (s *OrganizationTypesService) CreateOrganizationType(ctx context.Context, r
 }
 
 func (s *OrganizationTypesService) GetOrganizationType(ctx context.Context, req *connect.Request[eventsv1.GetOrganizationTypeRequest]) (*connect.Response[eventsv1.GetOrganizationTypeResponse], error) {
-	slog.Info("GetOrganizationType", "id", req.Msg.Id)
+	slog.Debug("GetOrganizationType", "id", req.Msg.Id)
 
 	ot, err := s.queries.GetOrganizationType(ctx, req.Msg.Id)
 	if err != nil {
+		if err == pgx.ErrNoRows {
+			return nil, connect.NewError(connect.CodeNotFound, nil)
+		}
 		return nil, connect.NewError(connect.CodeInternal, err)
-	}
-	if ot == nil {
-		return nil, connect.NewError(connect.CodeNotFound, nil)
 	}
 
 	return connect.NewResponse(&eventsv1.GetOrganizationTypeResponse{
@@ -49,7 +52,7 @@ func (s *OrganizationTypesService) GetOrganizationType(ctx context.Context, req 
 }
 
 func (s *OrganizationTypesService) ListOrganizationTypes(ctx context.Context, req *connect.Request[eventsv1.ListOrganizationTypesRequest]) (*connect.Response[eventsv1.ListOrganizationTypesResponse], error) {
-	slog.Info("ListOrganizationTypes", "page", req.Msg.Page, "limit", req.Msg.Limit)
+	slog.Debug("ListOrganizationTypes", "page", req.Msg.Page, "limit", req.Msg.Limit)
 
 	page := req.Msg.Page
 	if page <= 0 {
@@ -60,31 +63,46 @@ func (s *OrganizationTypesService) ListOrganizationTypes(ctx context.Context, re
 		limit = 10
 	}
 
-	types, total, err := s.queries.ListOrganizationTypes(ctx, limit, (page-1)*limit)
+	types, err := s.queries.ListOrganizationTypes(ctx, db.ListOrganizationTypesParams{
+		Limit:  limit,
+		Offset: (page - 1) * limit,
+	})
+	if err != nil {
+		return nil, connect.NewError(connect.CodeInternal, err)
+	}
+
+	total, err := s.queries.CountOrganizationTypes(ctx)
 	if err != nil {
 		return nil, connect.NewError(connect.CodeInternal, err)
 	}
 
 	protoTypes := make([]*eventsv1.OrganizationType, len(types))
 	for i, t := range types {
-		protoTypes[i] = dbOrganizationTypeToProto(&t)
+		protoTypes[i] = dbOrganizationTypeToProto(t)
 	}
 
 	return connect.NewResponse(&eventsv1.ListOrganizationTypesResponse{
 		OrganizationTypes: protoTypes,
-		Total:             total,
+		Total:             int32(total),
 	}), nil
 }
 
 func (s *OrganizationTypesService) UpdateOrganizationType(ctx context.Context, req *connect.Request[eventsv1.UpdateOrganizationTypeRequest]) (*connect.Response[eventsv1.UpdateOrganizationTypeResponse], error) {
-	slog.Info("UpdateOrganizationType", "id", req.Msg.Id)
+	slog.Debug("UpdateOrganizationType", "id", req.Msg.Id)
 
-	ot, err := s.queries.UpdateOrganizationType(ctx, req.Msg.Id, req.Msg.Title)
-	if err != nil {
-		return nil, connect.NewError(connect.CodeInternal, err)
+	params := db.UpdateOrganizationTypeParams{
+		ID: req.Msg.Id,
 	}
-	if ot == nil {
-		return nil, connect.NewError(connect.CodeNotFound, nil)
+	if req.Msg.Title != nil {
+		params.Title = pgtype.Text{String: *req.Msg.Title, Valid: true}
+	}
+
+	ot, err := s.queries.UpdateOrganizationType(ctx, params)
+	if err != nil {
+		if err == pgx.ErrNoRows {
+			return nil, connect.NewError(connect.CodeNotFound, nil)
+		}
+		return nil, connect.NewError(connect.CodeInternal, err)
 	}
 
 	return connect.NewResponse(&eventsv1.UpdateOrganizationTypeResponse{
@@ -93,23 +111,23 @@ func (s *OrganizationTypesService) UpdateOrganizationType(ctx context.Context, r
 }
 
 func (s *OrganizationTypesService) DeleteOrganizationType(ctx context.Context, req *connect.Request[eventsv1.DeleteOrganizationTypeRequest]) (*connect.Response[eventsv1.DeleteOrganizationTypeResponse], error) {
-	slog.Info("DeleteOrganizationType", "id", req.Msg.Id)
+	slog.Debug("DeleteOrganizationType", "id", req.Msg.Id)
 
-	success, err := s.queries.DeleteOrganizationType(ctx, req.Msg.Id)
+	err := s.queries.DeleteOrganizationType(ctx, req.Msg.Id)
 	if err != nil {
 		return nil, connect.NewError(connect.CodeInternal, err)
 	}
 
 	return connect.NewResponse(&eventsv1.DeleteOrganizationTypeResponse{
-		Success: success,
+		Success: true,
 	}), nil
 }
 
-func dbOrganizationTypeToProto(ot *db.OrganizationType) *eventsv1.OrganizationType {
+func dbOrganizationTypeToProto(ot db.OrganizationType) *eventsv1.OrganizationType {
 	return &eventsv1.OrganizationType{
 		Id:        ot.ID,
 		Title:     ot.Title,
-		CreatedAt: ot.CreatedAt.Format("2006-01-02T15:04:05Z07:00"),
-		UpdatedAt: ot.UpdatedAt.Format("2006-01-02T15:04:05Z07:00"),
+		CreatedAt: ot.CreatedAt.Time.Format(time.RFC3339),
+		UpdatedAt: ot.UpdatedAt.Time.Format(time.RFC3339),
 	}
 }

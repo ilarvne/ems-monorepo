@@ -6,6 +6,8 @@ import (
 	"time"
 
 	"connectrpc.com/connect"
+	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgtype"
 	eventsv1 "github.com/studyverse/ems-backend/gen/eventsv1"
 	"github.com/studyverse/ems-backend/gen/eventsv1/eventsv1connect"
 	"github.com/studyverse/ems-backend/internal/db"
@@ -21,29 +23,45 @@ func NewEventAttendanceService(queries *db.Queries) *EventAttendanceService {
 }
 
 func (s *EventAttendanceService) CheckInAttendee(ctx context.Context, req *connect.Request[eventsv1.CheckInAttendeeRequest]) (*connect.Response[eventsv1.CheckInAttendeeResponse], error) {
-	slog.Info("CheckInAttendee", "registrationId", req.Msg.RegistrationId)
+	slog.Debug("CheckInAttendee", "registrationId", req.Msg.RegistrationId)
 
 	// Check if registration exists
-	reg, err := s.queries.GetEventRegistration(ctx, req.Msg.RegistrationId)
+	_, err := s.queries.GetEventRegistration(ctx, req.Msg.RegistrationId)
 	if err != nil {
+		if err == pgx.ErrNoRows {
+			return nil, connect.NewError(connect.CodeNotFound, nil)
+		}
 		return nil, connect.NewError(connect.CodeInternal, err)
-	}
-	if reg == nil {
-		return nil, connect.NewError(connect.CodeNotFound, nil)
 	}
 
 	// Check if already has attendance record
-	existing, err := s.queries.GetEventAttendanceByRegistration(ctx, req.Msg.RegistrationId)
-	if err != nil {
+	_, err = s.queries.GetEventAttendanceByRegistration(ctx, req.Msg.RegistrationId)
+	if err != nil && err != pgx.ErrNoRows {
 		return nil, connect.NewError(connect.CodeInternal, err)
 	}
 
-	var att *db.EventAttendance
-	checkedInBy := &req.Msg.CheckedInBy
-	if existing != nil {
-		att, err = s.queries.UpdateEventAttendance(ctx, req.Msg.RegistrationId, "checked_in", req.Msg.Notes)
+	var att db.EventAttendance
+	var notes pgtype.Text
+	if req.Msg.Notes != nil {
+		notes = pgtype.Text{String: *req.Msg.Notes, Valid: true}
+	}
+
+	if err == nil {
+		// Existing record - update
+		att, err = s.queries.UpdateEventAttendance(ctx, db.UpdateEventAttendanceParams{
+			RegistrationID: req.Msg.RegistrationId,
+			Status:         db.AttendanceStatusCheckedIn,
+			Notes:          notes,
+		})
 	} else {
-		att, err = s.queries.CreateEventAttendance(ctx, req.Msg.RegistrationId, "checked_in", checkedInBy, req.Msg.Notes)
+		// New record - create
+		att, err = s.queries.CreateEventAttendance(ctx, db.CreateEventAttendanceParams{
+			RegistrationID: req.Msg.RegistrationId,
+			Status:         db.AttendanceStatusCheckedIn,
+			MarkCheckedIn:  true,
+			CheckedInBy:    pgtype.Int4{Int32: req.Msg.CheckedInBy, Valid: true},
+			Notes:          notes,
+		})
 	}
 	if err != nil {
 		return nil, connect.NewError(connect.CodeInternal, err)
@@ -55,30 +73,47 @@ func (s *EventAttendanceService) CheckInAttendee(ctx context.Context, req *conne
 }
 
 func (s *EventAttendanceService) MarkAttendance(ctx context.Context, req *connect.Request[eventsv1.MarkAttendanceRequest]) (*connect.Response[eventsv1.MarkAttendanceResponse], error) {
-	slog.Info("MarkAttendance", "registrationId", req.Msg.RegistrationId, "status", req.Msg.Status)
+	slog.Debug("MarkAttendance", "registrationId", req.Msg.RegistrationId, "status", req.Msg.Status)
 
 	// Check if registration exists
-	reg, err := s.queries.GetEventRegistration(ctx, req.Msg.RegistrationId)
+	_, err := s.queries.GetEventRegistration(ctx, req.Msg.RegistrationId)
 	if err != nil {
+		if err == pgx.ErrNoRows {
+			return nil, connect.NewError(connect.CodeNotFound, nil)
+		}
 		return nil, connect.NewError(connect.CodeInternal, err)
 	}
-	if reg == nil {
-		return nil, connect.NewError(connect.CodeNotFound, nil)
-	}
 
-	status := protoAttendanceStatusToString(req.Msg.Status)
+	status := protoAttendanceStatusToDB(req.Msg.Status)
 
 	// Check if already has attendance record
-	existing, err := s.queries.GetEventAttendanceByRegistration(ctx, req.Msg.RegistrationId)
-	if err != nil {
+	_, err = s.queries.GetEventAttendanceByRegistration(ctx, req.Msg.RegistrationId)
+	if err != nil && err != pgx.ErrNoRows {
 		return nil, connect.NewError(connect.CodeInternal, err)
 	}
 
-	var att *db.EventAttendance
-	if existing != nil {
-		att, err = s.queries.UpdateEventAttendance(ctx, req.Msg.RegistrationId, status, req.Msg.Notes)
+	var att db.EventAttendance
+	var notes pgtype.Text
+	if req.Msg.Notes != nil {
+		notes = pgtype.Text{String: *req.Msg.Notes, Valid: true}
+	}
+
+	if err == nil {
+		// Update
+		att, err = s.queries.UpdateEventAttendance(ctx, db.UpdateEventAttendanceParams{
+			RegistrationID: req.Msg.RegistrationId,
+			Status:         status,
+			Notes:          notes,
+		})
 	} else {
-		att, err = s.queries.CreateEventAttendance(ctx, req.Msg.RegistrationId, status, nil, req.Msg.Notes)
+		// Create
+		markCheckedIn := status == db.AttendanceStatusCheckedIn || status == db.AttendanceStatusAttended
+		att, err = s.queries.CreateEventAttendance(ctx, db.CreateEventAttendanceParams{
+			RegistrationID: req.Msg.RegistrationId,
+			Status:         status,
+			MarkCheckedIn:  markCheckedIn,
+			Notes:          notes,
+		})
 	}
 	if err != nil {
 		return nil, connect.NewError(connect.CodeInternal, err)
@@ -90,33 +125,38 @@ func (s *EventAttendanceService) MarkAttendance(ctx context.Context, req *connec
 }
 
 func (s *EventAttendanceService) GetEventAttendance(ctx context.Context, req *connect.Request[eventsv1.GetEventAttendanceRequest]) (*connect.Response[eventsv1.GetEventAttendanceResponse], error) {
-	slog.Info("GetEventAttendance", "eventId", req.Msg.EventId)
+	slog.Debug("GetEventAttendance", "eventId", req.Msg.EventId)
 
-	stats, err := s.queries.GetEventAttendance(ctx, req.Msg.EventId)
+	attendanceList, err := s.queries.GetEventAttendanceForEvent(ctx, req.Msg.EventId)
 	if err != nil {
 		return nil, connect.NewError(connect.CodeInternal, err)
 	}
 
-	protoAtt := make([]*eventsv1.EventAttendance, len(stats.Attendance))
-	for i, a := range stats.Attendance {
-		protoAtt[i] = dbEventAttendanceToProto(&a)
+	stats, err := s.queries.CountEventAttendanceStats(ctx, req.Msg.EventId)
+	if err != nil {
+		return nil, connect.NewError(connect.CodeInternal, err)
+	}
+
+	protoAtt := make([]*eventsv1.EventAttendance, len(attendanceList))
+	for i, a := range attendanceList {
+		protoAtt[i] = dbEventAttendanceToProto(a)
 	}
 
 	return connect.NewResponse(&eventsv1.GetEventAttendanceResponse{
 		Attendance:      protoAtt,
-		TotalRegistered: stats.TotalRegistered,
-		TotalAttended:   stats.TotalAttended,
-		TotalNoShow:     stats.TotalNoShow,
+		TotalRegistered: int32(stats.TotalRegistered),
+		TotalAttended:   int32(stats.TotalAttended),
+		TotalNoShow:     int32(stats.TotalNoShow),
 	}), nil
 }
 
-func dbEventAttendanceToProto(a *db.EventAttendance) *eventsv1.EventAttendance {
+func dbEventAttendanceToProto(a db.EventAttendance) *eventsv1.EventAttendance {
 	att := &eventsv1.EventAttendance{
 		Id:             a.ID,
 		RegistrationId: a.RegistrationID,
 		Status:         dbAttendanceStatusToProto(a.Status),
-		CreatedAt:      a.CreatedAt.Format(time.RFC3339),
-		UpdatedAt:      a.UpdatedAt.Format(time.RFC3339),
+		CreatedAt:      a.CreatedAt.Time.Format(time.RFC3339),
+		UpdatedAt:      a.UpdatedAt.Time.Format(time.RFC3339),
 	}
 	if a.CheckedInAt.Valid {
 		checkedInAt := a.CheckedInAt.Time.Format(time.RFC3339)
@@ -131,28 +171,28 @@ func dbEventAttendanceToProto(a *db.EventAttendance) *eventsv1.EventAttendance {
 	return att
 }
 
-func dbAttendanceStatusToProto(status string) eventsv1.AttendanceStatus {
+func dbAttendanceStatusToProto(status db.AttendanceStatus) eventsv1.AttendanceStatus {
 	switch status {
-	case "attended":
+	case db.AttendanceStatusAttended:
 		return eventsv1.AttendanceStatus_ATTENDANCE_STATUS_ATTENDED
-	case "no_show":
+	case db.AttendanceStatusNoShow:
 		return eventsv1.AttendanceStatus_ATTENDANCE_STATUS_NO_SHOW
-	case "checked_in":
+	case db.AttendanceStatusCheckedIn:
 		return eventsv1.AttendanceStatus_ATTENDANCE_STATUS_CHECKED_IN
 	default:
 		return eventsv1.AttendanceStatus_ATTENDANCE_STATUS_UNSPECIFIED
 	}
 }
 
-func protoAttendanceStatusToString(status eventsv1.AttendanceStatus) string {
+func protoAttendanceStatusToDB(status eventsv1.AttendanceStatus) db.AttendanceStatus {
 	switch status {
 	case eventsv1.AttendanceStatus_ATTENDANCE_STATUS_ATTENDED:
-		return "attended"
+		return db.AttendanceStatusAttended
 	case eventsv1.AttendanceStatus_ATTENDANCE_STATUS_NO_SHOW:
-		return "no_show"
+		return db.AttendanceStatusNoShow
 	case eventsv1.AttendanceStatus_ATTENDANCE_STATUS_CHECKED_IN:
-		return "checked_in"
+		return db.AttendanceStatusCheckedIn
 	default:
-		return "attended"
+		return db.AttendanceStatusAttended
 	}
 }

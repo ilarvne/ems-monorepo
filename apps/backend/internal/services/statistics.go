@@ -6,10 +6,10 @@ import (
 	"time"
 
 	"connectrpc.com/connect"
+	"github.com/jackc/pgx/v5/pgxpool"
 	eventsv1 "github.com/studyverse/ems-backend/gen/eventsv1"
 	"github.com/studyverse/ems-backend/gen/eventsv1/eventsv1connect"
 	"github.com/studyverse/ems-backend/internal/db"
-	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 type StatisticsService struct {
@@ -23,7 +23,7 @@ func NewStatisticsService(queries *db.Queries, pool *pgxpool.Pool) *StatisticsSe
 }
 
 func (s *StatisticsService) GetDashboardStatistics(ctx context.Context, req *connect.Request[eventsv1.GetDashboardStatisticsRequest]) (*connect.Response[eventsv1.GetDashboardStatisticsResponse], error) {
-	slog.Info("GetDashboardStatistics")
+	slog.Debug("GetDashboardStatistics")
 
 	// Get total counts
 	var totalEvents, totalRegs, totalAttendees int32
@@ -94,7 +94,7 @@ func (s *StatisticsService) GetDashboardStatistics(ctx context.Context, req *con
 }
 
 func (s *StatisticsService) GetEventStatistics(ctx context.Context, req *connect.Request[eventsv1.GetEventStatisticsRequest]) (*connect.Response[eventsv1.GetEventStatisticsResponse], error) {
-	slog.Info("GetEventStatistics", "eventId", req.Msg.EventId)
+	slog.Debug("GetEventStatistics", "eventId", req.Msg.EventId)
 
 	var totalRegs, totalAttended, checkedIn, noShow int32
 	s.pool.QueryRow(ctx, `SELECT COUNT(*) FROM event_registrations WHERE event_id = $1 AND status = 'registered'`, req.Msg.EventId).Scan(&totalRegs)
@@ -129,7 +129,7 @@ func (s *StatisticsService) GetEventStatistics(ctx context.Context, req *connect
 }
 
 func (s *StatisticsService) GetEventTagsDistributionByMonth(ctx context.Context, req *connect.Request[eventsv1.GetEventTagsDistributionByMonthRequest]) (*connect.Response[eventsv1.GetEventTagsDistributionByMonthResponse], error) {
-	slog.Info("GetEventTagsDistributionByMonth", "year", req.Msg.Year, "month", req.Msg.Month)
+	slog.Debug("GetEventTagsDistributionByMonth", "year", req.Msg.Year, "month", req.Msg.Month)
 
 	startDate := time.Date(int(req.Msg.Year), time.Month(req.Msg.Month), 1, 0, 0, 0, 0, time.UTC)
 	endDate := startDate.AddDate(0, 1, 0)
@@ -172,7 +172,7 @@ func (s *StatisticsService) GetEventTagsDistributionByMonth(ctx context.Context,
 }
 
 func (s *StatisticsService) GetEventActivityByYear(ctx context.Context, req *connect.Request[eventsv1.GetEventActivityByYearRequest]) (*connect.Response[eventsv1.GetEventActivityByYearResponse], error) {
-	slog.Info("GetEventActivityByYear", "year", req.Msg.Year)
+	slog.Debug("GetEventActivityByYear", "year", req.Msg.Year)
 
 	startDate := time.Date(int(req.Msg.Year), 1, 1, 0, 0, 0, 0, time.UTC)
 	endDate := startDate.AddDate(1, 0, 0)
@@ -220,7 +220,7 @@ func (s *StatisticsService) GetEventActivityByYear(ctx context.Context, req *con
 }
 
 func (s *StatisticsService) GetOverallStatistics(ctx context.Context, req *connect.Request[eventsv1.GetOverallStatisticsRequest]) (*connect.Response[eventsv1.GetOverallStatisticsResponse], error) {
-	slog.Info("GetOverallStatistics")
+	slog.Debug("GetOverallStatistics")
 
 	var totalEvents, totalUsers, totalOrgs, totalRegs, upcomingEvents int32
 	s.pool.QueryRow(ctx, `SELECT COUNT(*) FROM events`).Scan(&totalEvents)
@@ -256,19 +256,19 @@ func (s *StatisticsService) GetOverallStatistics(ctx context.Context, req *conne
 	s.pool.QueryRow(ctx, `SELECT COUNT(*) FROM event_registrations WHERE registered_at >= $1 AND registered_at < $2`, monthStart, monthEnd).Scan(&regsThisMonth)
 
 	return connect.NewResponse(&eventsv1.GetOverallStatisticsResponse{
-		TotalEvents:           totalEvents,
-		TotalUsers:            totalUsers,
-		TotalOrganizations:    totalOrgs,
-		TotalRegistrations:    totalRegs,
-		UpcomingEvents:        upcomingEvents,
-		AverageAttendanceRate: avgRate,
-		EventsThisMonth:       eventsThisMonth,
+		TotalEvents:            totalEvents,
+		TotalUsers:             totalUsers,
+		TotalOrganizations:     totalOrgs,
+		TotalRegistrations:     totalRegs,
+		UpcomingEvents:         upcomingEvents,
+		AverageAttendanceRate:  avgRate,
+		EventsThisMonth:        eventsThisMonth,
 		RegistrationsThisMonth: regsThisMonth,
 	}), nil
 }
 
 func (s *StatisticsService) GetEventTrends(ctx context.Context, req *connect.Request[eventsv1.GetEventTrendsRequest]) (*connect.Response[eventsv1.GetEventTrendsResponse], error) {
-	slog.Info("GetEventTrends", "days", req.Msg.Days)
+	slog.Debug("GetEventTrends", "days", req.Msg.Days)
 
 	days := int(req.Msg.Days)
 	if days <= 0 {
@@ -312,7 +312,7 @@ func (s *StatisticsService) GetEventTrends(ctx context.Context, req *connect.Req
 }
 
 func (s *StatisticsService) GetTopPerformingClubs(ctx context.Context, req *connect.Request[eventsv1.GetTopPerformingClubsRequest]) (*connect.Response[eventsv1.GetTopPerformingClubsResponse], error) {
-	slog.Info("GetTopPerformingClubs", "limit", req.Msg.Limit, "days", req.Msg.Days)
+	slog.Debug("GetTopPerformingClubs", "limit", req.Msg.Limit, "days", req.Msg.Days)
 
 	limit := int(req.Msg.Limit)
 	if limit <= 0 {
@@ -373,7 +373,7 @@ func (s *StatisticsService) GetTopPerformingClubs(ctx context.Context, req *conn
 }
 
 func (s *StatisticsService) GetUserEngagementLevels(ctx context.Context, req *connect.Request[eventsv1.GetUserEngagementLevelsRequest]) (*connect.Response[eventsv1.GetUserEngagementLevelsResponse], error) {
-	slog.Info("GetUserEngagementLevels")
+	slog.Debug("GetUserEngagementLevels")
 
 	var totalUsers int32
 	s.pool.QueryRow(ctx, `SELECT COUNT(*) FROM users`).Scan(&totalUsers)
@@ -416,7 +416,7 @@ func (s *StatisticsService) GetUserEngagementLevels(ctx context.Context, req *co
 }
 
 func (s *StatisticsService) GetTopPerformingEvents(ctx context.Context, req *connect.Request[eventsv1.GetTopPerformingEventsRequest]) (*connect.Response[eventsv1.GetTopPerformingEventsResponse], error) {
-	slog.Info("GetTopPerformingEvents", "limit", req.Msg.Limit)
+	slog.Debug("GetTopPerformingEvents", "limit", req.Msg.Limit)
 
 	limit := int(req.Msg.Limit)
 	if limit <= 0 {
@@ -474,7 +474,7 @@ func (s *StatisticsService) GetTopPerformingEvents(ctx context.Context, req *con
 			TotalAttendees:     totalAttended,
 			AttendanceRate:     avgRate,
 		}
-		if org != nil {
+		if org.ID != 0 {
 			event.Organization = dbOrganizationToProto(org)
 		}
 		events = append(events, event)
@@ -486,7 +486,7 @@ func (s *StatisticsService) GetTopPerformingEvents(ctx context.Context, req *con
 }
 
 func (s *StatisticsService) GetLowRegistrationEvents(ctx context.Context, req *connect.Request[eventsv1.GetLowRegistrationEventsRequest]) (*connect.Response[eventsv1.GetLowRegistrationEventsResponse], error) {
-	slog.Info("GetLowRegistrationEvents", "threshold", req.Msg.Threshold)
+	slog.Debug("GetLowRegistrationEvents", "threshold", req.Msg.Threshold)
 
 	daysAhead := int(req.Msg.DaysAhead)
 	if daysAhead <= 0 {
@@ -535,7 +535,7 @@ func (s *StatisticsService) GetLowRegistrationEvents(ctx context.Context, req *c
 			CapacityUtilization: float64(totalRegs) / 100 * 100,
 			DaysUntilEvent:      daysUntil,
 		}
-		if org != nil {
+		if org.ID != 0 {
 			event.Organization = dbOrganizationToProto(org)
 		}
 		events = append(events, event)
@@ -547,7 +547,7 @@ func (s *StatisticsService) GetLowRegistrationEvents(ctx context.Context, req *c
 }
 
 func (s *StatisticsService) GetOrganizationActivity(ctx context.Context, req *connect.Request[eventsv1.GetOrganizationActivityRequest]) (*connect.Response[eventsv1.GetOrganizationActivityResponse], error) {
-	slog.Info("GetOrganizationActivity", "limit", req.Msg.Limit)
+	slog.Debug("GetOrganizationActivity", "limit", req.Msg.Limit)
 
 	limit := int(req.Msg.Limit)
 	if limit <= 0 {
