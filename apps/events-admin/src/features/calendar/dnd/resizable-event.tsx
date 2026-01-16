@@ -12,7 +12,7 @@ import { motion } from "framer-motion";
 import { Resizable, type ResizeCallback } from "re-resizable";
 import type React from "react";
 import { useCallback, useMemo, useState } from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "@repo/ui/lib/utils";
 import { useCalendar } from "@/features/calendar/contexts/calendar-context";
 
 import type { IEvent } from "@/features/calendar/interfaces";
@@ -148,7 +148,7 @@ export function ResizableEvent({
 			onResizeStop: handleResizeStop,
 			className: cn(
 				"transition-all duration-200",
-				isResizing && "z-50 shadow-lg",
+				isResizing && "z-50 ring-2 ring-primary/50",
 			),
 		}),
 		[handleResizeStart, handleResize, handleResizeStop, isResizing],
@@ -169,7 +169,7 @@ export function ResizableEvent({
 					initial={{ opacity: 0, y: -10 }}
 					animate={{ opacity: 1, y: 0 }}
 					exit={{ opacity: 0, y: -10 }}
-					className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded shadow-lg z-50 whitespace-nowrap"
+					className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded z-50 whitespace-nowrap"
 				>
 					{resizePreview.start} - {resizePreview.end}
 				</motion.div>

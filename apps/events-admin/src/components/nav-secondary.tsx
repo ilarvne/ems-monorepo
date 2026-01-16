@@ -1,7 +1,7 @@
 'use client'
 
-import { type Icon } from '@tabler/icons-react'
 import { Link, useMatchRoute } from '@tanstack/react-router'
+import { type LucideIcon } from 'lucide-react'
 import * as React from 'react'
 
 import {
@@ -10,7 +10,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem
-} from '@/components/ui/sidebar'
+} from '@repo/ui/components/sidebar'
 
 export function NavSecondary({
   items,
@@ -19,7 +19,7 @@ export function NavSecondary({
   items: {
     title: string
     url: string
-    icon: Icon
+    icon: LucideIcon
   }[]
 } & React.ComponentPropsWithoutRef<typeof SidebarGroup>) {
   const matchRoute = useMatchRoute()

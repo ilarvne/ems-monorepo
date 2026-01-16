@@ -1,13 +1,13 @@
-import { Suspense, useState } from "react";
 import { useQuery } from "@connectrpc/connect-query";
 import { getEventActivityByYear } from "@repo/proto";
 import { Calendar1 } from "lucide-react";
+import { useState } from "react";
 
-import { GitHubContributionFallback } from "./graph";
-import { AnimatedGitHubContributionGraph } from './graph';
+import { AnimatedGitHubContributionGraph, GitHubContributionFallback } from "./graph";
 import type { Activity } from "@/features/statistics/components/kibo-ui/contribution-graph";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { Button } from "@repo/ui/components/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@repo/ui/components/card";
+import { cn } from "@repo/ui/lib/utils";
 
 interface EventActivityProps {
   year?: number;
@@ -20,33 +20,28 @@ export function EventActivity({ year: initialYear }: EventActivityProps) {
   // Generate list of years (current year and 4 previous years)
   const years = Array.from({ length: 5 }, (_, i) => currentYear - i);
 
-  const { data, isLoading } = useQuery(
-    getEventActivityByYear, {
-      year: selectedYear,
-    }
-  );
+	const { data, isLoading } = useQuery(getEventActivityByYear, {
+		year: selectedYear,
+	});
 
-  const contributions = (data?.activities || []).map((activity) => ({
-    date: activity.date,
-    count: activity.count,
-    level: activity.level,
-  })) as Activity[];
-
-  if (isLoading) {
-    return <GitHubContributionFallback />;
-  }
+	const activities = (data?.activities || []) as Activity[];
+	const contributions = activities.map((activity) => ({
+		date: activity.date,
+		count: activity.count,
+		level: activity.level,
+	}));
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-start justify-between gap-4">
+    <Card>
+      <CardHeader className="flex flex-row items-start justify-between gap-4">
         <div className="space-y-1">
-          <h2 className="text-lg font-semibold flex items-center gap-2">
+          <CardTitle className="flex items-center gap-2">
             <Calendar1 className="size-5" />
             Event Activity
-          </h2>
-          <p className="text-sm text-muted-foreground">
-            Analyze event creation trends and busy periods
-          </p>
+          </CardTitle>
+          <CardDescription>
+            Events created and registrations over time
+          </CardDescription>
         </div>
         
         <div className="flex gap-1">
@@ -65,11 +60,15 @@ export function EventActivity({ year: initialYear }: EventActivityProps) {
             </Button>
           ))}
         </div>
-      </div>
+      </CardHeader>
+		<CardContent>
+			{isLoading ? (
+				<GitHubContributionFallback />
+			) : (
+				<AnimatedGitHubContributionGraph contributions={contributions} />
+			)}
+		</CardContent>
 
-      <Suspense fallback={<GitHubContributionFallback />}>
-        <AnimatedGitHubContributionGraph contributions={Promise.resolve(contributions)} />
-      </Suspense>
-    </div>
+    </Card>
   );
 }

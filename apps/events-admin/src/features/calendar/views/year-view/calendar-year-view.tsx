@@ -1,15 +1,16 @@
-import { getYear, isSameDay, isSameMonth } from "date-fns";
+import { getYear, isSameDay, isSameMonth, startOfDay } from "date-fns";
 import { motion } from "framer-motion";
-import { cn } from "@/lib/utils";
+import { cn } from "@repo/ui/lib/utils";
 import {
 	staggerContainer,
 	transition,
 } from "@/features/calendar/animations";
 import { useCalendar } from "@/features/calendar/contexts/calendar-context";
 import { EventListDialog } from "@/features/calendar/dialogs/events-list-dialog";
-import { getCalendarCells } from "@/features/calendar/helpers";
+import { getCalendarCells, groupEventsByDay } from "@/features/calendar/helpers";
 import type { IEvent } from "@/features/calendar/interfaces";
 import { EventBullet } from "@/features/calendar/views/month-view/event-bullet";
+import { useMemo } from "react";
 
 interface IProps {
 	singleDayEvents: IEvent[];
@@ -36,7 +37,13 @@ const WEEKDAYS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 export function CalendarYearView({ singleDayEvents, multiDayEvents }: IProps) {
 	const { selectedDate, setSelectedDate } = useCalendar();
 	const currentYear = getYear(selectedDate);
-	const allEvents = [...multiDayEvents, ...singleDayEvents];
+	
+	const allEvents = useMemo(
+		() => [...multiDayEvents, ...singleDayEvents],
+		[multiDayEvents, singleDayEvents]
+	);
+
+	const eventsByDay = useMemo(() => groupEventsByDay(allEvents), [allEvents]);
 
 	return (
 		<div className="flex flex-col h-full  overflow-y-auto p-4  sm:p-6">
@@ -54,7 +61,7 @@ export function CalendarYearView({ singleDayEvents, multiDayEvents }: IProps) {
 					return (
 						<motion.div
 							key={month}
-							className="flex flex-col border border-border rounded-lg shadow-sm overflow-hidden"
+							className="flex flex-col border border-border rounded-lg overflow-hidden"
 							initial={{ opacity: 0, scale: 0.95 }}
 							animate={{ opacity: 1, scale: 1 }}
 							transition={{ delay: monthIndex * 0.05, ...transition }}
@@ -91,13 +98,13 @@ export function CalendarYearView({ singleDayEvents, multiDayEvents }: IProps) {
 								{cells.map((cell) => {
 									const isCurrentMonth = isSameMonth(cell.date, monthDate);
 									const isToday = isSameDay(cell.date, new Date());
-									const dayEvents = allEvents.filter((event) =>
-										isSameDay(new Date(event.startDate), cell.date),
-									);
+									const dayKey = startOfDay(cell.date).toISOString();
+									const dayEvents = eventsByDay[dayKey] || [];
 									const hasEvents = dayEvents.length > 0;
 
 									return (
 										<div
+
 											key={cell.date.toISOString()}
 											className={cn(
 												"flex flex-col items-center justify-start p-1 min-h-[2rem] relative",

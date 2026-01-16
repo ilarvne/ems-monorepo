@@ -435,6 +435,23 @@ export const useGetEventsByMode = (events: IEvent[]) => {
 	}
 };
 
+export function groupEventsByDay(events: IEvent[]): Record<string, IEvent[]> {
+	const groups: Record<string, IEvent[]> = {};
+	events.forEach((event) => {
+		const start = startOfDay(parseISO(event.startDate));
+		const end = startOfDay(parseISO(event.endDate));
+		
+		if (!isValid(start) || !isValid(end) || start > end) return;
+
+		eachDayOfInterval({ start, end }).forEach((day) => {
+			const key = day.toISOString();
+			if (!groups[key]) groups[key] = [];
+			groups[key].push(event);
+		});
+	});
+	return groups;
+}
+
 export const toCapitalize = (str: string): string => {
 	if (!str) return "";
 	return str.charAt(0).toUpperCase() + str.slice(1);

@@ -1,11 +1,11 @@
 import { format, isWithinInterval, parseISO } from "date-fns";
 import { Calendar, Clock, User } from "lucide-react";
 import { useEffect, useRef } from "react";
-import { DayPicker } from "@/components/ui/day-picker";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { DayPicker } from "@repo/ui/components/day-picker";
+import { ScrollArea } from "@repo/ui/components/scroll-area";
 import { useCalendar } from "@/features/calendar/contexts/calendar-context";
 
-import { AddEditEventDialog } from "@/features/calendar/dialogs/add-edit-event-dialog";
+import { CreateEventTrigger } from "@/features/events/components";
 import { DroppableArea } from "@/features/calendar/dnd/droppable-area";
 import { groupEvents } from "@/features/calendar/helpers";
 import type { IEvent } from "@/features/calendar/interfaces";
@@ -88,11 +88,11 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
 					/>
 
 					{/* Day header */}
-					<div className="relative z-20 flex border-b">
-						<div className="w-18"></div>
-						<span className="flex-1 border-l py-2 text-center text-xs font-medium text-t-quaternary">
+					<div className="relative z-20 flex border-b border-border">
+						<div className="w-[72px]"></div>
+						<span className="flex-1 border-l border-border py-2 text-center text-xs font-medium text-muted-foreground">
 							{format(selectedDate, "EE")}{" "}
-							<span className="font-semibold text-t-secondary">
+							<span className="font-semibold text-foreground">
 								{format(selectedDate, "d")}
 							</span>
 						</span>
@@ -102,12 +102,12 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
 				<ScrollArea className="h-[800px]" type="always" ref={scrollAreaRef}>
 					<div className="flex">
 						{/* Hours column */}
-						<div className="relative w-18">
+						<div className="relative w-[72px]">
 							{hours.map((hour, index) => (
 								<div key={hour} className="relative" style={{ height: "96px" }}>
 									<div className="absolute -top-3 right-2 flex h-6 items-center">
 										{index !== 0 && (
-											<span className="text-xs text-t-quaternary">
+											<span className="text-xs text-muted-foreground">
 												{format(
 													new Date().setHours(hour, 0, 0, 0),
 													use24HourFormat ? "HH:00" : "h a",
@@ -120,7 +120,7 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
 						</div>
 
 						{/* Day grid */}
-						<div className="relative flex-1 border-l">
+						<div className="relative flex-1 border-l border-border">
 							<div className="relative">
 								{hours.map((hour, index) => (
 									<div
@@ -129,38 +129,38 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
 										style={{ height: "96px" }}
 									>
 										{index !== 0 && (
-											<div className="pointer-events-none absolute inset-x-0 top-0 border-b"></div>
+											<div className="pointer-events-none absolute inset-x-0 top-0 border-b border-border"></div>
 										)}
 
-										<DroppableArea
-											date={selectedDate}
-											hour={hour}
-											minute={0}
-											className="absolute inset-x-0 top-0 h-[48px]"
-										>
-											<AddEditEventDialog
-												startDate={selectedDate}
-												startTime={{ hour, minute: 0 }}
-											>
-												<div className="absolute inset-0 cursor-pointer transition-colors hover:bg-secondary" />
-											</AddEditEventDialog>
-										</DroppableArea>
+								<DroppableArea
+									date={selectedDate}
+									hour={hour}
+									minute={0}
+									className="absolute inset-x-0 top-0 h-[48px]"
+								>
+									<CreateEventTrigger
+										startDate={selectedDate}
+										startTime={{ hour, minute: 0 }}
+									>
+										<div className="absolute inset-0 cursor-pointer transition-colors hover:bg-secondary" />
+									</CreateEventTrigger>
+								</DroppableArea>
 
-										<div className="pointer-events-none absolute inset-x-0 top-1/2 border-b border-dashed border-b-tertiary"></div>
+								<div className="pointer-events-none absolute inset-x-0 top-1/2 border-b border-dashed border-border/50"></div>
 
-										<DroppableArea
-											date={selectedDate}
-											hour={hour}
-											minute={30}
-											className="absolute inset-x-0 bottom-0 h-[48px]"
-										>
-											<AddEditEventDialog
-												startDate={selectedDate}
-												startTime={{ hour, minute: 30 }}
-											>
-												<div className="absolute inset-0 cursor-pointer transition-colors hover:bg-secondary" />
-											</AddEditEventDialog>
-										</DroppableArea>
+								<DroppableArea
+									date={selectedDate}
+									hour={hour}
+									minute={30}
+									className="absolute inset-x-0 bottom-0 h-[48px]"
+								>
+									<CreateEventTrigger
+										startDate={selectedDate}
+										startTime={{ hour, minute: 30 }}
+									>
+										<div className="absolute inset-0 cursor-pointer transition-colors hover:bg-secondary" />
+									</CreateEventTrigger>
+								</DroppableArea>
 									</div>
 								))}
 
@@ -176,13 +176,12 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
 				</ScrollArea>
 			</div>
 
-			<div className="hidden w-72 divide-y border-l md:block">
+			<div className="hidden w-72 divide-y divide-border border-l border-border md:block">
 				<DayPicker
 					className="mx-auto w-fit"
 					mode="single"
 					selected={selectedDate}
 					onSelect={(date) => date && setSelectedDate(date)}
-					initialFocus
 				/>
 
 				<div className="flex-1 space-y-3">
@@ -193,12 +192,12 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
 								<span className="relative inline-flex size-2.5 rounded-full bg-green-600"></span>
 							</span>
 
-							<p className="text-sm font-semibold text-t-secondary">
+							<p className="text-sm font-semibold text-foreground">
 								Happening now
 							</p>
 						</div>
 					) : (
-						<p className="p-4 text-center text-sm italic text-t-tertiary">
+						<p className="p-4 text-center text-sm italic text-muted-foreground">
 							No appointments or consultations at the moment
 						</p>
 					)}
@@ -217,23 +216,23 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
 
 											{user && (
 												<div className="flex items-center gap-1.5">
-													<User className="size-4 text-t-quinary" />
-													<span className="text-sm text-t-tertiary">
+													<User className="size-4 text-muted-foreground" />
+													<span className="text-sm text-muted-foreground">
 														{user.name}
 													</span>
 												</div>
 											)}
 
 											<div className="flex items-center gap-1.5">
-												<Calendar className="size-4 text-t-quinary" />
-												<span className="text-sm text-t-tertiary">
+												<Calendar className="size-4 text-muted-foreground" />
+												<span className="text-sm text-muted-foreground">
 													{format(new Date(event.startDate), "MMM d, yyyy")}
 												</span>
 											</div>
 
 											<div className="flex items-center gap-1.5">
-												<Clock className="size-4 text-t-quinary" />
-												<span className="text-sm text-t-tertiary">
+												<Clock className="size-4 text-muted-foreground" />
+												<span className="text-sm text-muted-foreground">
 													{format(
 														parseISO(event.startDate),
 														use24HourFormat ? "HH:mm" : "hh:mm a",

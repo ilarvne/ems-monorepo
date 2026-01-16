@@ -1,63 +1,61 @@
-import type { ColumnDef, FilterFn } from '@tanstack/react-table'
-import { useState } from 'react'
-import type { User } from '@repo/proto'
+import { type User } from '@repo/proto'
+import { type ColumnDef, type FilterFn } from '@tanstack/react-table'
+
+import { UserAvatar } from './user-avatar'
+
+// Helper function for formatting dates
+const formatDate = (dateString: string) => {
+  if (!dateString) return '-'
+  try {
+    const date = new Date(dateString)
+    if (isNaN(date.getTime())) return '-'
+    return new Intl.DateTimeFormat('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    }).format(date)
+  } catch {
+    return '-'
+  }
+}
 
 // Custom filter function for multi-column searching
-const multiColumnFilterFn: FilterFn<User> = (row, _columnId, filterValue) => {
+export const multiColumnFilterFn: FilterFn<User> = (row, _columnId, filterValue) => {
   const searchableRowContent = `${row.original.username} ${row.original.email}`.toLowerCase()
   const searchTerm = (filterValue ?? '').toLowerCase()
   return searchableRowContent.includes(searchTerm)
 }
 
-const UserAvatar = ({ username }: { username: string }) => {
-  const [imageError, setImageError] = useState(false)
-  const avatarUrl = `https://t.me/i/userpic/320/${username}.jpg`
-
-  const handleImageLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
-    const img = e.currentTarget
-    // Check if image is 1x1 pixel (placeholder)
-    if (img.naturalWidth === 1 && img.naturalHeight === 1) {
-      setImageError(true)
-    }
-  }
-
-  if (imageError) {
-    return (
-      <div className='flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-muted text-sm font-medium'>
-        {username.slice(0, 2).toUpperCase()}
-      </div>
-    )
-  }
-
-  return (
-    <img
-      alt={username}
-      className='h-10 w-10 shrink-0 rounded-full object-cover'
-      onError={() => setImageError(true)}
-      onLoad={handleImageLoad}
-      src={avatarUrl}
-    />
-  )
-}
-
+// Column definitions - no select/delete columns (DataTable adds them automatically)
 export const columns: ColumnDef<User>[] = [
   {
     accessorKey: 'id',
     header: 'ID',
-    size: 60
+    size: 60,
+    minSize: 60,
+    maxSize: 60,
+    enableSorting: true,
+    cell: ({ row }) => (
+      <span className="font-mono text-xs text-muted-foreground">
+        {row.original.id}
+      </span>
+    )
   },
   {
     accessorKey: 'username',
-    header: 'Username',
+    header: 'User',
     size: 200,
+    minSize: 150,
+    enableSorting: true,
     filterFn: multiColumnFilterFn,
     cell: ({ row }) => {
       const username = row.getValue('username') as string
-
       return (
-        <div className='flex items-center gap-3'>
+        <div className="flex items-center gap-2 min-w-0">
           <UserAvatar username={username} />
-          <span className='font-medium'>{username}</span>
+          <span className="font-medium text-sm truncate" title={username}>
+            {username}
+          </span>
         </div>
       )
     }
@@ -65,24 +63,25 @@ export const columns: ColumnDef<User>[] = [
   {
     accessorKey: 'email',
     header: 'Email',
-    size: 200
+    size: 220,
+    minSize: 150,
+    enableSorting: true,
+    cell: ({ row }) => (
+      <span className="text-sm truncate" title={row.getValue('email') as string}>
+        {row.getValue('email') as string}
+      </span>
+    )
   },
   {
     accessorKey: 'created_at',
     header: 'Created',
-    size: 150,
-    cell: ({ row }) => {
-      const dateString = row.getValue('created_at') as string
-      if (!dateString) return '-'
-      
-      const date = new Date(dateString)
-      if (isNaN(date.getTime())) return '-'
-      
-      return new Intl.DateTimeFormat('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric'
-      }).format(date)
-    }
+    size: 120,
+    minSize: 100,
+    enableSorting: true,
+    cell: ({ row }) => (
+      <span className="text-xs text-muted-foreground tabular-nums whitespace-nowrap">
+        {formatDate(row.getValue('created_at') as string)}
+      </span>
+    )
   }
 ]

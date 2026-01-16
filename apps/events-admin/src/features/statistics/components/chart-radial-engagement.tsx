@@ -3,10 +3,10 @@ import { getUserEngagementLevels } from '@repo/proto'
 import { TrendingUp, TrendingDown, VenetianMask } from 'lucide-react'
 import { LabelList, RadialBar, RadialBarChart } from 'recharts'
 
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import type { ChartConfig } from '@/components/ui/chart'
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
-import { Skeleton } from '@/components/ui/skeleton'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@repo/ui/components/card'
+import type { ChartConfig } from '@repo/ui/components/chart'
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@repo/ui/components/chart'
+import { Skeleton } from '@repo/ui/components/skeleton'
 
 const chartConfig = {
   count: {
@@ -58,7 +58,6 @@ export function ChartRadialEngagement() {
   // Extract percentage change from trend message for badge display
   const percentageMatch = trendMessage.match(/\(([0-9.]+)%\s+(increase|decrease)/)
   const percentageChange = percentageMatch ? percentageMatch[1] : null
-  const changeType = percentageMatch ? percentageMatch[2] : null
   
   // Get base conversion rate
   const conversionRateMatch = trendMessage.match(/^([0-9.]+)%/)

@@ -11,7 +11,7 @@ import {
   type HTMLMotionProps,
 } from 'motion/react';
 
-import { cn } from '@/lib/utils';
+import { cn } from '@repo/ui/lib/utils';
 import { useIsInView } from '@/hooks/use-is-in-view';
 import { Slot, type WithAsChild } from '@/components/animate-ui/primitives/animate/slot';
 

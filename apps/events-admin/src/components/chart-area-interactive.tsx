@@ -6,11 +6,11 @@ import { getEventTrends } from '@repo/proto'
 import { TrendingUp } from 'lucide-react'
 import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts'
 
-import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import type { ChartConfig } from '@/components/ui/chart'
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
+import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/components/card'
+import type { ChartConfig } from '@repo/ui/components/chart'
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@repo/ui/components/chart'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@repo/ui/components/select'
+import { ToggleGroup, ToggleGroupItem } from '@repo/ui/components/toggle-group'
 
 import { useIsMobile } from '@/hooks/use-mobile'
 
@@ -105,33 +105,36 @@ export function ChartAreaInteractive() {
           </div>
         ) : (
           <ChartContainer config={chartConfig} className='aspect-auto h-[250px] w-full'>
-            <AreaChart
-              accessibilityLayer
-              data={chartData}
-              margin={{
-                left: 12,
-                right: 12
-              }}
-            >
-              <CartesianGrid vertical={false} />
-              <XAxis
-                dataKey='date'
-                tickLine={false}
-                axisLine={false}
-                tickMargin={8}
-                minTickGap={32}
-                tickFormatter={(value) => {
-                  const date = new Date(value)
-                  return date.toLocaleDateString('en-US', {
-                    month: 'short',
-                    day: 'numeric'
-                  })
+              <AreaChart
+                accessibilityLayer
+                data={chartData}
+                margin={{
+                  left: 0,
+                  right: 0,
+                  top: 10,
+                  bottom: 0
                 }}
-              />
-              <ChartTooltip
-                cursor={false}
-                content={
-                  <ChartTooltipContent
+              >
+                <CartesianGrid vertical={false} strokeDasharray="3 3" opacity={0.5} />
+                <XAxis
+                  dataKey='date'
+                  tickLine={false}
+                  axisLine={false}
+                  tickMargin={8}
+                  minTickGap={32}
+                  tickFormatter={(value) => {
+                    const date = new Date(value)
+                    return date.toLocaleDateString('en-US', {
+                      month: 'short',
+                      day: 'numeric'
+                    })
+                  }}
+                />
+                <ChartTooltip
+                  cursor={false}
+                  content={
+                    <ChartTooltipContent
+
                     labelFormatter={(value) => {
                       return new Date(value).toLocaleDateString('en-US', {
                         month: 'short',
@@ -155,17 +158,21 @@ export function ChartAreaInteractive() {
               </defs>
               <Area
                 dataKey='registrationCount'
-                type='natural'
+                type='monotone'
                 fill='url(#fillRegistrationCount)'
                 fillOpacity={0.4}
                 stroke='var(--color-registrationCount)'
+                strokeWidth={2}
+                stackId="1"
               />
               <Area
                 dataKey='eventCount'
-                type='natural'
+                type='monotone'
                 fill='url(#fillEventCount)'
                 fillOpacity={0.4}
                 stroke='var(--color-eventCount)'
+                strokeWidth={2}
+                stackId="2"
               />
             </AreaChart>
           </ChartContainer>

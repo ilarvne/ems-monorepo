@@ -1,9 +1,9 @@
 import { type ColumnDef } from '@tanstack/react-table'
 import { ArrowUpDown, Calendar, TrendingUp, Building2 } from 'lucide-react'
 
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Badge } from '@repo/ui/components/badge'
+import { Button } from '@repo/ui/components/button'
+import { Avatar, AvatarFallback, AvatarImage } from '@repo/ui/components/avatar'
 
 interface OrganizationActivity {
   id: number

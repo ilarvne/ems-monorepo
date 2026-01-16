@@ -21,7 +21,7 @@ import {
   useContext,
   useMemo,
 } from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "@repo/ui/lib/utils";
 
 export type Activity = {
   date: string;

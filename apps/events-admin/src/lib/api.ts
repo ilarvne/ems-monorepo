@@ -1,7 +1,33 @@
 import { createConnectTransport } from '@connectrpc/connect-web'
 import { MutationCache, QueryCache, QueryClient } from '@tanstack/react-query'
-import { ConnectError } from '@connectrpc/connect'
+import { ConnectError, type Interceptor } from '@connectrpc/connect'
 import { toast } from 'sonner'
+
+/**
+ * Global error handling interceptor for Connect-RPC
+ */
+const errorInterceptor: Interceptor = (next) => async (req) => {
+  try {
+    return await next(req)
+  } catch (err) {
+    if (err instanceof ConnectError) {
+      console.error(`[ConnectError] ${err.code}: ${err.message}`)
+      // Handle specific error codes
+      switch (err.code) {
+        case 16: // Unauthenticated
+          // Optionally redirect to login or refresh token
+          break
+        case 7: // PermissionDenied
+          toast.error('You do not have permission to perform this action.')
+          break
+        default:
+          // Fallback handled by TanStack Query caches
+          break
+      }
+    }
+    throw err
+  }
+}
 
 /**
  * Connect-RPC transport configuration
@@ -11,8 +37,7 @@ import { toast } from 'sonner'
 export const transport = createConnectTransport({
   baseUrl: import.meta.env.VITE_API_URL || 'http://localhost:5555',
   useBinaryFormat: import.meta.env.PROD,
-  // Include credentials for cross-origin requests with cookies
-  credentials: 'include',
+  interceptors: [errorInterceptor],
 })
 
 /**

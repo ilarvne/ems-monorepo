@@ -2,9 +2,9 @@ import type { VariantProps } from "class-variance-authority";
 import { cva } from "class-variance-authority";
 import { differenceInMinutes, parseISO } from "date-fns";
 import type { HTMLAttributes } from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "@repo/ui/lib/utils";
 import { useCalendar } from "@/features/calendar/contexts/calendar-context";
-import { EventDetailsDialog } from "@/features/calendar/dialogs/event-details-dialog";
+import { EventDetailsModal } from "@/features/events/components";
 import { DraggableEvent } from "@/features/calendar/dnd/draggable-event";
 import { ResizableEvent } from "@/features/calendar/dnd/resizable-event";
 import { formatTime } from "@/features/calendar/helpers";
@@ -74,7 +74,7 @@ export function EventBlock({ event, className }: IProps) {
 	return (
 		<ResizableEvent event={event}>
 			<DraggableEvent event={event}>
-				<EventDetailsDialog event={event}>
+				<EventDetailsModal eventId={event.id}>
 					<div
 						role="button"
 						tabIndex={0}
@@ -103,7 +103,7 @@ export function EventBlock({ event, className }: IProps) {
 							</p>
 						)}
 					</div>
-				</EventDetailsDialog>
+				</EventDetailsModal>
 			</DraggableEvent>
 		</ResizableEvent>
 	);

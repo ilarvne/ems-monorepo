@@ -1,10 +1,10 @@
 import { type ColumnDef } from '@tanstack/react-table'
 import { ArrowUpDown, TrendingUp, Users, Calendar } from 'lucide-react'
 
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Progress } from '@/components/ui/progress'
+import { Badge } from '@repo/ui/components/badge'
+import { Button } from '@repo/ui/components/button'
+import { Avatar, AvatarFallback, AvatarImage } from '@repo/ui/components/avatar'
+import { Progress } from '@repo/ui/components/progress'
 
 interface TopPerformingEvent {
   id: number
@@ -33,10 +33,10 @@ export const topPerformingEventsColumns: ColumnDef<TopPerformingEvent>[] = [
             <Calendar className="size-4 text-muted-foreground" />
           </AvatarFallback>
         </Avatar>
-        <div className="flex flex-col">
-          <span className="font-medium">{row.original.title}</span>
+        <div className="flex flex-col min-w-0">
+          <span className="font-medium truncate" title={row.original.title}>{row.original.title}</span>
           {row.original.organization && (
-            <span className="text-xs text-muted-foreground">{row.original.organization.title}</span>
+            <span className="text-xs text-muted-foreground truncate" title={row.original.organization.title}>{row.original.organization.title}</span>
           )}
         </div>
       </div>

@@ -1,8 +1,8 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useQuery } from '@tanstack/react-query'
 import { z } from 'zod'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/components/card'
+import { Button } from '@repo/ui/components/button'
 import { kratos } from '@/lib/auth'
 
 const errorSearchSchema = z.object({
@@ -29,8 +29,9 @@ function ErrorPage() {
     retry: false,
   })
 
-  const errorMessage = errorData?.error?.message || 'There was a problem signing you in. Please try again.'
-  const errorStatus = errorData?.error?.status || 'Authentication Error'
+  const error = errorData?.error as { message?: string; status?: string } | undefined
+  const errorMessage = error?.message || 'There was a problem signing you in. Please try again.'
+  const errorStatus = error?.status || 'Authentication Error'
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background">

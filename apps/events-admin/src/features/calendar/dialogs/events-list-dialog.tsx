@@ -6,14 +6,14 @@ import {
     ModalHeader,
     ModalTitle,
     ModalTrigger,
-} from "@/components/ui/responsive-modal";
-import {cn} from "@/lib/utils";
+} from "@repo/ui/components/responsive-modal";
+import {cn} from "@repo/ui/lib/utils";
 import {useCalendar} from "@/features/calendar/contexts/calendar-context";
 import {formatTime} from "@/features/calendar/helpers";
 import type {IEvent} from "@/features/calendar/interfaces";
 import {dayCellVariants} from "@/features/calendar/views/month-view/day-cell";
 import {EventBullet} from "@/features/calendar/views/month-view/event-bullet";
-import {EventDetailsDialog} from "@/features/calendar/dialogs/event-details-dialog";
+import {EventDetailsModal} from "@/features/events/components";
 
 interface EventListDialogProps {
     date: Date;
@@ -59,7 +59,7 @@ export function EventListDialog({
                 <div className="max-h-[60vh] overflow-y-auto space-y-2">
                     {cellEvents.length > 0 ? (
                         cellEvents.map((event) => (
-                            <EventDetailsDialog event={event} key={event.id}>
+                            <EventDetailsModal eventId={event.id} key={event.id}>
                                 <div
                                     className={cn(
                                         "flex items-center gap-2 p-2 border rounded-md hover:bg-muted cursor-pointer",
@@ -77,7 +77,7 @@ export function EventListDialog({
                                             </p>
                                         </div>
                                 </div>
-                            </EventDetailsDialog>
+                            </EventDetailsModal>
                         ))
                     ) : (
                         <p className="text-sm text-muted-foreground">

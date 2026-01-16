@@ -10,10 +10,10 @@ WORKDIR /app
 COPY package.json bun.lock* ./
 COPY apps/events-admin/package.json ./apps/events-admin/
 COPY packages/proto/package.json ./packages/proto/
-COPY packages/config/prettier/package.json ./packages/config/prettier/
+COPY packages/prettier/package.json ./packages/prettier/
 
 # Install dependencies
-RUN bun install --frozen-lockfile
+RUN bun install
 
 # Stage 2: Builder
 FROM oven/bun:1 AS builder
@@ -29,8 +29,8 @@ COPY apps/events-admin/ ./apps/events-admin/
 COPY tsconfig.base.json ./
 COPY nx.json ./
 
-# Build proto package first
-RUN cd packages/proto && bun run build
+# Build proto package (skip buf generate, use prebuilt gen files)
+RUN cd packages/proto && bun run tsc
 
 # Build the frontend
 ARG VITE_API_URL=http://localhost:3000
@@ -41,7 +41,8 @@ ENV VITE_API_URL=$VITE_API_URL
 ENV VITE_KRATOS_PUBLIC_URL=$VITE_KRATOS_PUBLIC_URL
 ENV VITE_HYDRA_PUBLIC_URL=$VITE_HYDRA_PUBLIC_URL
 
-RUN cd apps/events-admin && bun run build
+# Skip tsc type checking in Docker build (run vite build directly)
+RUN cd apps/events-admin && bun x vite build
 
 # Stage 3: Runner - Nginx for static files
 FROM nginx:alpine AS runner

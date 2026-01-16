@@ -2,7 +2,7 @@
 
 import { isSameDay, parseISO } from "date-fns";
 import { motion } from "framer-motion";
-import React from "react";
+import { useMemo } from "react";
 import { fadeIn, transition } from "@/features/calendar/animations";
 import { useCalendar } from "@/features/calendar/contexts/calendar-context";
 import { AgendaEvents } from "@/features/calendar/views/agenda-view/agenda-events";
@@ -14,17 +14,27 @@ import { CalendarYearView } from "@/features/calendar/views/year-view/calendar-y
 export function CalendarBody() {
 	const { view, events } = useCalendar();
 
-	const singleDayEvents = events.filter((event) => {
-		const startDate = parseISO(event.startDate);
-		const endDate = parseISO(event.endDate);
-		return isSameDay(startDate, endDate);
-	});
+	const { singleDayEvents, multiDayEvents } = useMemo(() => {
+		const single: typeof events = [];
+		const multi: typeof events = [];
 
-	const multiDayEvents = events.filter((event) => {
-		const startDate = parseISO(event.startDate);
-		const endDate = parseISO(event.endDate);
-		return !isSameDay(startDate, endDate);
-	});
+		events.forEach((event) => {
+			if (event.isAllDay) {
+				multi.push(event);
+				return;
+			}
+			const startDate = parseISO(event.startDate);
+			const endDate = parseISO(event.endDate);
+			
+			if (isSameDay(startDate, endDate)) {
+				single.push(event);
+			} else {
+				multi.push(event);
+			}
+		});
+
+		return { singleDayEvents: single, multiDayEvents: multi };
+	}, [events]);
 
 	return (
 		<div className="w-full h-full overflow-scroll relative">

@@ -1,10 +1,10 @@
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "@repo/ui/components/skeleton";
 
 export function WeekViewSkeleton() {
 	return (
 		<div className="flex h-full flex-col">
-			<div className="grid grid-cols-8 border-b">
-				<div className="w-18"></div>
+			<div className="grid grid-cols-8 border-b border-border">
+				<div className="w-[72px]"></div>
 				{Array.from({ length: 7 }).map((_, i) => (
 					<div
 						key={i}
@@ -17,19 +17,19 @@ export function WeekViewSkeleton() {
 			</div>
 
 			<div className="flex flex-1 overflow-y-auto">
-				<div className="w-18 flex-shrink-0">
+				<div className="w-[72px]">
 					{Array.from({ length: 12 }).map((_, i) => (
-						<div key={i} className="relative h-12 border-b pr-2 text-right">
+						<div key={i} className="relative h-12 border-b border-border pr-2 text-right">
 							<Skeleton className="absolute -top-3 right-2 h-4 w-10" />
 						</div>
 					))}
 				</div>
 
-				<div className="grid flex-1 grid-cols-7 divide-x">
+				<div className="grid flex-1 grid-cols-7 divide-x divide-border">
 					{Array.from({ length: 7 }).map((_, dayIndex) => (
 						<div key={dayIndex} className="relative">
 							{Array.from({ length: 12 }).map((_, hourIndex) => (
-								<div key={hourIndex} className="h-12 border-b"></div>
+								<div key={hourIndex} className="h-12 border-b border-border"></div>
 							))}
 						</div>
 					))}

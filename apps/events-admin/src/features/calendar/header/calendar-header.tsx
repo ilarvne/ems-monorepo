@@ -1,37 +1,30 @@
 "use client";
 
+import { Suspense, useState } from "react";
 import { motion } from "framer-motion";
-import {
-	CalendarRange,
-	Columns,
-	Grid2X2,
-	Grid3X3,
-	LayoutList,
-	List,
-	Plus,
-} from "lucide-react";
+import { Loader2, Plus } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
-import { ButtonGroup } from "@/components/ui/button-group";
+import { Button } from "@repo/ui/components/button";
 import {
 	slideFromLeft,
 	slideFromRight,
 	transition,
 } from "@/features/calendar/animations";
 import { useCalendar } from "@/features/calendar/contexts/calendar-context";
-import { AddEditEventDialog } from "@/features/calendar/dialogs/add-edit-event-dialog";
 import { DateNavigator } from "@/features/calendar/header/date-navigator";
 import FilterEvents from "@/features/calendar/header/filter";
 import { TodayButton } from "@/features/calendar/header/today-button";
 import { UserSelect } from "@/features/calendar/header/user-select";
 import { Settings } from "@/features/calendar/settings/settings";
+import { CreateEventForm } from "@/features/events/components";
 import Views from "./view-tabs";
 
 export function CalendarHeader() {
 	const { view, events } = useCalendar();
+	const [isCreateOpen, setIsCreateOpen] = useState(false);
 
 	return (
-		<div className="flex flex-col gap-4 border-b p-4 lg:flex-row lg:items-center lg:justify-between">
+		<div className="flex flex-col gap-4 border-b border-border p-4 lg:flex-row lg:items-center lg:justify-between">
 			<motion.div
 				className="flex items-center gap-3"
 				variants={slideFromLeft}
@@ -58,12 +51,14 @@ export function CalendarHeader() {
 				<div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:gap-1.5">
 					<UserSelect />
 
-					<AddEditEventDialog>
-						<Button>
-							<Plus className="h-4 w-4" />
-							Add Event
-						</Button>
-					</AddEditEventDialog>
+					<Button onClick={() => setIsCreateOpen(true)}>
+						<Plus className="h-4 w-4" />
+						Add Event
+					</Button>
+
+					<Suspense fallback={<div className="h-10 w-10 flex items-center justify-center"><Loader2 className="h-4 w-4 animate-spin" /></div>}>
+						<CreateEventForm open={isCreateOpen} onOpenChange={setIsCreateOpen} />
+					</Suspense>
 				</div>
 				<Settings />
 			</motion.div>

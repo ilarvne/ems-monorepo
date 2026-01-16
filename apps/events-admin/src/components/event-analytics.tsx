@@ -6,13 +6,12 @@ import { listEventsForAdmin, getTopPerformingEvents, getLowRegistrationEvents, g
 import { Calendar, Clock, CheckCircle2, Timer, XCircle, ImageIcon, TrendingUp, AlertTriangle, Building2 } from 'lucide-react'
 import { type ColumnDef, flexRender, getCoreRowModel, getSortedRowModel, type SortingState, useReactTable } from '@tanstack/react-table'
 
-import { Badge } from '@/components/ui/badge'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Progress } from '@/components/ui/progress'
-import { Skeleton } from '@/components/ui/skeleton'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Badge } from '@repo/ui/components/badge'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/components/card'
+import { Progress } from '@repo/ui/components/progress'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@repo/ui/components/table'
+import { Avatar, AvatarFallback, AvatarImage } from '@repo/ui/components/avatar'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@repo/ui/components/tabs'
 import { topPerformingEventsColumns } from '@/features/events/top-performing-events.columns'
 import { lowRegistrationEventsColumns } from '@/features/events/low-registration-events.columns'
 import { organizationActivityColumns } from '@/features/events/organization-activity.columns'
@@ -174,8 +173,6 @@ const columns: ColumnDef<Event>[] = [
 ]
 
 export function EventAnalytics() {
-  'use no memo'
-  
   // Pre-fetch all data at parent level to avoid suspense on tab switch
   const recentEventsQuery = useSuspenseQuery(listEventsForAdmin, {
     page: 1,
@@ -245,8 +242,6 @@ export function EventAnalytics() {
 }
 
 function RecentEventsView({ data }: { data: any }) {
-  'use no memo'
-  
   const [sorting, setSorting] = React.useState<SortingState>([
     { id: 'startTime', desc: true }
   ])
@@ -306,8 +301,6 @@ function RecentEventsView({ data }: { data: any }) {
 }
 
 function TopPerformingEventsView({ data }: { data: any }) {
-  'use no memo'
-  
   const [sorting, setSorting] = React.useState<SortingState>([
     { id: 'attendanceRate', desc: true }
   ])
@@ -365,8 +358,6 @@ function TopPerformingEventsView({ data }: { data: any }) {
 }
 
 function LowRegistrationEventsView({ data }: { data: any }) {
-  'use no memo'
-  
   const [sorting, setSorting] = React.useState<SortingState>([
     { id: 'daysUntilEvent', desc: false }
   ])
@@ -424,8 +415,6 @@ function LowRegistrationEventsView({ data }: { data: any }) {
 }
 
 function OrganizationActivityView({ data }: { data: any }) {
-  'use no memo'
-  
   const [sorting, setSorting] = React.useState<SortingState>([
     { id: 'eventsThisMonth', desc: true }
   ])

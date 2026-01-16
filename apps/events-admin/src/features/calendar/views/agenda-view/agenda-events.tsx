@@ -1,6 +1,6 @@
 import {format, parseISO} from "date-fns";
 import type {FC} from "react";
-import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
+import {Avatar, AvatarFallback, AvatarImage} from "@repo/ui/components/avatar";
 import {
     Command,
     CommandEmpty,
@@ -8,14 +8,15 @@ import {
     CommandInput,
     CommandItem,
     CommandList,
-} from "@/components/ui/command";
-import {cn} from "@/lib/utils";
+} from "@repo/ui/components/command";
+import {cn} from "@repo/ui/lib/utils";
 import {useCalendar} from "@/features/calendar/contexts/calendar-context";
-import {EventDetailsDialog} from "@/features/calendar/dialogs/event-details-dialog";
+import {EventDetailsModal} from "@/features/events/components";
 import {
     formatTime,
     getBgColor,
-    getColorClass, getEventsForMonth,
+    getColorClass,
+    getEventsForMonth,
     getFirstLetters,
     toCapitalize,
 } from "@/features/calendar/helpers";
@@ -27,11 +28,18 @@ export const AgendaEvents: FC = () => {
 
     const monthEvents = getEventsForMonth(events, selectedDate)
 
-    const agendaEvents = Object.groupBy(monthEvents, (event) => {
-        return agendaModeGroupBy === "date"
-            ? format(parseISO(event.startDate), "yyyy-MM-dd")
-            : event.color;
-    });
+    const agendaEvents = monthEvents.reduce<Record<string, typeof monthEvents>>(
+        (acc, event) => {
+            const key =
+                agendaModeGroupBy === "date"
+                    ? format(parseISO(event.startDate), "yyyy-MM-dd")
+                    : event.color;
+            if (!acc[key]) acc[key] = [];
+            acc[key].push(event);
+            return acc;
+        },
+        {},
+    );
 
     const groupedAndSortedEvents = Object.entries(agendaEvents).sort(
         (a, b) => new Date(a[0]).getTime() - new Date(b[0]).getTime(),
@@ -53,10 +61,11 @@ export const AgendaEvents: FC = () => {
                         }
                     >
                         {groupedEvents!.map((event) => (
-                            <CommandItem
-                                key={event.id}
-                                className={cn(
-                                    "mb-2 p-4 border rounded-md data-[selected=true]:bg-bg transition-all data-[selected=true]:text-none hover:cursor-pointer",
+                <CommandItem
+                    key={event.id}
+                    className={cn(
+                        "mb-2 p-4 border rounded-md data-[selected=true]:bg-muted transition-all data-[selected=true]:text-none hover:cursor-pointer",
+
                                     {
                                         [getColorClass(event.color)]: badgeVariant === "colored",
                                         "hover:bg-zinc-200 dark:hover:bg-gray-900":
@@ -65,7 +74,7 @@ export const AgendaEvents: FC = () => {
                                     },
                                 )}
                             >
-                                <EventDetailsDialog event={event}>
+                                <EventDetailsModal eventId={event.id}>
                                     <div className="w-full flex items-center justify-between gap-4">
                                         <div className="flex items-center gap-2">
                                             {badgeVariant === "dot" ? (
@@ -116,7 +125,7 @@ export const AgendaEvents: FC = () => {
                                             )}
                                         </div>
                                     </div>
-                                </EventDetailsDialog>
+                                </EventDetailsModal>
                             </CommandItem>
                         ))}
                     </CommandGroup>

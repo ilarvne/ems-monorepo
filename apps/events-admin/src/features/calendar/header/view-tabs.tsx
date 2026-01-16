@@ -1,8 +1,8 @@
 import { motion, AnimatePresence } from "motion/react";
 
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@repo/ui/components/tabs";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@repo/ui/lib/utils";
 import { useCalendar } from "../contexts/calendar-context";
 import {
   CalendarRange,
@@ -11,7 +11,7 @@ import {
   Grid3X3,
   Grid2X2,
 } from "lucide-react";
-import { TCalendarView } from "../types";
+import type { TCalendarView } from "../types";
 import { memo } from "react";
 
 const tabs = [

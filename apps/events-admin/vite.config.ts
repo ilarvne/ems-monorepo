@@ -9,6 +9,9 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 export default defineConfig({
   root: __dirname,
+  server: {
+    port: 6868,
+  },
   plugins: [
     TanStackRouterVite({
       routesDirectory: path.resolve(__dirname, './src/routes'),

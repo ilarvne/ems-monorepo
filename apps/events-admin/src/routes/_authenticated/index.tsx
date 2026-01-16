@@ -8,8 +8,8 @@ import { EventActivity } from '@/features/statistics/components/github-contribut
 import { ChartPieInteractive } from '@/features/statistics/components/chart-pie-interactive'
 import { ClubLeaderboard } from '@/features/statistics/components/club-leaderboard'
 import { ChartRadialEngagement } from '@/features/statistics/components/chart-radial-engagement'
-import { Skeleton } from '@/components/ui/skeleton'
-import { Card, CardContent, CardHeader } from '@/components/ui/card'
+import { Skeleton } from '@repo/ui/components/skeleton'
+import { Card, CardContent, CardHeader } from '@repo/ui/components/card'
 
 export const Route = createFileRoute('/_authenticated/')({
   component: Dashboard
@@ -20,24 +20,16 @@ function Dashboard() {
   const currentMonth = new Date().getMonth() + 1
 
   return (
-    <>
-      <SectionCards />
-      <div className='grid grid-cols-1 gap-4 px-4 lg:px-6 xl:grid-cols-3'>
-        <ChartAreaInteractive />
-        <ChartPieInteractive year={currentYear} month={currentMonth} />
-      </div>
-      <div className='grid grid-cols-1 gap-4 px-4 lg:px-6 xl:grid-cols-5'>
-        <div className='xl:col-span-2'>
-          <ChartRadialEngagement />
-        </div>
-        <div className='xl:col-span-3'>
-          <ClubLeaderboard limit={5} days={90} />
-        </div>
-      </div>
-      <div className='px-4 lg:px-6'>
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 p-6">
+      {/* --- LEFT COLUMN (Spans 2) --- */}
+      <div className="lg:col-span-2 flex flex-col gap-6">
+        <SectionCards />
+        
+        {/* Activity & Trends */}
         <EventActivity year={currentYear} />
-      </div>
-      <div className='px-4 lg:px-6'>
+        <ChartAreaInteractive />
+        
+        {/* Data Table */}
         <Suspense
           fallback={
             <Card>
@@ -59,6 +51,14 @@ function Dashboard() {
           <EventAnalytics />
         </Suspense>
       </div>
-    </>
+
+      {/* --- RIGHT COLUMN (Spans 1) --- */}
+      <div className="flex flex-col gap-6">
+        {/* Engagement Charts */}
+        <ChartRadialEngagement />
+        <ChartPieInteractive year={currentYear} month={currentMonth} />
+        <ClubLeaderboard limit={5} days={90} />
+      </div>
+    </div>
   )
 }

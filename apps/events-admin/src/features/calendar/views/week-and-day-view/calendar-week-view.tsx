@@ -1,22 +1,22 @@
-import {addDays, format, isSameDay, parseISO, startOfWeek} from "date-fns";
+import {addDays, format, startOfWeek, startOfDay} from "date-fns";
 import {motion} from "framer-motion";
-import {ScrollArea} from "@/components/ui/scroll-area";
+import {ScrollArea} from "@repo/ui/components/scroll-area";
 import {
     fadeIn,
     staggerContainer,
     transition,
 } from "@/features/calendar/animations";
 import {useCalendar} from "@/features/calendar/contexts/calendar-context";
-import {AddEditEventDialog} from "@/features/calendar/dialogs/add-edit-event-dialog";
+import {CreateEventTrigger} from "@/features/events/components";
 import {DroppableArea} from "@/features/calendar/dnd/droppable-area";
-import {groupEvents} from "@/features/calendar/helpers";
+import {groupEvents, groupEventsByDay} from "@/features/calendar/helpers";
 import type {IEvent} from "@/features/calendar/interfaces";
 import {CalendarTimeline} from "@/features/calendar/views/week-and-day-view/calendar-time-line";
 import {RenderGroupedEvents} from "@/features/calendar/views/week-and-day-view/render-grouped-events";
 import {
     WeekViewMultiDayEventsRow
 } from "@/features/calendar/views/week-and-day-view/week-view-multi-day-events-row";
-import {AlertCircleIcon} from 'lucide-react'
+import {useMemo} from "react";
 
 interface IProps {
     singleDayEvents: IEvent[];
@@ -29,6 +29,8 @@ export function CalendarWeekView({singleDayEvents, multiDayEvents}: IProps) {
     const weekStart = startOfWeek(selectedDate);
     const weekDays = Array.from({length: 7}, (_, i) => addDays(weekStart, i));
     const hours = Array.from({length: 24}, (_, i) => i);
+
+    const eventsByDay = useMemo(() => groupEventsByDay(singleDayEvents), [singleDayEvents]);
 
     return (
         <motion.div
@@ -60,18 +62,19 @@ export function CalendarWeekView({singleDayEvents, multiDayEvents}: IProps) {
 
                     {/* Week header */}
                     <motion.div
-                        className="relative z-20 flex border-b"
+                        className="relative z-20 flex border-b border-border"
                         initial={{opacity: 0, y: -20}}
                         animate={{opacity: 1, y: 0}}
                         transition={transition}
                     >
                         {/* Time column header - responsive width */}
-                        <div className="w-18"></div>
-                        <div className="grid flex-1 grid-cols-7  border-l">
+                        <div className="w-[72px]"></div>
+                        <div className="grid flex-1 grid-cols-7 border-l border-border">
                             {weekDays.map((day, index) => (
-                                <motion.span
-                                    key={index}
-                                    className="py-1 sm:py-2 text-center text-xs font-medium text-t-quaternary"
+									<motion.span
+										key={index}
+										className="py-1 sm:py-2 text-center text-xs font-medium text-muted-foreground"
+
                                     initial={{opacity: 0, y: -10}}
                                     animate={{opacity: 1, y: 0}}
                                     transition={{delay: index * 0.05, ...transition}}
@@ -79,14 +82,16 @@ export function CalendarWeekView({singleDayEvents, multiDayEvents}: IProps) {
                                     {/* Mobile: Show only day abbreviation and number */}
                                     <span className="block sm:hidden">
 									{format(day, "EEE").charAt(0)}
-                                        <span className="block font-semibold text-t-secondary text-xs">
+										<span className="block font-semibold text-foreground text-xs">
+
 										{format(day, "d")}
 									</span>
 								</span>
                                     {/* Desktop: Show full format */}
                                     <span className="hidden sm:inline">
 									{format(day, "EE")}{" "}
-                                        <span className="ml-1 font-semibold text-t-secondary">
+										<span className="ml-1 font-semibold text-foreground">
+
 										{format(day, "d")}
 									</span>
 								</span>
@@ -100,7 +105,7 @@ export function CalendarWeekView({singleDayEvents, multiDayEvents}: IProps) {
                 <ScrollArea className="h-[736px]" type="always">
                     <div className="flex">
                         {/* Hours column */}
-                        <motion.div className="relative w-18" variants={staggerContainer}>
+                        <motion.div className="relative w-[72px]" variants={staggerContainer}>
                             {hours.map((hour, index) => (
                                 <motion.div
                                     key={hour}
@@ -112,7 +117,8 @@ export function CalendarWeekView({singleDayEvents, multiDayEvents}: IProps) {
                                 >
                                     <div className="absolute -top-3 right-2 flex h-6 items-center">
                                         {index !== 0 && (
-                                            <span className="text-xs text-t-quaternary">
+												<span className="text-xs text-muted-foreground">
+
 												{format(
                                                     new Date().setHours(hour, 0, 0, 0),
                                                     use24HourFormat ? "HH:00" : "h a",
@@ -126,16 +132,13 @@ export function CalendarWeekView({singleDayEvents, multiDayEvents}: IProps) {
 
                         {/* Week grid */}
                         <motion.div
-                            className="relative flex-1 border-l"
+                            className="relative flex-1 border-l border-border"
                             variants={staggerContainer}
                         >
                             <div className="grid grid-cols-7 divide-x">
                                 {weekDays.map((day, dayIndex) => {
-                                    const dayEvents = singleDayEvents.filter(
-                                        (event) =>
-                                            isSameDay(parseISO(event.startDate), day) ||
-                                            isSameDay(parseISO(event.endDate), day),
-                                    );
+                                    const dayKey = startOfDay(day).toISOString();
+                                    const dayEvents = eventsByDay[dayKey] || [];
                                     const groupedEvents = groupEvents(dayEvents);
 
                                     return (
@@ -157,7 +160,7 @@ export function CalendarWeekView({singleDayEvents, multiDayEvents}: IProps) {
                                                 >
                                                     {index !== 0 && (
                                                         <div
-                                                            className="pointer-events-none absolute inset-x-0 top-0 border-b"></div>
+                                                            className="pointer-events-none absolute inset-x-0 top-0 border-b border-border"></div>
                                                     )}
 
                                                     <DroppableArea
@@ -166,17 +169,18 @@ export function CalendarWeekView({singleDayEvents, multiDayEvents}: IProps) {
                                                         minute={0}
                                                         className="absolute inset-x-0 top-0  h-[48px]"
                                                     >
-                                                        <AddEditEventDialog
+                                                        <CreateEventTrigger
                                                             startDate={day}
                                                             startTime={{hour, minute: 0}}
                                                         >
                                                             <div
                                                                 className="absolute inset-0 cursor-pointer transition-colors hover:bg-secondary"/>
-                                                        </AddEditEventDialog>
+                                                        </CreateEventTrigger>
                                                     </DroppableArea>
 
-                                                    <div
-                                                        className="pointer-events-none absolute inset-x-0 top-1/2 border-b border-dashed border-b-tertiary"></div>
+												<div
+													className="pointer-events-none absolute inset-x-0 top-1/2 border-b border-dashed border-border/50"></div>
+
 
                                                     <DroppableArea
                                                         date={day}
@@ -184,13 +188,13 @@ export function CalendarWeekView({singleDayEvents, multiDayEvents}: IProps) {
                                                         minute={30}
                                                         className="absolute inset-x-0 bottom-0 h-[48px]"
                                                     >
-                                                        <AddEditEventDialog
+                                                        <CreateEventTrigger
                                                             startDate={day}
                                                             startTime={{hour, minute: 30}}
                                                         >
                                                             <div
                                                                 className="absolute inset-0 cursor-pointer transition-colors hover:bg-secondary"/>
-                                                        </AddEditEventDialog>
+                                                        </CreateEventTrigger>
                                                     </DroppableArea>
                                                 </motion.div>
                                             ))}

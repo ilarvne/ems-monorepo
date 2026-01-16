@@ -1,10 +1,10 @@
 import { type ColumnDef } from '@tanstack/react-table'
 import { ArrowUpDown, AlertTriangle, Calendar, Users, Clock } from 'lucide-react'
 
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Progress } from '@/components/ui/progress'
+import { Badge } from '@repo/ui/components/badge'
+import { Button } from '@repo/ui/components/button'
+import { Avatar, AvatarFallback, AvatarImage } from '@repo/ui/components/avatar'
+import { Progress } from '@repo/ui/components/progress'
 
 interface LowRegistrationEvent {
   id: number

@@ -2,8 +2,8 @@
 
 import dayjs from "dayjs";
 import { LoaderIcon } from "lucide-react";
-import { use, useCallback, useEffect, useRef, useState } from "react";
-import { useTheme } from "@/features/theme/hooks/use-theme";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useTheme } from "@repo/ui/hooks/use-theme";
 
 import type { Activity } from "@/features/statistics/components/kibo-ui/contribution-graph";
 import {
@@ -17,7 +17,7 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from "@repo/ui/components/tooltip";
 
 import {
   AnimatedContributionSquare,
@@ -31,10 +31,10 @@ export function AnimatedGitHubContributionGraph({
   contributions,
   autoPlay = true,
 }: {
-  contributions: Promise<Activity[]>;
+  contributions: Activity[];
   autoPlay?: boolean;
 }) {
-  const data = use(contributions);
+  const data = contributions;
   const squareRefs = useRef<Map<string, SquareAnimationControls>>(new Map());
   const containerRef = useRef<HTMLDivElement>(null);
   const [animationState, setAnimationState] = useState<AnimationState>("idle");

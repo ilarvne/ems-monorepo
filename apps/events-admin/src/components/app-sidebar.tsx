@@ -1,22 +1,18 @@
 import {
-  IconCamera,
-  IconChartBar,
-  IconDashboard,
-  IconDatabase,
-  IconFileAi,
-  IconFileDescription,
-  IconFileWord,
-  IconFolder,
-  IconHelp,
-  IconInnerShadowTop,
-  IconListDetails,
-  IconReport,
-  IconSearch,
-  IconSettings,
-  IconUsers
-} from '@tabler/icons-react'
-import { Calendar1, CalendarCheck, FerrisWheel, Sparkle, Tags } from 'lucide-react'
-import { useState } from 'react'
+  Building2,
+  Calendar,
+  CalendarCheck,
+  Camera,
+  FileText,
+  HelpCircle,
+  LayoutDashboard,
+  Search,
+  Settings,
+  Sparkles,
+  Tags,
+  Users,
+  FileStack
+} from 'lucide-react'
 
 import { NavDocuments } from '@/components/nav-documents'
 import { NavMain } from '@/components/nav-main'
@@ -31,22 +27,18 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail
-} from '@/components/ui/sidebar'
-
-import { Sparkles } from './animate-ui/icons/sparkles'
+} from '@repo/ui/components/sidebar'
 
 function LogoWithSparkles({ ...props }: React.ComponentPropsWithoutRef<'a'>) {
-  const [isHovered, setIsHovered] = useState(false)
-  
   return (
     <a
       {...props}
       href='#'
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      className='flex items-center gap-1 group-data-[collapsible=icon]:justify-center'
     >
-      <Sparkles animate={isHovered} animateOnView className='size-5! text-lime-400' />
-      <span className='text-base font-semibold'>AITU Events.</span>
+      <span className='text-base group-data-[collapsible=icon]:hidden'>AITU</span>
+      <span className='text-base font-bold group-data-[collapsible=icon]:hidden'>EMS</span>
+      <span className='hidden text-base font-bold group-data-[collapsible=icon]:block'>A</span>
     </a>
   )
 }
@@ -56,7 +48,7 @@ const data = {
     {
       title: 'Dashboard',
       url: '/',
-      icon: IconDashboard
+      icon: LayoutDashboard
     },
     {
       title: 'Calendar',
@@ -66,13 +58,13 @@ const data = {
     {
       title: 'Users',
       url: '/users',
-      icon: IconUsers
+      icon: Users
     }
   ],
   navClouds: [
     {
       title: 'Capture',
-      icon: IconCamera,
+      icon: Camera,
       isActive: true,
       url: '#',
       items: [
@@ -88,7 +80,7 @@ const data = {
     },
     {
       title: 'Proposal',
-      icon: IconFileDescription,
+      icon: FileText,
       url: '#',
       items: [
         {
@@ -103,7 +95,7 @@ const data = {
     },
     {
       title: 'Prompts',
-      icon: IconFileAi,
+      icon: Sparkles,
       url: '#',
       items: [
         {
@@ -121,29 +113,29 @@ const data = {
     {
       title: 'Settings',
       url: '#',
-      icon: IconSettings
+      icon: Settings
     },
     {
       title: 'Get Help',
       url: '#',
-      icon: IconHelp
+      icon: HelpCircle
     },
     {
       title: 'Search',
       url: '#',
-      icon: IconSearch
+      icon: Search
     }
   ],
   documents: [
     {
       name: 'Events',
       url: '/events',
-      icon: Calendar1
+      icon: Calendar
     },
     {
-      name: 'Clubs',
-      url: '/clubs',
-      icon: FerrisWheel
+      name: 'Organizations',
+      url: '/organizations',
+      icon: Building2
     },
     {
       name: 'Tags',
@@ -153,7 +145,7 @@ const data = {
     {
       name: 'Reports',
       url: '/reports',
-      icon: IconReport
+      icon: FileStack
     }
   ]
 }

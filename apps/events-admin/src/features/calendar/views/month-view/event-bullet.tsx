@@ -1,6 +1,6 @@
 import { cva } from "class-variance-authority";
 import { motion } from "framer-motion";
-import { cn } from "@/lib/utils";
+import { cn } from "@repo/ui/lib/utils";
 import { transition } from "@/features/calendar/animations";
 import type { TEventColor } from "@/features/calendar/types";
 

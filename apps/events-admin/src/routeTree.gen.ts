@@ -17,8 +17,8 @@ import { Route as AuthCallbackRouteImport } from './routes/auth/callback'
 import { Route as AuthenticatedUsersRouteImport } from './routes/_authenticated/users'
 import { Route as AuthenticatedTagsRouteImport } from './routes/_authenticated/tags'
 import { Route as AuthenticatedReportsRouteImport } from './routes/_authenticated/reports'
+import { Route as AuthenticatedOrganizationsRouteImport } from './routes/_authenticated/organizations'
 import { Route as AuthenticatedEventsRouteImport } from './routes/_authenticated/events'
-import { Route as AuthenticatedClubsRouteImport } from './routes/_authenticated/clubs'
 import { Route as AuthenticatedCalendarRouteImport } from './routes/_authenticated/calendar'
 import { Route as AuthenticatedAnalyticsRouteImport } from './routes/_authenticated/analytics'
 
@@ -61,14 +61,15 @@ const AuthenticatedReportsRoute = AuthenticatedReportsRouteImport.update({
   path: '/reports',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedOrganizationsRoute =
+  AuthenticatedOrganizationsRouteImport.update({
+    id: '/organizations',
+    path: '/organizations',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedEventsRoute = AuthenticatedEventsRouteImport.update({
   id: '/events',
   path: '/events',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
-const AuthenticatedClubsRoute = AuthenticatedClubsRouteImport.update({
-  id: '/clubs',
-  path: '/clubs',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedCalendarRoute = AuthenticatedCalendarRouteImport.update({
@@ -85,8 +86,8 @@ const AuthenticatedAnalyticsRoute = AuthenticatedAnalyticsRouteImport.update({
 export interface FileRoutesByFullPath {
   '/analytics': typeof AuthenticatedAnalyticsRoute
   '/calendar': typeof AuthenticatedCalendarRoute
-  '/clubs': typeof AuthenticatedClubsRoute
   '/events': typeof AuthenticatedEventsRoute
+  '/organizations': typeof AuthenticatedOrganizationsRoute
   '/reports': typeof AuthenticatedReportsRoute
   '/tags': typeof AuthenticatedTagsRoute
   '/users': typeof AuthenticatedUsersRoute
@@ -98,8 +99,8 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/analytics': typeof AuthenticatedAnalyticsRoute
   '/calendar': typeof AuthenticatedCalendarRoute
-  '/clubs': typeof AuthenticatedClubsRoute
   '/events': typeof AuthenticatedEventsRoute
+  '/organizations': typeof AuthenticatedOrganizationsRoute
   '/reports': typeof AuthenticatedReportsRoute
   '/tags': typeof AuthenticatedTagsRoute
   '/users': typeof AuthenticatedUsersRoute
@@ -113,8 +114,8 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/_authenticated/analytics': typeof AuthenticatedAnalyticsRoute
   '/_authenticated/calendar': typeof AuthenticatedCalendarRoute
-  '/_authenticated/clubs': typeof AuthenticatedClubsRoute
   '/_authenticated/events': typeof AuthenticatedEventsRoute
+  '/_authenticated/organizations': typeof AuthenticatedOrganizationsRoute
   '/_authenticated/reports': typeof AuthenticatedReportsRoute
   '/_authenticated/tags': typeof AuthenticatedTagsRoute
   '/_authenticated/users': typeof AuthenticatedUsersRoute
@@ -128,8 +129,8 @@ export interface FileRouteTypes {
   fullPaths:
     | '/analytics'
     | '/calendar'
-    | '/clubs'
     | '/events'
+    | '/organizations'
     | '/reports'
     | '/tags'
     | '/users'
@@ -141,8 +142,8 @@ export interface FileRouteTypes {
   to:
     | '/analytics'
     | '/calendar'
-    | '/clubs'
     | '/events'
+    | '/organizations'
     | '/reports'
     | '/tags'
     | '/users'
@@ -155,8 +156,8 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/_authenticated/analytics'
     | '/_authenticated/calendar'
-    | '/_authenticated/clubs'
     | '/_authenticated/events'
+    | '/_authenticated/organizations'
     | '/_authenticated/reports'
     | '/_authenticated/tags'
     | '/_authenticated/users'
@@ -231,18 +232,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedReportsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/organizations': {
+      id: '/_authenticated/organizations'
+      path: '/organizations'
+      fullPath: '/organizations'
+      preLoaderRoute: typeof AuthenticatedOrganizationsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/events': {
       id: '/_authenticated/events'
       path: '/events'
       fullPath: '/events'
       preLoaderRoute: typeof AuthenticatedEventsRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/clubs': {
-      id: '/_authenticated/clubs'
-      path: '/clubs'
-      fullPath: '/clubs'
-      preLoaderRoute: typeof AuthenticatedClubsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/calendar': {
@@ -265,8 +266,8 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteChildren {
   AuthenticatedAnalyticsRoute: typeof AuthenticatedAnalyticsRoute
   AuthenticatedCalendarRoute: typeof AuthenticatedCalendarRoute
-  AuthenticatedClubsRoute: typeof AuthenticatedClubsRoute
   AuthenticatedEventsRoute: typeof AuthenticatedEventsRoute
+  AuthenticatedOrganizationsRoute: typeof AuthenticatedOrganizationsRoute
   AuthenticatedReportsRoute: typeof AuthenticatedReportsRoute
   AuthenticatedTagsRoute: typeof AuthenticatedTagsRoute
   AuthenticatedUsersRoute: typeof AuthenticatedUsersRoute
@@ -276,8 +277,8 @@ interface AuthenticatedRouteChildren {
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAnalyticsRoute: AuthenticatedAnalyticsRoute,
   AuthenticatedCalendarRoute: AuthenticatedCalendarRoute,
-  AuthenticatedClubsRoute: AuthenticatedClubsRoute,
   AuthenticatedEventsRoute: AuthenticatedEventsRoute,
+  AuthenticatedOrganizationsRoute: AuthenticatedOrganizationsRoute,
   AuthenticatedReportsRoute: AuthenticatedReportsRoute,
   AuthenticatedTagsRoute: AuthenticatedTagsRoute,
   AuthenticatedUsersRoute: AuthenticatedUsersRoute,

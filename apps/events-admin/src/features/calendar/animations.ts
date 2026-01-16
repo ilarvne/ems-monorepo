@@ -22,7 +22,7 @@ export const transition = {
 	type: "spring",
 	stiffness: 200,
 	damping: 20,
-};
+} as const;
 
 export const staggerContainer: Variants = {
 	animate: {

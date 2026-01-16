@@ -11,24 +11,24 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@repo/ui/components/card"
 import type {
   ChartConfig,
-} from "@/components/ui/chart"
+} from "@repo/ui/components/chart"
 import {
   ChartContainer,
   ChartStyle,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart"
+} from "@repo/ui/components/chart"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Skeleton } from "@/components/ui/skeleton"
+} from "@repo/ui/components/select"
+import { Skeleton } from "@repo/ui/components/skeleton"
 import { useQuery } from '@connectrpc/connect-query'
 import { getEventTagsDistributionByMonth } from '@repo/proto'
 

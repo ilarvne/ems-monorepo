@@ -1,6 +1,6 @@
-import { IconDotsVertical, IconLogout, IconSettings, IconUserCircle } from '@tabler/icons-react'
+import { MoreVertical, LogOut, Settings, UserCircle } from 'lucide-react'
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Avatar, AvatarFallback, AvatarImage } from '@repo/ui/components/avatar'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,8 +9,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu'
-import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '@/components/ui/sidebar'
+} from '@repo/ui/components/dropdown-menu'
+import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '@repo/ui/components/sidebar'
 import { useAuth, getUserDisplayName, getUserInitials, getUserEmail } from '@/lib/auth'
 
 export function NavUser() {
@@ -44,7 +44,7 @@ export function NavUser() {
                 <span className='truncate font-medium'>{displayName}</span>
                 <span className='text-muted-foreground truncate text-xs'>{email}</span>
               </div>
-              <IconDotsVertical className='ml-auto size-4' />
+              <MoreVertical className='ml-auto size-4' />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
@@ -70,17 +70,17 @@ export function NavUser() {
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>
-                <IconUserCircle />
+                <UserCircle />
                 Profile
               </DropdownMenuItem>
               <DropdownMenuItem>
-                <IconSettings />
+                <Settings />
                 Settings
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={handleLogout} className="text-destructive focus:text-destructive">
-              <IconLogout />
+              <LogOut />
               Log out
             </DropdownMenuItem>
           </DropdownMenuContent>

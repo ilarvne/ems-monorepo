@@ -1,60 +1,40 @@
-import { useSuspenseQuery } from '@connectrpc/connect-query'
-import { listEventsForAdmin } from '@repo/proto'
-import { EventFormat } from '@repo/proto'
-import type { Event } from '@repo/proto'
+import { useMutation, useSuspenseQuery } from '@connectrpc/connect-query'
+import { useQueryClient } from '@tanstack/react-query'
+import { listEventsForAdmin, deleteEvent, EventFormat, type Event } from '@repo/proto'
 import { createFileRoute } from '@tanstack/react-router'
-import {
-  type ColumnDef,
-  type ColumnFiltersState,
-  flexRender,
-  getCoreRowModel,
-  getFacetedUniqueValues,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  type PaginationState,
-  type SortingState,
-  useReactTable,
-  type VisibilityState
-} from '@tanstack/react-table'
-import {
-  ListFilterIcon,
-  CircleXIcon,
-  FilterIcon,
-  Columns3Icon,
-  PlusIcon,
-  ChevronFirstIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  ChevronLastIcon,
-  ArrowUpIcon,
-  ArrowDownIcon,
-  ChevronsUpDownIcon
-} from 'lucide-react'
-import { parseAsInteger, parseAsString, parseAsArrayOf, useQueryStates } from 'nuqs'
-import { Suspense, useMemo, useRef, useId } from 'react'
+import { type RowSelectionState } from '@tanstack/react-table'
+import { PlusIcon, UploadIcon, FilterIcon, Trash2Icon, DownloadIcon, XIcon, ChevronRightIcon, CheckIcon, SearchIcon, Loader2Icon } from 'lucide-react'
+import { parseAsArrayOf, parseAsInteger, parseAsString, useQueryState, useQueryStates } from 'nuqs'
+import { Suspense, useState, useCallback, useMemo } from 'react'
+import { toast } from 'sonner'
 
-import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
 import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Pagination, PaginationContent, PaginationItem } from '@/components/ui/pagination'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Skeleton } from '@/components/ui/skeleton'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle
+} from '@repo/ui/components/alert-dialog'
+import { Badge } from '@repo/ui/components/badge'
+import { Button, buttonVariants } from '@repo/ui/components/button'
+import { Checkbox } from '@repo/ui/components/checkbox'
+import { FloatingActionBar } from '@repo/ui/components/floating-action-bar'
+import { Input } from '@repo/ui/components/input'
+import { Popover, PopoverContent, PopoverTrigger } from '@repo/ui/components/popover'
+import { ScrollArea } from '@repo/ui/components/scroll-area'
+import { Skeleton } from '@repo/ui/components/skeleton'
+import { cn } from '@repo/ui/lib/utils'
 
-import { cn } from '@/lib/utils'
-
-import { columns as baseColumns, multiColumnFilterFn } from '@/features/events/events.columns'
-import { EventCardList } from '@/features/events/event-card'
+import { DataTable } from '@/components/admin-data-table'
+import { columns } from '@/features/events/events.columns'
+import { SimpleEventCardList } from '@/features/events/event-card'
+import { CreateEventForm } from '@/features/events/components/create-event-form'
+import { ExcelImportDialog } from '@/features/events/components/excel-import-dialog'
+import { EventDetailsModalControlled } from '@/features/events/components'
+import { exportEventsToExcel, exportSelectedEventsToExcel } from '@/lib/excel-export'
 
 export const Route = createFileRoute('/_authenticated/events')({
   component: () => (
@@ -66,63 +46,62 @@ export const Route = createFileRoute('/_authenticated/events')({
 
 function EventsLoading() {
   return (
-    <div className='p-8'>
-      <div className='flex justify-between items-center mb-6'>
-        <div className='space-y-2'>
-          <Skeleton className='h-9 w-32' />
-          <Skeleton className='h-5 w-64' />
+    <div className="p-8">
+      <div className="flex justify-between items-center mb-6">
+        <div className="space-y-2">
+          <Skeleton className="h-9 w-32" />
+          <Skeleton className="h-5 w-64" />
         </div>
       </div>
 
-      <div className='space-y-4'>
+      <div className="space-y-4">
         {/* Filters skeleton */}
-        <div className='flex flex-wrap items-center justify-between gap-3'>
-          <div className='flex items-center gap-3'>
-            <Skeleton className='h-10 w-60' />
-            <Skeleton className='h-10 w-24' />
-            <Skeleton className='h-10 w-20' />
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <Skeleton className="h-10 w-60" />
+            <Skeleton className="h-10 w-24" />
           </div>
-          <Skeleton className='h-10 w-28' />
+          <Skeleton className="h-10 w-28" />
         </div>
 
         {/* Table skeleton */}
-        <div className='overflow-hidden rounded-md border bg-background'>
-          <div className='p-4 space-y-3'>
+        <div className="overflow-hidden rounded-lg border bg-background">
+          <div className="p-4 space-y-3">
             {/* Header row */}
-            <div className='flex gap-4'>
-              <Skeleton className='h-4 w-8' />
-              <Skeleton className='h-4 w-32' />
-              <Skeleton className='h-4 w-20' />
-              <Skeleton className='h-4 w-40' />
-              <Skeleton className='h-4 w-32' />
-              <Skeleton className='h-4 w-28' />
-              <Skeleton className='h-4 w-24' />
+            <div className="flex gap-4 border-b pb-3">
+              <Skeleton className="h-4 w-8" />
+              <Skeleton className="h-4 w-12" />
+              <Skeleton className="h-4 w-40" />
+              <Skeleton className="h-4 w-20" />
+              <Skeleton className="h-4 w-32" />
+              <Skeleton className="h-4 w-28" />
+              <Skeleton className="h-4 w-20" />
             </div>
             {/* Table rows */}
-            {Array.from({ length: 9 }).map((_, i) => (
-              <div key={i} className='flex gap-4 items-center'>
-                <Skeleton className='h-4 w-8' />
-                <Skeleton className='h-12 w-12 rounded-md' />
-                <Skeleton className='h-4 w-32' />
-                <Skeleton className='h-4 w-20' />
-                <Skeleton className='h-4 w-40' />
-                <Skeleton className='h-4 w-32' />
-                <Skeleton className='h-4 w-28' />
-                <Skeleton className='h-4 w-24' />
+            {Array.from({ length: 8 }).map((_, i) => (
+              <div key={i} className="flex gap-4 items-center py-2">
+                <Skeleton className="h-4 w-4" />
+                <Skeleton className="h-9 w-9 rounded-md" />
+                <Skeleton className="h-4 w-40" />
+                <Skeleton className="h-4 w-16" />
+                <Skeleton className="h-4 w-28" />
+                <Skeleton className="h-4 w-24" />
+                <Skeleton className="h-5 w-16 rounded-full" />
+                <Skeleton className="h-4 w-20" />
               </div>
             ))}
           </div>
         </div>
 
         {/* Pagination skeleton */}
-        <div className='flex items-center justify-between gap-8'>
-          <Skeleton className='h-10 w-32' />
-          <Skeleton className='h-5 w-40' />
-          <div className='flex gap-2'>
-            <Skeleton className='h-10 w-10' />
-            <Skeleton className='h-10 w-10' />
-            <Skeleton className='h-10 w-10' />
-            <Skeleton className='h-10 w-10' />
+        <div className="flex items-center justify-between gap-8">
+          <Skeleton className="h-9 w-32" />
+          <Skeleton className="h-5 w-48" />
+          <div className="flex gap-1">
+            <Skeleton className="h-9 w-9" />
+            <Skeleton className="h-9 w-9" />
+            <Skeleton className="h-9 w-9" />
+            <Skeleton className="h-9 w-9" />
           </div>
         </div>
       </div>
@@ -130,505 +109,630 @@ function EventsLoading() {
   )
 }
 
+// Status filter options
+const statusOptions = [
+  { value: 'live', label: 'Live' },
+  { value: 'today', label: 'Today' },
+  { value: 'upcoming', label: 'Upcoming' },
+  { value: 'past', label: 'Past' }
+]
+
+// Helper to determine event status
+function getEventStatus(event: Event): 'live' | 'today' | 'upcoming' | 'past' {
+  const now = new Date()
+  const startTime = new Date(event.startTime)
+  const endTime = event.endTime ? new Date(event.endTime) : startTime
+
+  // Check if event is currently live
+  if (now >= startTime && now <= endTime) {
+    return 'live'
+  }
+
+  // Check if event is today (but not live)
+  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+  const todayEnd = new Date(todayStart)
+  todayEnd.setDate(todayEnd.getDate() + 1)
+
+  if (startTime >= todayStart && startTime < todayEnd && now < startTime) {
+    return 'today'
+  }
+
+  // Check if event is in the past
+  if (endTime < now) {
+    return 'past'
+  }
+
+  // Otherwise it's upcoming
+  return 'upcoming'
+}
+
+// Format filter options
+const formatOptions = [
+  { value: EventFormat.ONLINE, label: 'Online' },
+  { value: EventFormat.OFFLINE, label: 'Offline' }
+]
+
 function Events() {
-  const id = useId()
-  const inputRef = useRef<HTMLInputElement>(null)
+  const queryClient = useQueryClient()
+  const [isImportDialogOpen, setIsImportDialogOpen] = useState(false)
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
+  const [selectedEventId, setSelectedEventId] = useState<number | null>(null)
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
+  
+  // Bulk delete confirmation state
+  const [isBulkDeleteDialogOpen, setIsBulkDeleteDialogOpen] = useState(false)
+  const [pendingBulkDeleteIds, setPendingBulkDeleteIds] = useState<number[]>([])
 
-  // URL state management with nuqs - group related states
-  const [tableState, setTableState] = useQueryStates(
-    {
-      page: parseAsInteger.withDefault(1),
-      pageSize: parseAsInteger.withDefault(10),
-      search: parseAsString.withDefault(''),
-      format: parseAsArrayOf(parseAsInteger).withDefault([]),
-      sortBy: parseAsString.withDefault('startTime'),
-      sortDesc: parseAsInteger.withDefault(1), // Default to descending for dates
-      hiddenColumns: parseAsArrayOf(parseAsString).withDefault([])
+  // Delete mutation
+  const deleteMutation = useMutation(deleteEvent, {
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['connect-query'] })
     },
-    {
-      history: 'push'
+    onError: () => {
+      toast.error('Failed to delete event')
     }
-  )
-
-  // Fetch data based on pagination state
-  // When filters are active, fetch all data for client-side filtering
-  const hasActiveFilters = tableState.search || tableState.format.length > 0
-
-  const { data } = useSuspenseQuery(listEventsForAdmin, {
-    limit: hasActiveFilters ? 1000 : tableState.pageSize,
-    page: hasActiveFilters ? 1 : tableState.page
   })
 
-  // Sync URL state to table state
-  const columnFilters: ColumnFiltersState = useMemo(() => {
-    const filters: ColumnFiltersState = []
-    if (tableState.search) {
-      filters.push({ id: 'title', value: tableState.search })
-    }
-    if (tableState.format.length > 0) {
-      filters.push({ id: 'format', value: tableState.format })
-    }
-    return filters
-  }, [tableState.search, tableState.format])
-
-  const columnVisibility: VisibilityState = useMemo(() => {
-    const visibility: VisibilityState = {}
-    tableState.hiddenColumns.forEach((col) => {
-      visibility[col] = false
-    })
-    return visibility
-  }, [tableState.hiddenColumns])
-
-  const pagination: PaginationState = useMemo(
-    () => ({
-      pageIndex: tableState.page - 1,
-      pageSize: tableState.pageSize
-    }),
-    [tableState.page, tableState.pageSize]
+  // Additional filter state for format
+  const [formatFilter, setFormatFilter] = useQueryState(
+    'format',
+    parseAsArrayOf(parseAsInteger).withDefault([])
   )
 
-  const sorting: SortingState = useMemo(
-    () => [
-      {
-        id: tableState.sortBy,
-        desc: tableState.sortDesc === 1
+  // Status filter state (upcoming, today, past, live)
+  const [statusFilter, setStatusFilter] = useQueryState(
+    'status',
+    parseAsArrayOf(parseAsString).withDefault([])
+  )
+
+  // Organization filter state
+  const [orgFilter, setOrgFilter] = useQueryState(
+    'org',
+    parseAsArrayOf(parseAsInteger).withDefault([])
+  )
+
+  // Action trigger from URL
+  const [actionState, setActionState] = useQueryStates({
+    action: parseAsString.withDefault('')
+  })
+
+  // Derive dialog open state from URL action OR local state
+  const isCreateFromUrl = actionState.action === 'create'
+  const isImportFromUrl = actionState.action === 'import'
+
+  // Dialog handlers that clear URL action when closing
+  const handleCreateDialogChange = useCallback(
+    (open: boolean) => {
+      setIsCreateDialogOpen(open)
+      if (!open && isCreateFromUrl) {
+        setActionState({ action: null })
       }
-    ],
-    [tableState.sortBy, tableState.sortDesc]
+    },
+    [isCreateFromUrl, setActionState]
   )
 
-  // Handlers to update URL state
-  const setColumnFilters = (updater: ColumnFiltersState | ((old: ColumnFiltersState) => ColumnFiltersState)) => {
-    const newFilters = typeof updater === 'function' ? updater(columnFilters) : updater
-    const searchFilter = newFilters.find((f) => f.id === 'title')
-    const formatFilterValue = newFilters.find((f) => f.id === 'format')
+  const handleImportDialogChange = useCallback(
+    (open: boolean) => {
+      setIsImportDialogOpen(open)
+      if (!open && isImportFromUrl) {
+        setActionState({ action: null })
+      }
+    },
+    [isImportFromUrl, setActionState]
+  )
 
-    setTableState({
-      search: (searchFilter?.value as string) || null,
-      format: (formatFilterValue?.value as number[]) || null,
-      page: 1
+  // Count of active format/status/org filters for filter badge
+  const activeFilterCount = formatFilter.length + statusFilter.length + orgFilter.length
+
+  // Always fetch all events for client-side pagination and filtering
+  const { data } = useSuspenseQuery(listEventsForAdmin, {
+    limit: 1000,
+    page: 1
+  })
+
+  // Extract unique organizations from events
+  const organizationOptions = useMemo(() => {
+    const orgMap = new Map<number, string>()
+    data.events.forEach((event) => {
+      if (event.organization?.id && event.organization?.title) {
+        orgMap.set(event.organization.id, event.organization.title)
+      }
     })
-  }
+    return Array.from(orgMap.entries())
+      .map(([id, title]) => ({ value: id, label: title }))
+      .sort((a, b) => a.label.localeCompare(b.label))
+  }, [data.events])
 
-  const setColumnVisibility = (updater: VisibilityState | ((old: VisibilityState) => VisibilityState)) => {
-    const newVisibility = typeof updater === 'function' ? updater(columnVisibility) : updater
-    const hidden = Object.entries(newVisibility)
-      .filter(([, visible]) => !visible)
-      .map(([col]) => col)
+  // Apply client-side filters for status, format, and organization
+  const filteredEvents = useMemo(() => {
+    let events = data.events
 
-    setTableState({
-      hiddenColumns: hidden.length > 0 ? hidden : null
-    })
-  }
-
-  const setPagination = (updater: PaginationState | ((old: PaginationState) => PaginationState)) => {
-    const newPagination = typeof updater === 'function' ? updater(pagination) : updater
-    setTableState({
-      page: newPagination.pageIndex + 1,
-      pageSize: newPagination.pageSize
-    })
-  }
-
-  const setSorting = (updater: SortingState | ((old: SortingState) => SortingState)) => {
-    const newSorting = typeof updater === 'function' ? updater(sorting) : updater
-    if (newSorting.length > 0) {
-      setTableState({
-        sortBy: newSorting[0].id,
-        sortDesc: newSorting[0].desc ? 1 : 0
-      })
+    // Apply format filter
+    if (formatFilter.length > 0) {
+      events = events.filter((event) => formatFilter.includes(event.format))
     }
+
+    // Apply status filter
+    if (statusFilter.length > 0) {
+      events = events.filter((event) => statusFilter.includes(getEventStatus(event)))
+    }
+
+    // Apply organization filter
+    if (orgFilter.length > 0) {
+      events = events.filter((event) => event.organization?.id && orgFilter.includes(event.organization.id))
+    }
+
+    return events
+  }, [data.events, formatFilter, statusFilter, orgFilter])
+
+  const handleFormatChange = (checked: boolean, value: number) => {
+    const newValues = formatFilter ? [...formatFilter] : []
+    if (checked) {
+      newValues.push(value)
+    } else {
+      const index = newValues.indexOf(value)
+      if (index > -1) {
+        newValues.splice(index, 1)
+      }
+    }
+    setFormatFilter(newValues.length ? newValues : null)
   }
 
-  // Enhanced columns with select and sorting
-  const columns: ColumnDef<Event>[] = useMemo(
-    () => [
-      {
-        id: 'select',
-        size: 28,
-        enableHiding: false,
-        enableSorting: false,
-        header: ({ table }) => (
-          <Checkbox
-            aria-label='Select all'
-            checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
-            onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          />
-        ),
-        cell: ({ row }) => (
-          <Checkbox
-            aria-label='Select row'
-            checked={row.getIsSelected()}
-            onCheckedChange={(value) => row.toggleSelected(!!value)}
-          />
-        )
-      },
-      {
-        accessorKey: 'title',
-        header: 'Event Name',
-        size: 200,
-        enableHiding: false,
-        filterFn: multiColumnFilterFn,
-        cell: ({ row }) => <div className='font-medium'>{row.getValue('title')}</div>
-      },
-      ...baseColumns.filter((col) => 'accessorKey' in col && col.accessorKey !== 'title' && col.accessorKey !== 'id')
-    ],
+  const handleStatusChange = (checked: boolean, value: string) => {
+    const newValues = statusFilter ? [...statusFilter] : []
+    if (checked) {
+      newValues.push(value)
+    } else {
+      const index = newValues.indexOf(value)
+      if (index > -1) {
+        newValues.splice(index, 1)
+      }
+    }
+    setStatusFilter(newValues.length ? newValues : null)
+  }
+
+  const handleOrgChange = (checked: boolean, value: number) => {
+    const newValues = orgFilter ? [...orgFilter] : []
+    if (checked) {
+      newValues.push(value)
+    } else {
+      const index = newValues.indexOf(value)
+      if (index > -1) {
+        newValues.splice(index, 1)
+      }
+    }
+    setOrgFilter(newValues.length ? newValues : null)
+  }
+
+  // Handle row click - open event details sheet
+  const handleRowClick = useCallback((event: Event) => {
+    setSelectedEventId(event.id)
+  }, [])
+
+  // Handle row selection change from DataTable
+  const handleRowSelectionChange = useCallback((selection: RowSelectionState) => {
+    setRowSelection(selection)
+  }, [])
+
+  // Clear selection
+  const handleClearSelection = useCallback(() => {
+    setRowSelection({})
+  }, [])
+
+  // Get selected event IDs from current selection
+  const selectedEventIds = Object.keys(rowSelection).map((id) => parseInt(id, 10))
+  const selectedCount = selectedEventIds.length
+
+  // Handle delete selected - opens confirmation dialog
+  const handleDeleteSelected = useCallback(
+    (ids: (string | number)[]) => {
+      setPendingBulkDeleteIds(ids.map((id) => Number(id)))
+      setIsBulkDeleteDialogOpen(true)
+    },
     []
   )
 
-  const table = useReactTable({
-    columns,
-    data: data.events,
-    pageCount: hasActiveFilters ? -1 : Math.ceil((data.total || 0) / pagination.pageSize),
-    manualPagination: !hasActiveFilters,
-    manualFiltering: false,
-    enableSortingRemoval: false,
-    getCoreRowModel: getCoreRowModel(),
-    getFacetedUniqueValues: getFacetedUniqueValues(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    onColumnFiltersChange: setColumnFilters,
-    onColumnVisibilityChange: setColumnVisibility,
-    onPaginationChange: setPagination,
-    onSortingChange: setSorting,
-    state: {
-      columnFilters,
-      columnVisibility,
-      pagination,
-      sorting
-    }
-  })
-
-  // Get unique format values
-  const uniqueFormatValues = useMemo(() => {
-    const formatColumn = table.getColumn('format')
-    if (!formatColumn) return []
-    const values = Array.from(formatColumn.getFacetedUniqueValues().keys())
-    return values.sort()
-  }, [table])
-
-  // Get counts for each format
-  const formatCounts = useMemo(() => {
-    const formatColumn = table.getColumn('format')
-    if (!formatColumn) return new Map()
-    return formatColumn.getFacetedUniqueValues()
-  }, [table])
-
-  const selectedFormats = useMemo(() => {
-    const filterValue = table.getColumn('format')?.getFilterValue() as number[]
-    return filterValue ?? []
-  }, [table])
-
-  const handleFormatChange = (checked: boolean, value: number) => {
-    const filterValue = table.getColumn('format')?.getFilterValue() as number[]
-    const newFilterValue = filterValue ? [...filterValue] : []
-
-    if (checked) {
-      newFilterValue.push(value)
-    } else {
-      const index = newFilterValue.indexOf(value)
-      if (index > -1) {
-        newFilterValue.splice(index, 1)
+  // Actually perform the delete after confirmation
+  const handleConfirmDelete = useCallback(async () => {
+    try {
+      // Delete events sequentially to avoid overwhelming the server
+      for (const id of pendingBulkDeleteIds) {
+        await deleteMutation.mutateAsync({ id })
       }
+      toast.success(
+        pendingBulkDeleteIds.length === 1
+          ? 'Event deleted'
+          : `${pendingBulkDeleteIds.length} events deleted`
+      )
+      setRowSelection({})
+      setIsBulkDeleteDialogOpen(false)
+      setPendingBulkDeleteIds([])
+    } catch {
+      // Error is already handled by mutation onError
     }
+  }, [pendingBulkDeleteIds, deleteMutation])
 
-    table.getColumn('format')?.setFilterValue(newFilterValue.length ? newFilterValue : undefined)
-  }
-
-  const getFormatLabel = (format: number) => {
-    switch (format) {
-      case EventFormat.ONLINE:
-        return 'Online'
-      case EventFormat.OFFLINE:
-        return 'Offline'
-      default:
-        return 'Unknown'
+  // Handle export all events (exports filtered results when filters are active)
+  const handleExportAll = useCallback(async () => {
+    try {
+      await exportEventsToExcel(filteredEvents)
+      toast.success('Export completed', {
+        description: `Exported ${filteredEvents.length} events to Excel`
+      })
+    } catch (error) {
+      toast.error('Export failed', {
+        description: error instanceof Error ? error.message : 'Unknown error'
+      })
     }
+  }, [filteredEvents])
+
+  // Handle export selected events
+  const handleExportSelected = useCallback(async () => {
+    try {
+      await exportSelectedEventsToExcel(filteredEvents, selectedEventIds)
+      toast.success('Export completed', {
+        description: `Exported ${selectedEventIds.length} selected events to Excel`
+      })
+    } catch (error) {
+      toast.error('Export failed', {
+        description: error instanceof Error ? error.message : 'Unknown error'
+      })
+    }
+  }, [filteredEvents, selectedEventIds])
+
+  return (
+    <div className="p-6 lg:p-8 space-y-4">
+      {/* Page Header */}
+      <div>
+        <h1 className="text-2xl font-semibold tracking-tight">Events</h1>
+        <p className="text-sm text-muted-foreground">Manage events and activities</p>
+      </div>
+
+      {/* Desktop View */}
+      <div className="hidden md:block">
+        <DataTable
+          data={filteredEvents}
+          columns={columns}
+          totalCount={filteredEvents.length}
+          hasActiveFilters={true}
+          searchColumnId="title"
+          searchPlaceholder="Search events..."
+          entityName="events"
+          defaultSortBy="startTime"
+          defaultSortDesc={true}
+          enableVirtualization={false}
+          enableDensityToggle={true}
+          enableMultiSort={true}
+          rowSelection={rowSelection}
+          onRowClick={handleRowClick}
+          onRowSelectionChange={handleRowSelectionChange}
+          onDeleteSelected={handleDeleteSelected}
+          getRowId={(row) => String(row.id)}
+          filterComponents={
+            <EventsFilter
+              formatFilter={formatFilter}
+              statusFilter={statusFilter}
+              orgFilter={orgFilter}
+              organizationOptions={organizationOptions}
+              activeFilterCount={activeFilterCount}
+              onFormatChange={handleFormatChange}
+              onStatusChange={handleStatusChange}
+              onOrgChange={handleOrgChange}
+            />
+          }
+          toolbarActions={
+            <>
+              <Button variant="outline" size="sm" onClick={handleExportAll} className="h-9">
+                <DownloadIcon className="h-4 w-4 mr-2" />
+                Export
+              </Button>
+              <Button variant="outline" size="sm" onClick={() => setIsImportDialogOpen(true)} className="h-9">
+                <UploadIcon className="h-4 w-4 mr-2" />
+                Import
+              </Button>
+              <Button size="sm" onClick={() => setIsCreateDialogOpen(true)} className="h-9">
+                <PlusIcon className="h-4 w-4 mr-2" />
+                Add Event
+              </Button>
+            </>
+          }
+        />
+      </div>
+
+      {/* Mobile Card View */}
+      <div className="md:hidden">
+        <div className="space-y-4">
+          {/* Mobile search and actions */}
+          <div className="flex gap-2">
+            <Button variant="outline" onClick={() => setIsImportDialogOpen(true)} size="icon">
+              <UploadIcon size={16} />
+            </Button>
+            <Button onClick={() => setIsCreateDialogOpen(true)} className="flex-1">
+              <PlusIcon className="mr-2" size={16} />
+              Add event
+            </Button>
+          </div>
+          <SimpleEventCardList events={data.events} />
+        </div>
+      </div>
+
+      {/* Floating Action Bar for bulk actions */}
+      <FloatingActionBar
+        selectedCount={selectedCount}
+        totalCount={data.total || 0}
+        onClearSelection={handleClearSelection}
+      >
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleExportSelected}
+          className="gap-2"
+        >
+          <DownloadIcon className="h-4 w-4" />
+          Export
+        </Button>
+        <Button
+          variant="destructive"
+          size="sm"
+          onClick={() => handleDeleteSelected(selectedEventIds)}
+          className="gap-2"
+        >
+          <Trash2Icon className="h-4 w-4" />
+          Delete
+        </Button>
+      </FloatingActionBar>
+
+      {/* Bulk Delete Confirmation Dialog */}
+      <AlertDialog open={isBulkDeleteDialogOpen} onOpenChange={setIsBulkDeleteDialogOpen}>
+        <AlertDialogContent style={{ overscrollBehavior: 'contain' }}>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              Delete {pendingBulkDeleteIds.length === 1 ? 'Event' : `${pendingBulkDeleteIds.length} Events`}
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete{' '}
+              {pendingBulkDeleteIds.length === 1
+                ? 'this event'
+                : `these ${pendingBulkDeleteIds.length} events`}
+              .
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={deleteMutation.isPending}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleConfirmDelete}
+              disabled={deleteMutation.isPending}
+              className={buttonVariants({ variant: 'destructive' })}
+            >
+              {deleteMutation.isPending && <Loader2Icon className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />}
+              {deleteMutation.isPending ? 'Deleting…' : 'Delete'}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Dialogs */}
+      <ExcelImportDialog
+        open={isImportDialogOpen || isImportFromUrl}
+        onOpenChange={handleImportDialogChange}
+      />
+      <CreateEventForm
+        open={isCreateDialogOpen || isCreateFromUrl}
+        onOpenChange={handleCreateDialogChange}
+      />
+      <EventDetailsModalControlled
+        eventId={selectedEventId}
+        onClose={() => setSelectedEventId(null)}
+      />
+    </div>
+  )
+}
+
+// Combined filter component for status, format, and organization
+function EventsFilter({
+  formatFilter,
+  statusFilter,
+  orgFilter,
+  organizationOptions,
+  activeFilterCount,
+  onFormatChange,
+  onStatusChange,
+  onOrgChange
+}: {
+  formatFilter: number[]
+  statusFilter: string[]
+  orgFilter: number[]
+  organizationOptions: { value: number; label: string }[]
+  activeFilterCount: number
+  onFormatChange: (checked: boolean, value: number) => void
+  onStatusChange: (checked: boolean, value: string) => void
+  onOrgChange: (checked: boolean, value: number) => void
+}) {
+  const [orgSubmenuOpen, setOrgSubmenuOpen] = useState(false)
+  const [orgSearch, setOrgSearch] = useState('')
+
+  // Filter organizations by search term
+  const filteredOrgs = useMemo(() => {
+    if (!orgSearch.trim()) return organizationOptions
+    const search = orgSearch.toLowerCase()
+    return organizationOptions.filter((org) => org.label.toLowerCase().includes(search))
+  }, [organizationOptions, orgSearch])
+
+  // Reset search when submenu closes
+  const handleOrgSubmenuChange = (open: boolean) => {
+    setOrgSubmenuOpen(open)
+    if (!open) setOrgSearch('')
   }
 
   return (
-    <div className='p-8'>
-      <div className='flex justify-between items-center mb-6'>
-        <div>
-          <h1 className='text-3xl font-bold'>Events</h1>
-          <p className='text-muted-foreground mt-1'>Manage events and activities</p>
-        </div>
-      </div>
+    <div className="flex items-center gap-2">
+      {/* All Filters in One Popover */}
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button variant="outline" size="sm" className="h-9">
+            <FilterIcon className="h-4 w-4 mr-2" />
+            Filters
+            {activeFilterCount > 0 && (
+              <span className="ml-2 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1.5 text-xs font-medium text-primary-foreground">
+                {activeFilterCount}
+              </span>
+            )}
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent align="start" className="w-56 p-0">
+          <div className="p-1">
+            {/* Organization - Nested Submenu */}
+            {organizationOptions.length > 0 && (
+              <Popover open={orgSubmenuOpen} onOpenChange={handleOrgSubmenuChange}>
+                <PopoverTrigger asChild>
+                  <button
+                    className={cn(
+                      'flex w-full items-center justify-between rounded-sm px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground',
+                      orgFilter.length > 0 && 'font-medium'
+                    )}
+                  >
+                    <span>Organization</span>
+                    <div className="flex items-center gap-1">
+                      {orgFilter.length > 0 && (
+                        <Badge variant="secondary" className="h-5 min-w-5 px-1.5 text-xs">
+                          {orgFilter.length}
+                        </Badge>
+                      )}
+                      <ChevronRightIcon className="h-4 w-4 text-muted-foreground" />
+                    </div>
+                  </button>
+                </PopoverTrigger>
+                <PopoverContent side="right" align="start" className="w-64 p-0" sideOffset={2}>
+                  <div className="p-2 border-b">
+                    <div className="relative">
+                      <SearchIcon className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                      <Input
+                        placeholder="Search organizations..."
+                        value={orgSearch}
+                        onChange={(e) => setOrgSearch(e.target.value)}
+                        className="h-8 pl-8 text-sm"
+                      />
+                    </div>
+                  </div>
+                  <ScrollArea className="max-h-64">
+                    <div className="p-1">
+                      {filteredOrgs.length === 0 ? (
+                        <div className="px-2 py-4 text-center text-sm text-muted-foreground">
+                          No organizations found
+                        </div>
+                      ) : (
+                        filteredOrgs.map((org) => {
+                          const isSelected = orgFilter.includes(org.value)
+                          return (
+                            <button
+                              key={org.value}
+                              onClick={() => onOrgChange(!isSelected, org.value)}
+                              className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground"
+                            >
+                              <div
+                                className={cn(
+                                  'flex h-4 w-4 shrink-0 items-center justify-center rounded-sm border',
+                                  isSelected
+                                    ? 'border-primary bg-primary text-primary-foreground'
+                                    : 'border-muted-foreground/30'
+                                )}
+                              >
+                                {isSelected && <CheckIcon className="h-3 w-3" />}
+                              </div>
+                              <span className="truncate">{org.label}</span>
+                            </button>
+                          )
+                        })
+                      )}
+                    </div>
+                  </ScrollArea>
+                  {orgFilter.length > 0 && (
+                    <div className="border-t p-1">
+                      <button
+                        onClick={() => orgFilter.forEach((id) => onOrgChange(false, id))}
+                        className="flex w-full items-center justify-center gap-1 rounded-sm px-2 py-1.5 text-xs text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                      >
+                        <XIcon className="h-3 w-3" />
+                        Clear all ({orgFilter.length})
+                      </button>
+                    </div>
+                  )}
+                </PopoverContent>
+              </Popover>
+            )}
 
-      <div className='space-y-4'>
-        {/* Filters */}
-        <div className='flex flex-wrap items-center justify-between gap-3'>
-          <div className='flex items-center gap-3'>
-            {/* Filter by title, description or location */}
-            <div className='relative'>
-              <Input
-                aria-label='Filter by title, description or location'
-                className={cn('peer min-w-60 ps-9', Boolean(table.getColumn('title')?.getFilterValue()) && 'pe-9')}
-                id={`${id}-input`}
-                onChange={(e) => table.getColumn('title')?.setFilterValue(e.target.value)}
-                placeholder='Search events...'
-                ref={inputRef}
-                type='text'
-                value={(table.getColumn('title')?.getFilterValue() ?? '') as string}
-              />
-              <div className='pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 text-muted-foreground/80 peer-disabled:opacity-50'>
-                <ListFilterIcon aria-hidden='true' size={16} />
+            <div className="my-1 border-t" />
+
+            {/* Status Section */}
+            <div className="px-2 py-1">
+              <div className="mb-1 text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                Status
               </div>
-              {Boolean(table.getColumn('title')?.getFilterValue()) && (
-                <button
-                  aria-label='Clear filter'
-                  className='absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center rounded-e-md text-muted-foreground/80 outline-none transition-[color,box-shadow] hover:text-foreground focus:z-10 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50'
-                  onClick={() => {
-                    table.getColumn('title')?.setFilterValue('')
-                    if (inputRef.current) {
-                      inputRef.current.focus()
-                    }
-                  }}
-                  type='button'
-                >
-                  <CircleXIcon aria-hidden='true' size={16} />
-                </button>
-              )}
+              <div className="space-y-0.5">
+                {statusOptions.map((option) => (
+                  <label key={option.value} className="flex cursor-pointer items-center gap-2 rounded-sm px-1 py-1 hover:bg-accent">
+                    <Checkbox
+                      checked={statusFilter.includes(option.value)}
+                      onCheckedChange={(checked) => onStatusChange(!!checked, option.value)}
+                    />
+                    <span className="text-sm">{option.label}</span>
+                  </label>
+                ))}
+              </div>
             </div>
 
-            {/* Filter by format */}
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button variant='outline'>
-                  <FilterIcon aria-hidden='true' className='-ms-1 opacity-60' size={16} />
-                  Format
-                  {selectedFormats.length > 0 && (
-                    <span className='-me-1 inline-flex h-5 max-h-full items-center rounded border bg-background px-1 font-[inherit] font-medium text-[0.625rem] text-muted-foreground/70'>
-                      {selectedFormats.length}
-                    </span>
-                  )}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent align='start' className='w-auto min-w-36 p-3'>
-                <div className='space-y-3'>
-                  <div className='font-medium text-muted-foreground text-xs'>Filters</div>
-                  <div className='space-y-3'>
-                    {uniqueFormatValues.map((value) => (
-                      <label key={value} className='flex cursor-pointer items-center gap-2'>
-                        <Checkbox
-                          checked={selectedFormats.includes(value as number)}
-                          onCheckedChange={(checked) => handleFormatChange(!!checked, value as number)}
-                        />
-                        <span className='flex grow justify-between gap-2 text-sm'>
-                          <span>{getFormatLabel(value as number)}</span>
-                          <span className='text-muted-foreground'>{formatCounts.get(value)}</span>
-                        </span>
-                      </label>
-                    ))}
-                  </div>
-                </div>
-              </PopoverContent>
-            </Popover>
+            <div className="my-1 border-t" />
 
-            {/* Toggle columns visibility */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant='outline'>
-                  <Columns3Icon aria-hidden='true' className='-ms-1 opacity-60' size={16} />
-                  View
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align='end'>
-                <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
-                {table
-                  .getAllColumns()
-                  .filter((column) => column.getCanHide())
-                  .map((column) => {
-                    return (
-                      <DropdownMenuCheckboxItem
-                        checked={column.getIsVisible()}
-                        className='capitalize'
-                        key={column.id}
-                        onCheckedChange={(value) => column.toggleVisibility(!!value)}
-                        onSelect={(event) => event.preventDefault()}
-                      >
-                        {column.id}
-                      </DropdownMenuCheckboxItem>
-                    )
-                  })}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-
-          {/* Add event button */}
-          <Button className='ml-auto'>
-            <PlusIcon aria-hidden='true' className='-ms-1 opacity-60' size={16} />
-            Add event
-          </Button>
-        </div>
-
-        {/* Table - Hidden on mobile */}
-        <div className='hidden md:block overflow-hidden rounded-md border bg-background'>
-          <Table className='table-fixed'>
-            <TableHeader>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow className='hover:bg-transparent' key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => {
-                    return (
-                      <TableHead
-                        className='h-11'
-                        key={header.id}
-                        style={{ width: header.getSize() ? `${header.getSize()}px` : undefined }}
-                      >
-                        {header.isPlaceholder ? null : header.column.getCanSort() ? (
-                          <Button
-                            className='-ms-3 h-auto p-3 data-[state=open]:bg-accent'
-                            onClick={header.column.getToggleSortingHandler()}
-                            variant='ghost'
-                          >
-                            <span>{flexRender(header.column.columnDef.header, header.getContext())}</span>
-                            {{
-                              asc: <ArrowUpIcon aria-hidden='true' className='ms-2 size-4' />,
-                              desc: <ArrowDownIcon aria-hidden='true' className='ms-2 size-4' />
-                            }[header.column.getIsSorted() as string] ?? (
-                              <ChevronsUpDownIcon aria-hidden='true' className='ms-2 size-4 opacity-40' />
-                            )}
-                          </Button>
-                        ) : (
-                          flexRender(header.column.columnDef.header, header.getContext())
-                        )}
-                      </TableHead>
-                    )
-                  })}
-                </TableRow>
-              ))}
-            </TableHeader>
-            <TableBody>
-              {table.getRowModel().rows?.length ? (
-                table.getRowModel().rows.map((row) => (
-                  <TableRow data-state={row.getIsSelected() && 'selected'} key={row.id}>
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell className='last:py-0' key={cell.id}>
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell className='h-24 text-center' colSpan={columns.length}>
-                    No results.
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </div>
-
-        {/* Mobile Card View - Shown only on mobile */}
-        <div className='md:hidden'>
-          <EventCardList rows={table.getRowModel().rows} />
-        </div>
-
-        {/* Pagination */}
-        <div className='flex items-center justify-between gap-8'>
-          {/* Results per page */}
-          <div className='flex items-center gap-3'>
-            <Label className='max-sm:sr-only' htmlFor={id}>
-              Rows per page
-            </Label>
-            <Select
-              onValueChange={(value) => {
-                table.setPageSize(Number(value))
-              }}
-              value={table.getState().pagination.pageSize.toString()}
-            >
-              <SelectTrigger className='w-fit whitespace-nowrap' id={id}>
-                <SelectValue placeholder='Select number of results' />
-              </SelectTrigger>
-              <SelectContent className='[&_*[role=option]>span]:start-auto [&_*[role=option]>span]:end-2 [&_*[role=option]]:ps-2 [&_*[role=option]]:pe-8'>
-                {[5, 10, 25, 50].map((pageSize) => (
-                  <SelectItem key={pageSize} value={pageSize.toString()}>
-                    {pageSize}
-                  </SelectItem>
+            {/* Format Section */}
+            <div className="px-2 py-1">
+              <div className="mb-1 text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                Format
+              </div>
+              <div className="space-y-0.5">
+                {formatOptions.map((option) => (
+                  <label key={option.value} className="flex cursor-pointer items-center gap-2 rounded-sm px-1 py-1 hover:bg-accent">
+                    <Checkbox
+                      checked={formatFilter.includes(option.value)}
+                      onCheckedChange={(checked) => onFormatChange(!!checked, option.value)}
+                    />
+                    <span className="text-sm">{option.label}</span>
+                  </label>
                 ))}
-              </SelectContent>
-            </Select>
+              </div>
+            </div>
           </div>
+        </PopoverContent>
+      </Popover>
 
-          {/* Page number information */}
-          <div className='flex grow justify-end whitespace-nowrap text-muted-foreground text-sm'>
-            <p aria-live='polite' className='whitespace-nowrap text-muted-foreground text-sm'>
-              <span className='text-foreground'>
-                {table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1}-
-                {Math.min(
-                  (table.getState().pagination.pageIndex + 1) * table.getState().pagination.pageSize,
-                  hasActiveFilters ? table.getFilteredRowModel().rows.length : data.total || 0
-                )}
-              </span>{' '}
-              of{' '}
-              <span className='text-foreground'>
-                {hasActiveFilters ? table.getFilteredRowModel().rows.length : data.total || 0}
-              </span>
-            </p>
-          </div>
-
-          {/* Pagination buttons */}
-          <div>
-            <Pagination>
-              <PaginationContent>
-                {/* First page button */}
-                <PaginationItem>
-                  <Button
-                    aria-label='Go to first page'
-                    className='disabled:pointer-events-none disabled:opacity-50'
-                    disabled={!table.getCanPreviousPage()}
-                    onClick={() => table.firstPage()}
-                    size='icon'
-                    variant='outline'
-                  >
-                    <ChevronFirstIcon aria-hidden='true' size={16} />
-                  </Button>
-                </PaginationItem>
-                {/* Previous page button */}
-                <PaginationItem>
-                  <Button
-                    aria-label='Go to previous page'
-                    className='disabled:pointer-events-none disabled:opacity-50'
-                    disabled={!table.getCanPreviousPage()}
-                    onClick={() => table.previousPage()}
-                    size='icon'
-                    variant='outline'
-                  >
-                    <ChevronLeftIcon aria-hidden='true' size={16} />
-                  </Button>
-                </PaginationItem>
-                {/* Next page button */}
-                <PaginationItem>
-                  <Button
-                    aria-label='Go to next page'
-                    className='disabled:pointer-events-none disabled:opacity-50'
-                    disabled={!table.getCanNextPage()}
-                    onClick={() => table.nextPage()}
-                    size='icon'
-                    variant='outline'
-                  >
-                    <ChevronRightIcon aria-hidden='true' size={16} />
-                  </Button>
-                </PaginationItem>
-                {/* Last page button */}
-                <PaginationItem>
-                  <Button
-                    aria-label='Go to last page'
-                    className='disabled:pointer-events-none disabled:opacity-50'
-                    disabled={!table.getCanNextPage()}
-                    onClick={() => table.lastPage()}
-                    size='icon'
-                    variant='outline'
-                  >
-                    <ChevronLastIcon aria-hidden='true' size={16} />
-                  </Button>
-                </PaginationItem>
-              </PaginationContent>
-            </Pagination>
-          </div>
+      {/* Selected Filter Badges - Status and Format only (no org badges) */}
+      {(statusFilter.length > 0 || formatFilter.length > 0) && (
+        <div className="flex items-center gap-1 flex-wrap">
+          {/* Status badges */}
+          {statusFilter.map((status) => (
+            <Badge
+              key={status}
+              variant="secondary"
+              className="text-xs gap-1 cursor-pointer hover:bg-destructive/10 hover:text-destructive transition-colors"
+              onClick={() => onStatusChange(false, status)}
+            >
+              {statusOptions.find((o) => o.value === status)?.label}
+              <XIcon className="h-3 w-3" />
+            </Badge>
+          ))}
+          {/* Format badges */}
+          {formatFilter.map((format) => (
+            <Badge
+              key={format}
+              variant="secondary"
+              className="text-xs gap-1 cursor-pointer hover:bg-destructive/10 hover:text-destructive transition-colors"
+              onClick={() => onFormatChange(false, format)}
+            >
+              {formatOptions.find((o) => o.value === format)?.label}
+              <XIcon className="h-3 w-3" />
+            </Badge>
+          ))}
         </div>
-      </div>
+      )}
     </div>
   )
 }

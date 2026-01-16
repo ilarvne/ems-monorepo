@@ -4,10 +4,11 @@ import {
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Separator } from "@/components/ui/separator";
-import { Toggle } from "@/components/ui/toggle";
+} from "@repo/ui/components/dropdown-menu";
+import { Separator } from "@repo/ui/components/separator";
+import { Toggle } from "@repo/ui/components/toggle";
 import { useCalendar } from "@/features/calendar/contexts/calendar-context";
+import { EVENT_COLOR_CLASSES } from "@/features/calendar/constants";
 import type { TEventColor } from "@/features/calendar/types";
 
 export default function FilterEvents() {
@@ -41,7 +42,9 @@ export default function FilterEvents() {
 						}}
 					>
 						<div
-							className={`size-3.5 rounded-full bg-${color}-600 dark:bg-${color}-700`}
+							className={
+								"size-3.5 rounded-full " + EVENT_COLOR_CLASSES[color]
+							}
 						/>
 						<span className="capitalize flex justify-center items-center gap-2">
 							{color}

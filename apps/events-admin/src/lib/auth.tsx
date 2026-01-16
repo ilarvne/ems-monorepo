@@ -28,10 +28,13 @@ export interface KratosIdentityTraits {
 export interface AuthContext {
   isAuthenticated: boolean
   isLoading: boolean
+  isGuest: boolean
   session: Session | null
   login: (returnTo?: string) => Promise<void>
   logout: () => Promise<void>
   checkSession: () => Promise<Session | null>
+  continueAsGuest: () => void
+  exitGuestMode: () => void
 }
 
 const AuthContext = React.createContext<AuthContext | null>(null)
@@ -39,6 +42,9 @@ const AuthContext = React.createContext<AuthContext | null>(null)
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [session, setSession] = React.useState<Session | null>(null)
   const [isLoading, setIsLoading] = React.useState(true)
+  const [isGuest, setIsGuest] = React.useState(() => {
+    return localStorage.getItem('guestMode') === 'true'
+  })
 
   const isAuthenticated = !!session?.active
 
@@ -125,6 +131,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // Logout via Kratos browser flow
   const logout = React.useCallback(async () => {
     try {
+      // Clear guest mode on logout
+      setIsGuest(false)
+      localStorage.removeItem('guestMode')
       // Create logout flow (requires CSRF token)
       const { data } = await kratos.createBrowserLogoutFlow()
       // Redirect to logout URL (clears session cookie)
@@ -139,6 +148,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       console.error('Logout failed:', error)
       setSession(null)
     }
+  }, [])
+
+  // Continue as guest (limited access)
+  const continueAsGuest = React.useCallback(() => {
+    setIsGuest(true)
+    localStorage.setItem('guestMode', 'true')
+  }, [])
+
+  // Exit guest mode
+  const exitGuestMode = React.useCallback(() => {
+    setIsGuest(false)
+    localStorage.removeItem('guestMode')
   }, [])
 
   // Show loading spinner during initial session check
@@ -158,10 +179,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       value={{
         isAuthenticated,
         isLoading,
+        isGuest,
         session,
         login,
         logout,
         checkSession,
+        continueAsGuest,
+        exitGuestMode,
       }}
     >
       {children}

@@ -1,8 +1,8 @@
 import { createFileRoute, redirect } from '@tanstack/react-router'
 import { z } from 'zod'
 import { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@repo/ui/components/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/components/card'
 import { useAuth } from '@/lib/auth'
 
 // Validate search params for redirect
@@ -13,8 +13,8 @@ const searchSchema = z.object({
 export const Route = createFileRoute('/auth/login')({
   validateSearch: searchSchema,
   beforeLoad: ({ context }) => {
-    // If already authenticated, redirect to dashboard
-    if (context.auth.isAuthenticated) {
+    // If already authenticated or in guest mode, redirect to dashboard
+    if (context.auth.isAuthenticated || context.auth.isGuest) {
       throw redirect({ to: '/' })
     }
   },
@@ -23,7 +23,7 @@ export const Route = createFileRoute('/auth/login')({
 
 function LoginPage() {
   const search = Route.useSearch()
-  const { login } = useAuth()
+  const { login, continueAsGuest } = useAuth()
   const [isLoading, setIsLoading] = useState(false)
 
   const handleMicrosoftLogin = async () => {
@@ -37,6 +37,12 @@ function LoginPage() {
       setIsLoading(false)
     }
     // Note: Don't set isLoading to false on success - page will redirect
+  }
+
+  const handleGuestMode = () => {
+    continueAsGuest()
+    // Use window.location for immediate redirect without React state issues
+    window.location.href = '/calendar'
   }
 
   return (
@@ -58,7 +64,9 @@ function LoginPage() {
               />
             </svg>
           </div>
-          <CardTitle className="text-2xl font-bold">AITU Events</CardTitle>
+          <CardTitle className="text-2xl">
+            <span>AITU</span> <span className="font-bold">EMS</span>
+          </CardTitle>
           <CardDescription>Sign in to access the admin dashboard</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -76,10 +84,31 @@ function LoginPage() {
             )}
             {isLoading ? 'Redirecting...' : 'Sign in with Microsoft'}
           </Button>
+          
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-card px-2 text-muted-foreground">Or</span>
+            </div>
+          </div>
+
+          <Button
+            onClick={handleGuestMode}
+            className="w-full gap-2"
+            size="lg"
+            variant="ghost"
+            disabled={isLoading}
+          >
+            <GuestIcon className="h-5 w-5" />
+            Continue as Guest
+          </Button>
+          
           <p className="text-center text-xs text-muted-foreground">
             Use your organization Microsoft account to sign in.
             <br />
-            Only authorized administrators can access this dashboard.
+            Guest access is limited to viewing the calendar and organizations.
           </p>
         </CardContent>
       </Card>
@@ -94,6 +123,15 @@ function MicrosoftIcon({ className }: { className?: string }) {
       <rect x="11" y="1" width="9" height="9" fill="#7FBA00" />
       <rect x="1" y="11" width="9" height="9" fill="#00A4EF" />
       <rect x="11" y="11" width="9" height="9" fill="#FFB900" />
+    </svg>
+  )
+}
+
+function GuestIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+      <circle cx="12" cy="7" r="4" />
     </svg>
   )
 }

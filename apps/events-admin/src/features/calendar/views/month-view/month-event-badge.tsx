@@ -1,16 +1,16 @@
 import type { VariantProps } from "class-variance-authority";
 import { cva } from "class-variance-authority";
 import { endOfDay, isSameDay, parseISO, startOfDay } from "date-fns";
-import { cn } from "@/lib/utils";
+import { cn } from "@repo/ui/lib/utils";
 import { useCalendar } from "@/features/calendar/contexts/calendar-context";
-import { EventDetailsDialog } from "@/features/calendar/dialogs/event-details-dialog";
+import { EventDetailsModal } from "@/features/events/components";
 import { DraggableEvent } from "@/features/calendar/dnd/draggable-event";
 import { formatTime } from "@/features/calendar/helpers";
 import type { IEvent } from "@/features/calendar/interfaces";
 import {EventBullet} from "@/features/calendar/views/month-view/event-bullet";
 
 const eventBadgeVariants = cva(
-	"mx-1 flex size-auto h-6.5 select-none items-center justify-between gap-1.5 truncate whitespace-nowrap rounded-md border px-2 text-xs",
+	"mx-1 flex size-auto h-[26px] select-none items-center justify-between gap-1.5 truncate whitespace-nowrap rounded-md border px-2 text-xs",
 	{
 		variants: {
 			color: {
@@ -26,13 +26,13 @@ const eventBadgeVariants = cva(
 				orange:
 					"border-orange-200 bg-orange-50 text-orange-700 dark:border-orange-800 dark:bg-orange-950 dark:text-orange-300",
 
-				// Dot variants
-				"blue-dot": "bg-bg-secondary text-t-primary [&_svg]:fill-blue-600",
-				"green-dot": "bg-bg-secondary text-t-primary [&_svg]:fill-green-600",
-				"red-dot": "bg-bg-secondary text-t-primary [&_svg]:fill-red-600",
-				"orange-dot": "bg-bg-secondary text-t-primary [&_svg]:fill-orange-600",
-				"purple-dot": "bg-bg-secondary text-t-primary [&_svg]:fill-purple-600",
-				"yellow-dot": "bg-bg-secondary text-t-primary [&_svg]:fill-yellow-600",
+				// Dot variants - using secondary background
+				"blue-dot": "border-border bg-secondary text-foreground [&_svg]:fill-blue-600",
+				"green-dot": "border-border bg-secondary text-foreground [&_svg]:fill-green-600",
+				"red-dot": "border-border bg-secondary text-foreground [&_svg]:fill-red-600",
+				"orange-dot": "border-border bg-secondary text-foreground [&_svg]:fill-orange-600",
+				"purple-dot": "border-border bg-secondary text-foreground [&_svg]:fill-purple-600",
+				"yellow-dot": "border-border bg-secondary text-foreground [&_svg]:fill-yellow-600",
 			},
 			multiDayPosition: {
 				first:
@@ -106,7 +106,7 @@ export function MonthEventBadge({
 
 	return (
 		<DraggableEvent event={event}>
-			<EventDetailsDialog event={event}>
+			<EventDetailsModal eventId={event.id}>
 				<div role="button" tabIndex={0} className={eventBadgeClasses}>
 					<div className="flex items-center gap-1.5 truncate">
 						{!["middle", "last"].includes(position) &&
@@ -134,7 +134,7 @@ export function MonthEventBadge({
 						)}
 					</div>
 				</div>
-			</EventDetailsDialog>
+			</EventDetailsModal>
 		</DraggableEvent>
 	);
 }

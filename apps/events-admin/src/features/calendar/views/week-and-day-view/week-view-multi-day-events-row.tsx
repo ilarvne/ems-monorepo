@@ -11,11 +11,15 @@ import {
 import { useMemo } from "react";
 import type { IEvent } from "@/features/calendar/interfaces";
 import { MonthEventBadge } from "@/features/calendar/views/month-view/month-event-badge";
+import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/components/popover";
+import { ScrollArea } from "@repo/ui/components/scroll-area";
 
 interface IProps {
 	selectedDate: Date;
 	multiDayEvents: IEvent[];
 }
+
+const MAX_VISIBLE_EVENTS = 3;
 
 export function WeekViewMultiDayEventsRow({
 	selectedDate,
@@ -90,24 +94,34 @@ export function WeekViewMultiDayEventsRow({
 	if (!hasEventsInWeek) {
 		return null;
 	}
+    
+    // Calculate total rows needed, limited by MAX
+    const visibleRows = eventRows.slice(0, MAX_VISIBLE_EVENTS);
+    const hasMore = eventRows.length > MAX_VISIBLE_EVENTS;
 
 	return (
 		<div className="overflow-hidden flex">
-			<div className="w-18 border-b"></div>
-			<div className="grid flex-1 grid-cols-7 divide-x border-b border-l">
-				{weekDays.map((day, dayIndex) => (
+			<div className="w-[72px] border-b border-border"></div>
+			<div className="grid flex-1 grid-cols-7 divide-x divide-border border-b border-border border-l">
+				{weekDays.map((day, dayIndex) => {
+                    // Check if we need to show "Show more" for this day
+                    const hiddenEventsCount = eventRows.slice(MAX_VISIBLE_EVENTS).flat().filter(
+                        (e) => e.startIndex <= dayIndex && e.endIndex >= dayIndex
+                    ).length;
+
+                    return (
 					<div
 						key={day.toISOString()}
 						className="flex h-full flex-col gap-1 py-1"
 					>
-						{eventRows.map((row, rowIndex) => {
+						{visibleRows.map((row, rowIndex) => {
 							const event = row.find(
 								(e) => e.startIndex <= dayIndex && e.endIndex >= dayIndex,
 							);
 
 							if (!event) {
 								return (
-									<div key={`${rowIndex}-${dayIndex}`} className="h-6.5" />
+									<div key={`${rowIndex}-${dayIndex}`} className="h-[26px]" />
 								);
 							}
 
@@ -135,8 +149,38 @@ export function WeekViewMultiDayEventsRow({
 								/>
 							);
 						})}
+                        
+                        {hasMore && hiddenEventsCount > 0 && (
+                            <Popover>
+                                <PopoverTrigger asChild>
+                                    <button className="text-xs text-muted-foreground hover:bg-accent rounded px-1 w-full text-left font-medium">
+                                        +{hiddenEventsCount} more
+                                    </button>
+                                </PopoverTrigger>
+                                <PopoverContent className="w-64 p-0" align="start">
+                                    <div className="p-2 border-b font-semibold text-sm">
+                                        {startOfDay(day).toLocaleDateString()}
+                                    </div>
+                                    <ScrollArea className="h-64 p-2">
+                                        <div className="flex flex-col gap-1">
+                                            {eventRows.flat()
+                                                .filter((e) => e.startIndex <= dayIndex && e.endIndex >= dayIndex)
+                                                .map(event => (
+                                                    <MonthEventBadge
+                                                        key={`popover-${event.id}`}
+                                                        event={event}
+                                                        cellDate={startOfDay(day)}
+                                                        position="none"
+                                                    />
+                                                ))
+                                            }
+                                        </div>
+                                    </ScrollArea>
+                                </PopoverContent>
+                            </Popover>
+                        )}
 					</div>
-				))}
+				)})}
 			</div>
 		</div>
 	);

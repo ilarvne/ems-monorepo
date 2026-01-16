@@ -4,12 +4,12 @@ import { useQuery } from '@connectrpc/connect-query'
 import { getTopPerformingClubs } from '@repo/proto'
 import { Trophy, TrendingUp, Users, Calendar } from 'lucide-react'
 
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Skeleton } from '@/components/ui/skeleton'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Badge } from '@/components/ui/badge'
-import { SchrodingersModal } from '@/components/ui/schrodingers-modal'
+import { Button } from '@repo/ui/components/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/components/card'
+import { Skeleton } from '@repo/ui/components/skeleton'
+import { Avatar, AvatarFallback, AvatarImage } from '@repo/ui/components/avatar'
+import { Badge } from '@repo/ui/components/badge'
+import { SchrodingersModal } from '@repo/ui/components/schrodingers-modal'
 import { useSchrodingersModal } from '@/hooks/use-schrodingers-modal'
 
 interface ClubLeaderboardProps {
