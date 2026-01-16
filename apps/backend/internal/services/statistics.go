@@ -223,15 +223,15 @@ func (s *StatisticsService) GetOverallStatistics(ctx context.Context, req *conne
 	slog.Debug("GetOverallStatistics")
 
 	var totalEvents, totalUsers, totalOrgs, totalRegs, upcomingEvents int32
-	s.pool.QueryRow(ctx, `SELECT COUNT(*) FROM events`).Scan(&totalEvents)
-	s.pool.QueryRow(ctx, `SELECT COUNT(*) FROM users`).Scan(&totalUsers)
-	s.pool.QueryRow(ctx, `SELECT COUNT(*) FROM organizations`).Scan(&totalOrgs)
-	s.pool.QueryRow(ctx, `SELECT COUNT(*) FROM event_registrations WHERE status = 'registered'`).Scan(&totalRegs)
-	s.pool.QueryRow(ctx, `SELECT COUNT(*) FROM events WHERE start_time >= NOW()`).Scan(&upcomingEvents)
+	_ = s.pool.QueryRow(ctx, `SELECT COUNT(*) FROM events`).Scan(&totalEvents)
+	_ = s.pool.QueryRow(ctx, `SELECT COUNT(*) FROM users`).Scan(&totalUsers)
+	_ = s.pool.QueryRow(ctx, `SELECT COUNT(*) FROM organizations`).Scan(&totalOrgs)
+	_ = s.pool.QueryRow(ctx, `SELECT COUNT(*) FROM event_registrations WHERE status = 'registered'`).Scan(&totalRegs)
+	_ = s.pool.QueryRow(ctx, `SELECT COUNT(*) FROM events WHERE start_time >= NOW()`).Scan(&upcomingEvents)
 
 	// Calculate average attendance rate
 	var avgRate float64
-	s.pool.QueryRow(ctx, `
+	_ = s.pool.QueryRow(ctx, `
 		SELECT COALESCE(AVG(
 			CASE WHEN reg_count > 0 THEN att_count::float / reg_count::float * 100 ELSE 0 END
 		), 0)
@@ -252,8 +252,8 @@ func (s *StatisticsService) GetOverallStatistics(ctx context.Context, req *conne
 	monthEnd := monthStart.AddDate(0, 1, 0)
 
 	var eventsThisMonth, regsThisMonth int32
-	s.pool.QueryRow(ctx, `SELECT COUNT(*) FROM events WHERE start_time >= $1 AND start_time < $2`, monthStart, monthEnd).Scan(&eventsThisMonth)
-	s.pool.QueryRow(ctx, `SELECT COUNT(*) FROM event_registrations WHERE registered_at >= $1 AND registered_at < $2`, monthStart, monthEnd).Scan(&regsThisMonth)
+	_ = s.pool.QueryRow(ctx, `SELECT COUNT(*) FROM events WHERE start_time >= $1 AND start_time < $2`, monthStart, monthEnd).Scan(&eventsThisMonth)
+	_ = s.pool.QueryRow(ctx, `SELECT COUNT(*) FROM event_registrations WHERE registered_at >= $1 AND registered_at < $2`, monthStart, monthEnd).Scan(&regsThisMonth)
 
 	return connect.NewResponse(&eventsv1.GetOverallStatisticsResponse{
 		TotalEvents:            totalEvents,
@@ -376,20 +376,20 @@ func (s *StatisticsService) GetUserEngagementLevels(ctx context.Context, req *co
 	slog.Debug("GetUserEngagementLevels")
 
 	var totalUsers int32
-	s.pool.QueryRow(ctx, `SELECT COUNT(*) FROM users`).Scan(&totalUsers)
+	_ = s.pool.QueryRow(ctx, `SELECT COUNT(*) FROM users`).Scan(&totalUsers)
 
 	var registeredUsers int32
-	s.pool.QueryRow(ctx, `SELECT COUNT(DISTINCT user_id) FROM event_registrations WHERE status = 'registered'`).Scan(&registeredUsers)
+	_ = s.pool.QueryRow(ctx, `SELECT COUNT(DISTINCT user_id) FROM event_registrations WHERE status = 'registered'`).Scan(&registeredUsers)
 
 	var attendedUsers int32
-	s.pool.QueryRow(ctx, `
+	_ = s.pool.QueryRow(ctx, `
 		SELECT COUNT(DISTINCT er.user_id) FROM event_registrations er
 		INNER JOIN event_attendance ea ON ea.registration_id = er.id
 		WHERE ea.status = 'attended'
 	`).Scan(&attendedUsers)
 
 	var repeatAttendees int32
-	s.pool.QueryRow(ctx, `
+	_ = s.pool.QueryRow(ctx, `
 		SELECT COUNT(*) FROM (
 			SELECT er.user_id FROM event_registrations er
 			INNER JOIN event_attendance ea ON ea.registration_id = er.id
