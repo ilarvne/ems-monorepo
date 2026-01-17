@@ -1,0 +1,143 @@
+version: v1.3.0
+
+# DSN is provided via KRATOS_DSN environment variable
+
+serve:
+  public:
+    base_url: https://ems-kratos.icycoast-91810834.westus2.azurecontainerapps.io/
+    cors:
+      enabled: true
+      allowed_origins:
+        - https://ems-frontend.icycoast-91810834.westus2.azurecontainerapps.io
+        - https://ems-backend.icycoast-91810834.westus2.azurecontainerapps.io
+      allowed_methods:
+        - POST
+        - GET
+        - PUT
+        - PATCH
+        - DELETE
+      allowed_headers:
+        - Authorization
+        - Cookie
+        - Content-Type
+        - X-Session-Token
+      exposed_headers:
+        - Content-Type
+        - Set-Cookie
+      allow_credentials: true
+  admin:
+    base_url: http://127.0.0.1:4434/
+
+selfservice:
+  default_browser_return_url: https://ems-frontend.icycoast-91810834.westus2.azurecontainerapps.io/
+  allowed_return_urls:
+    - https://ems-frontend.icycoast-91810834.westus2.azurecontainerapps.io
+
+  methods:
+    password:
+      enabled: true
+    totp:
+      enabled: true
+      config:
+        issuer: EMS
+    lookup_secret:
+      enabled: true
+    link:
+      enabled: true
+    code:
+      enabled: true
+    oidc:
+      enabled: true
+      config:
+        providers:
+          - id: microsoft
+            provider: microsoft
+            client_id: ${MICROSOFT_CLIENT_ID}
+            client_secret: ${MICROSOFT_CLIENT_SECRET}
+            microsoft_tenant: common
+            mapper_url: file:///etc/config/kratos/microsoft-claims-mapper.jsonnet
+            scope:
+              - openid
+              - email
+              - profile
+
+  flows:
+    error:
+      ui_url: https://ems-frontend.icycoast-91810834.westus2.azurecontainerapps.io/auth/error
+
+    settings:
+      ui_url: https://ems-frontend.icycoast-91810834.westus2.azurecontainerapps.io/auth/settings
+      privileged_session_max_age: 15m
+      required_aal: highest_available
+
+    recovery:
+      enabled: true
+      ui_url: https://ems-frontend.icycoast-91810834.westus2.azurecontainerapps.io/auth/recovery
+      use: code
+
+    verification:
+      enabled: true
+      ui_url: https://ems-frontend.icycoast-91810834.westus2.azurecontainerapps.io/auth/verification
+      use: code
+      after:
+        default_browser_return_url: https://ems-frontend.icycoast-91810834.westus2.azurecontainerapps.io/
+
+    logout:
+      after:
+        default_browser_return_url: https://ems-frontend.icycoast-91810834.westus2.azurecontainerapps.io/auth/login
+
+    login:
+      ui_url: https://ems-frontend.icycoast-91810834.westus2.azurecontainerapps.io/auth/login
+      lifespan: 10m
+
+    registration:
+      lifespan: 10m
+      ui_url: https://ems-frontend.icycoast-91810834.westus2.azurecontainerapps.io/auth/registration
+      after:
+        password:
+          hooks:
+            - hook: session
+            - hook: show_verification_ui
+        oidc:
+          hooks:
+            - hook: session
+
+log:
+  level: info
+  format: json
+  leak_sensitive_values: false
+
+# Secrets are provided via SECRETS_COOKIE and SECRETS_CIPHER env vars
+
+ciphers:
+  algorithm: xchacha20-poly1305
+
+hashers:
+  algorithm: argon2
+  argon2:
+    parallelism: 1
+    memory: 128MB
+    iterations: 2
+    salt_length: 16
+    key_length: 16
+
+identity:
+  default_schema_id: default
+  schemas:
+    - id: default
+      url: file:///etc/config/kratos/identity.schema.json
+
+courier:
+  smtp:
+    # Disable email sending for now - can configure later with SendGrid/etc
+    connection_uri: smtp://localhost:25/?disable_starttls=true
+
+cookies:
+  path: /
+  same_site: None
+
+session:
+  lifespan: 24h
+  cookie:
+    path: /
+    same_site: None

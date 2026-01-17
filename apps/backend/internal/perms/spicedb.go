@@ -26,7 +26,7 @@ type Relationship struct {
 }
 
 // NewClient creates a new SpiceDB permissions client
-func NewClient(endpoint, presharedKey string, insecureMode bool) (*Client, error) {
+func NewClient(endpoint, presharedKey string, insecureMode bool, skipVerifyCA bool) (*Client, error) {
 	var opts []grpc.DialOption
 
 	if insecureMode {
@@ -35,7 +35,12 @@ func NewClient(endpoint, presharedKey string, insecureMode bool) (*Client, error
 			grpcutil.WithInsecureBearerToken(presharedKey),
 		)
 	} else {
-		systemCerts, err := grpcutil.WithSystemCerts(grpcutil.VerifyCA)
+		// Use TLS with system certs
+		var verification = grpcutil.VerifyCA
+		if skipVerifyCA {
+			verification = grpcutil.SkipVerifyCA
+		}
+		systemCerts, err := grpcutil.WithSystemCerts(verification)
 		if err != nil {
 			return nil, err
 		}

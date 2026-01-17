@@ -44,7 +44,7 @@ func main() {
 	slog.Info("Kratos client initialized", "url", cfg.KratosPublicURL)
 
 	// Initialize SpiceDB client for authorization
-	permsClient, err := perms.NewClient(cfg.SpiceDBEndpoint, cfg.SpiceDBPresharedKey, cfg.SpiceDBInsecure)
+	permsClient, err := perms.NewClient(cfg.SpiceDBEndpoint, cfg.SpiceDBPresharedKey, cfg.SpiceDBInsecure, cfg.SpiceDBSkipVerifyCA)
 	if err != nil {
 		slog.Warn("Failed to initialize SpiceDB client - authorization checks will fail",
 			"endpoint", cfg.SpiceDBEndpoint,

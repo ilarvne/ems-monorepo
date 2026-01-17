@@ -25,6 +25,7 @@ type Config struct {
 	SpiceDBEndpoint     string
 	SpiceDBPresharedKey string
 	SpiceDBInsecure     bool
+	SpiceDBSkipVerifyCA bool
 
 	// Meilisearch
 	MeilisearchURL       string
@@ -45,6 +46,7 @@ func Load() *Config {
 		SpiceDBEndpoint:      getEnv("SPICEDB_ENDPOINT", "localhost:50051"),
 		SpiceDBPresharedKey:  getEnv("SPICEDB_PRESHARED_KEY", "foobar"),
 		SpiceDBInsecure:      getEnvBool("SPICEDB_INSECURE", true),
+		SpiceDBSkipVerifyCA:  getEnvBool("SPICEDB_SKIP_VERIFY_CA", false),
 		MeilisearchURL:       getEnv("MEILISEARCH_URL", "http://localhost:7700"),
 		MeilisearchMasterKey: getEnv("MEILISEARCH_MASTER_KEY", "masterKey123"),
 		LogLevel:             getEnv("LOG_LEVEL", "debug"),
