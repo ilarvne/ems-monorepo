@@ -1,0 +1,14 @@
+# Compiled binary
+server
+
+# Test coverage
+coverage.out
+coverage.html
+
+# IDE
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
