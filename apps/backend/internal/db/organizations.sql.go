@@ -35,23 +35,23 @@ func (q *Queries) CountOrganizations(ctx context.Context) (int64, error) {
 
 const createOrganization = `-- name: CreateOrganization :one
 INSERT INTO organizations (title, image_url, description, organization_type_id, instagram, telegram_channel, telegram_chat, website, youtube, tiktok, linkedin, status)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, COALESCE($12, 'active'))
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, COALESCE($12::organization_status, 'active'::organization_status))
 RETURNING id, title, image_url, description, organization_type_id, instagram, telegram_channel, telegram_chat, website, youtube, tiktok, linkedin, status, created_at, updated_at
 `
 
 type CreateOrganizationParams struct {
-	Title              string      `json:"title"`
-	ImageUrl           pgtype.Text `json:"image_url"`
-	Description        pgtype.Text `json:"description"`
-	OrganizationTypeID int32       `json:"organization_type_id"`
-	Instagram          pgtype.Text `json:"instagram"`
-	TelegramChannel    pgtype.Text `json:"telegram_channel"`
-	TelegramChat       pgtype.Text `json:"telegram_chat"`
-	Website            pgtype.Text `json:"website"`
-	Youtube            pgtype.Text `json:"youtube"`
-	Tiktok             pgtype.Text `json:"tiktok"`
-	Linkedin           pgtype.Text `json:"linkedin"`
-	Status             interface{} `json:"status"`
+	Title              string                 `json:"title"`
+	ImageUrl           pgtype.Text            `json:"image_url"`
+	Description        pgtype.Text            `json:"description"`
+	OrganizationTypeID int32                  `json:"organization_type_id"`
+	Instagram          pgtype.Text            `json:"instagram"`
+	TelegramChannel    pgtype.Text            `json:"telegram_channel"`
+	TelegramChat       pgtype.Text            `json:"telegram_chat"`
+	Website            pgtype.Text            `json:"website"`
+	Youtube            pgtype.Text            `json:"youtube"`
+	Tiktok             pgtype.Text            `json:"tiktok"`
+	Linkedin           pgtype.Text            `json:"linkedin"`
+	Status             NullOrganizationStatus `json:"status"`
 }
 
 func (q *Queries) CreateOrganization(ctx context.Context, arg CreateOrganizationParams) (Organization, error) {
@@ -314,7 +314,7 @@ SET title = COALESCE($1, title),
     youtube = COALESCE($9, youtube),
     tiktok = COALESCE($10, tiktok),
     linkedin = COALESCE($11, linkedin),
-    status = COALESCE($12, status),
+    status = COALESCE($12::organization_status, status),
     updated_at = NOW()
 WHERE id = $13
 RETURNING id, title, image_url, description, organization_type_id, instagram, telegram_channel, telegram_chat, website, youtube, tiktok, linkedin, status, created_at, updated_at

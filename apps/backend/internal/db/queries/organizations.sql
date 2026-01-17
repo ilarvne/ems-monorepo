@@ -1,6 +1,6 @@
 -- name: CreateOrganization :one
 INSERT INTO organizations (title, image_url, description, organization_type_id, instagram, telegram_channel, telegram_chat, website, youtube, tiktok, linkedin, status)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, COALESCE(sqlc.narg('status'), 'active'))
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, COALESCE(sqlc.narg('status')::organization_status, 'active'::organization_status))
 RETURNING *;
 
 -- name: GetOrganization :one
@@ -27,7 +27,7 @@ SET title = COALESCE(sqlc.narg('title'), title),
     youtube = COALESCE(sqlc.narg('youtube'), youtube),
     tiktok = COALESCE(sqlc.narg('tiktok'), tiktok),
     linkedin = COALESCE(sqlc.narg('linkedin'), linkedin),
-    status = COALESCE(sqlc.narg('status'), status),
+    status = COALESCE(sqlc.narg('status')::organization_status, status),
     updated_at = NOW()
 WHERE id = sqlc.arg('id')
 RETURNING *;

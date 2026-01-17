@@ -49,7 +49,7 @@ func (s *OrganizationsService) CreateOrganization(ctx context.Context, req *conn
 	params := db.CreateOrganizationParams{
 		Title:              req.Msg.Title,
 		OrganizationTypeID: req.Msg.OrganizationTypeId,
-		Status:             protoStatusToDB(req.Msg.Status),
+		Status:             db.NullOrganizationStatus{OrganizationStatus: protoStatusToDB(req.Msg.Status), Valid: true},
 	}
 
 	if req.Msg.ImageUrl != nil {
