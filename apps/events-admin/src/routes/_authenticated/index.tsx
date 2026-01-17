@@ -20,16 +20,24 @@ function Dashboard() {
   const currentMonth = new Date().getMonth() + 1
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 p-6">
-      {/* --- LEFT COLUMN (Spans 2) --- */}
-      <div className="lg:col-span-2 flex flex-col gap-6">
-        <SectionCards />
-        
-        {/* Activity & Trends */}
-        <EventActivity year={currentYear} />
+    <>
+      <SectionCards />
+      <div className='grid grid-cols-1 gap-4 px-4 lg:px-6 xl:grid-cols-3'>
         <ChartAreaInteractive />
-        
-        {/* Data Table */}
+        <ChartPieInteractive year={currentYear} month={currentMonth} />
+      </div>
+      <div className='grid grid-cols-1 gap-4 px-4 lg:px-6 xl:grid-cols-5'>
+        <div className='xl:col-span-2'>
+          <ChartRadialEngagement />
+        </div>
+        <div className='xl:col-span-3'>
+          <ClubLeaderboard limit={5} days={90} />
+        </div>
+      </div>
+      <div className='px-4 lg:px-6'>
+        <EventActivity year={currentYear} />
+      </div>
+      <div className='px-4 lg:px-6'>
         <Suspense
           fallback={
             <Card>
@@ -51,14 +59,6 @@ function Dashboard() {
           <EventAnalytics />
         </Suspense>
       </div>
-
-      {/* --- RIGHT COLUMN (Spans 1) --- */}
-      <div className="flex flex-col gap-6">
-        {/* Engagement Charts */}
-        <ChartRadialEngagement />
-        <ChartPieInteractive year={currentYear} month={currentMonth} />
-        <ClubLeaderboard limit={5} days={90} />
-      </div>
-    </div>
+    </>
   )
 }
