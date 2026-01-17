@@ -1,23 +1,9 @@
 import { type User } from '@repo/proto'
 import { type ColumnDef, type FilterFn } from '@tanstack/react-table'
 
-import { UserAvatar } from './user-avatar'
+import { formatDate } from '@/lib/utils'
 
-// Helper function for formatting dates
-const formatDate = (dateString: string) => {
-  if (!dateString) return '-'
-  try {
-    const date = new Date(dateString)
-    if (isNaN(date.getTime())) return '-'
-    return new Intl.DateTimeFormat('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    }).format(date)
-  } catch {
-    return '-'
-  }
-}
+import { UserAvatar } from './user-avatar'
 
 // Custom filter function for multi-column searching
 export const multiColumnFilterFn: FilterFn<User> = (row, _columnId, filterValue) => {

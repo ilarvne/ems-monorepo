@@ -1,16 +1,4 @@
-import {
-  Building2,
-  Calendar,
-  CalendarCheck,
-  Camera,
-  FileText,
-  HelpCircle,
-  LayoutDashboard,
-  Sparkles,
-  Tags,
-  Users,
-  FileStack
-} from 'lucide-react'
+import { Building2, Calendar, CalendarCheck, FileStack, HelpCircle, LayoutDashboard, Tags, Users } from 'lucide-react'
 
 import { NavDocuments } from '@/components/nav-documents'
 import { NavMain } from '@/components/nav-main'
@@ -57,54 +45,6 @@ const data = {
       title: 'Users',
       url: '/users',
       icon: Users
-    }
-  ],
-  navClouds: [
-    {
-      title: 'Capture',
-      icon: Camera,
-      isActive: true,
-      url: '#',
-      items: [
-        {
-          title: 'Active Proposals',
-          url: '#'
-        },
-        {
-          title: 'Archived',
-          url: '#'
-        }
-      ]
-    },
-    {
-      title: 'Proposal',
-      icon: FileText,
-      url: '#',
-      items: [
-        {
-          title: 'Active Proposals',
-          url: '#'
-        },
-        {
-          title: 'Archived',
-          url: '#'
-        }
-      ]
-    },
-    {
-      title: 'Prompts',
-      icon: Sparkles,
-      url: '#',
-      items: [
-        {
-          title: 'Active Proposals',
-          url: '#'
-        },
-        {
-          title: 'Archived',
-          url: '#'
-        }
-      ]
     }
   ],
   navSecondary: [

@@ -3,20 +3,7 @@ import { type ColumnDef, type FilterFn } from '@tanstack/react-table'
 
 import { Badge } from '@repo/ui/components/badge'
 
-// Helper function for formatting dates
-const formatDate = (dateString: string) => {
-  if (!dateString) return '-'
-  try {
-    const date = new Date(dateString)
-    return new Intl.DateTimeFormat('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric'
-    }).format(date)
-  } catch {
-    return '-'
-  }
-}
+import { formatDate } from '@/lib/utils'
 
 // Custom filter function for tag name searching
 export const multiColumnFilterFn: FilterFn<Tag> = (row, _columnId, filterValue) => {

@@ -7,19 +7,7 @@ import { Badge } from '@repo/ui/components/badge'
 import { Card, CardContent, CardHeader } from '@repo/ui/components/card'
 import { Checkbox } from '@repo/ui/components/checkbox'
 
-const formatDate = (dateString: string, includeTime = false) => {
-  const date = new Date(dateString)
-  const options: Intl.DateTimeFormatOptions = {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-    ...(includeTime && {
-      hour: '2-digit',
-      minute: '2-digit'
-    })
-  }
-  return new Intl.DateTimeFormat('en-US', options).format(date)
-}
+import { formatDate } from '@/lib/utils'
 
 interface EventCardProps {
   row: Row<Event>

@@ -9,22 +9,9 @@ import { Telegram } from '@repo/ui/components/svgs/telegram'
 import { TiktokIconDark } from '@repo/ui/components/svgs/tiktokIconDark'
 import { YouTube } from '@repo/ui/components/svgs/youtube'
 
-import { SocialIcon } from './social-icon'
+import { formatDate } from '@/lib/utils'
 
-// Helper function for formatting dates
-const formatDate = (dateString: string) => {
-  if (!dateString) return '-'
-  try {
-    const date = new Date(dateString)
-    return new Intl.DateTimeFormat('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric'
-    }).format(date)
-  } catch {
-    return '-'
-  }
-}
+import { SocialIcon } from './social-icon'
 
 // Custom filter functions
 export const multiColumnFilterFn: FilterFn<Organization> = (row, _columnId, filterValue) => {
