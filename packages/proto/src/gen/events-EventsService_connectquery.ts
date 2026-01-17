@@ -43,3 +43,8 @@ export const getEventsByTagId = EventsService.method.getEventsByTagId;
  * @generated from rpc events.v1.EventsService.GetUserSubscribedEvents
  */
 export const getUserSubscribedEvents = EventsService.method.getUserSubscribedEvents;
+
+/**
+ * @generated from rpc events.v1.EventsService.GetEventImageUploadUrl
+ */
+export const getEventImageUploadUrl = EventsService.method.getEventImageUploadUrl;

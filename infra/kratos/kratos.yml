@@ -26,7 +26,7 @@ serve:
         - Content-Type
         - Set-Cookie
   admin:
-    base_url: http://kratos:4434/
+    base_url: http://localhost:4434/
 
 selfservice:
   default_browser_return_url: http://localhost:6868/
@@ -131,8 +131,14 @@ courier:
   smtp:
     connection_uri: smtps://test:test@mailslurper:1025/?skip_ssl_verify=true
 
+cookies:
+  domain: localhost
+  path: /
+  same_site: Lax
+
 session:
   lifespan: 24h
   cookie:
     domain: localhost
+    path: /
     same_site: Lax

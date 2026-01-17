@@ -9,17 +9,13 @@ on:
 
 env:
   REGISTRY: ${{ secrets.AZURE_REGISTRY_URL }}
-  RESOURCE_GROUP: ${{ secrets.AZURE_RESOURCE_GROUP }}
+  RESOURCE_GROUP: ems-rg
   REGISTRY_NAME: ${{ secrets.AZURE_REGISTRY_NAME }}
-  CONTAINER_APP_ENV: ${{ secrets.AZURE_CONTAINER_APP_ENV }}
-  BACKEND_APP: ems-backend
-  FRONTEND_APP: ems-frontend
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    # Only deploy if the build workflow succeeded
     if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     steps:
       - uses: actions/checkout@v4
@@ -27,74 +23,47 @@ jobs:
       - name: Log in to Azure
         uses: azure/login@v2
         with:
-          creds: |
-            {
-              "clientId": "${{ secrets.AZURE_CLIENT_ID }}",
-              "clientSecret": "${{ secrets.AZURE_CLIENT_SECRET }}",
-              "subscriptionId": "${{ secrets.AZURE_SUBSCRIPTION_ID }}",
-              "tenantId": "${{ secrets.AZURE_TENANT_ID }}"
-            }
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Get latest image tags
-        id: images
+      - name: Get commit SHA
+        id: sha
         run: |
-          BACKEND_IMAGE=$(az acr repository show-tags --name $REGISTRY_NAME --repository backend --orderby time_desc --query "[0]" -o tsv 2>/dev/null || echo "latest")
-          echo "BACKEND_IMAGE=${REGISTRY}/backend:${BACKEND_IMAGE}" >> $GITHUB_OUTPUT
-          FRONTEND_IMAGE=$(az acr repository show-tags --name $REGISTRY_NAME --repository events-admin --orderby time_desc --query "[0]" -o tsv 2>/dev/null || echo "latest")
-          echo "FRONTEND_IMAGE=${REGISTRY}/events-admin:${FRONTEND_IMAGE}" >> $GITHUB_OUTPUT
-
-      - name: Deploy/Update Backend Container App
-        run: |
-          # Check if container app exists
-          if az containerapp show --name $BACKEND_APP --resource-group $RESOURCE_GROUP &>/dev/null; then
-            echo "Updating existing backend container app..."
-            az containerapp update \
-              --name $BACKEND_APP \
-              --resource-group $RESOURCE_GROUP \
-              --image ${{ steps.images.outputs.BACKEND_IMAGE }}
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            SHA=$(git rev-parse --short HEAD)
           else
-            echo "Creating new backend container app..."
-            az containerapp create \
-              --name $BACKEND_APP \
-              --resource-group $RESOURCE_GROUP \
-              --environment $CONTAINER_APP_ENV \
-              --image ${{ steps.images.outputs.BACKEND_IMAGE }} \
-              --target-port 8080 \
-              --ingress external \
-              --cpu 0.5 \
-              --memory 1 \
-              --registry-server ${{ env.REGISTRY }} \
-              --registry-username 00000000-0000-0000-0000-000000000000 \
-              --registry-password "$(az acr login --name $REGISTRY_NAME --expose-token --output tsv --query accessToken)"
+            SHA=$(echo "${{ github.event.workflow_run.head_sha }}" | cut -c1-7)
           fi
+          echo "SHORT_SHA=$SHA" >> $GITHUB_OUTPUT
 
-      - name: Deploy/Update Frontend Container App
+      - name: Deploy Backend
         run: |
-          # Check if container app exists
-          if az containerapp show --name $FRONTEND_APP --resource-group $RESOURCE_GROUP &>/dev/null; then
-            echo "Updating existing frontend container app..."
-            az containerapp update \
-              --name $FRONTEND_APP \
-              --resource-group $RESOURCE_GROUP \
-              --image ${{ steps.images.outputs.FRONTEND_IMAGE }}
-          else
-            echo "Creating new frontend container app..."
-            az containerapp create \
-              --name $FRONTEND_APP \
-              --resource-group $RESOURCE_GROUP \
-              --environment $CONTAINER_APP_ENV \
-              --image ${{ steps.images.outputs.FRONTEND_IMAGE }} \
-              --target-port 3000 \
-              --ingress external \
-              --cpu 0.5 \
-              --memory 1 \
-              --registry-server ${{ env.REGISTRY }} \
-              --registry-username 00000000-0000-0000-0000-000000000000 \
-              --registry-password "$(az acr login --name $REGISTRY_NAME --expose-token --output tsv --query accessToken)"
-          fi
+          az containerapp update \
+            --name ems-backend \
+            --resource-group $RESOURCE_GROUP \
+            --image ${{ env.REGISTRY }}/ems-backend:${{ steps.sha.outputs.SHORT_SHA }}
 
-      - name: Get deployment URLs
+      - name: Deploy Frontend
         run: |
-          echo "### Deployment Complete" >> $GITHUB_STEP_SUMMARY
-          echo "**Backend:** $(az containerapp show --name $BACKEND_APP --resource-group $RESOURCE_GROUP --query 'properties.configuration.ingress.fqdn' -o tsv)" >> $GITHUB_STEP_SUMMARY
-          echo "**Frontend:** $(az containerapp show --name $FRONTEND_APP --resource-group $RESOURCE_GROUP --query 'properties.configuration.ingress.fqdn' -o tsv)" >> $GITHUB_STEP_SUMMARY
+          az containerapp update \
+            --name ems-frontend \
+            --resource-group $RESOURCE_GROUP \
+            --image ${{ env.REGISTRY }}/ems-frontend:${{ steps.sha.outputs.SHORT_SHA }}
+
+      - name: Deploy Kratos
+        run: |
+          az containerapp update \
+            --name ems-kratos \
+            --resource-group $RESOURCE_GROUP \
+            --image ${{ env.REGISTRY }}/ems-kratos:${{ steps.sha.outputs.SHORT_SHA }}
+
+      - name: Deployment Summary
+        run: |
+          echo "### Deployment Complete :rocket:" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Service | URL |" >> $GITHUB_STEP_SUMMARY
+          echo "|---------|-----|" >> $GITHUB_STEP_SUMMARY
+          echo "| Frontend | https://ems.studyverse.app |" >> $GITHUB_STEP_SUMMARY
+          echo "| Auth (Kratos) | https://auth.studyverse.app |" >> $GITHUB_STEP_SUMMARY
+          echo "| Backend | https://ems-backend.icycoast-91810834.westus2.azurecontainerapps.io |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Image Tag:** \`${{ steps.sha.outputs.SHORT_SHA }}\`" >> $GITHUB_STEP_SUMMARY

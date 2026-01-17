@@ -1,182 +1,198 @@
 # AGENTS.md - EMS Monorepo
 
-# AGENTS.md - EMS Monorepo
-
 Guidelines for agentic coding tools working in this repository.
 
-## Existing Agent Rules
-- Cursor rules: none found (`.cursorrules` and `.cursor/rules/` absent)
-- Copilot rules: none found (`.github/copilot-instructions.md` absent)
-
 ## Repo Overview
-**Nx + Bun monorepo** with a Go Connect-RPC backend, a React/Vite admin frontend, and shared packages.
+
+**Nx + Bun monorepo** with Go Connect-RPC backend, React/Vite frontend, and shared packages.
 
 ```
 apps/
-├── backend/          # Go backend with Connect-RPC (gRPC-compatible)
-├── events-admin/     # React 19 + Vite + TanStack Router admin dashboard
+├── backend/          # Go Connect-RPC server (gRPC-compatible)
+├── events-admin/     # React 19 + Vite + TanStack Router
 packages/
 ├── db/               # Drizzle ORM schema (@repo/db)
-├── proto/            # Protobuf definitions + generated TS + Go clients (@repo/proto)
+├── proto/            # Protobuf definitions + generated clients (@repo/proto)
 ├── env/              # Zod environment schemas (@repo/env)
-├── ui/               # Shared UI components (shadcn/ui) (@repo/ui)
-├── prettier/         # Shared Prettier configs + import sorting
-infra/                # Docker configs for Kratos, Hydra, SpiceDB
+├── ui/               # Shared UI components - shadcn/ui (@repo/ui)
+├── prettier/         # Shared Prettier configs
+infra/                # Docker configs (Kratos, SpiceDB)
 ```
 
-## Tooling Baseline
-- Package manager/runtime: Bun
-- Orchestration: Nx (`bunx nx ...` is always available)
-- TS: strict, composite builds in some packages (`tsconfig.base.json`)
-- Backend: Go modules under `apps/backend/`
+## Build / Lint / Test Commands
 
-## Build / Lint / Test
 ### Workspace (root)
 ```bash
-bun install
-bun run dev              # nx run-many -t dev
-bun run build            # nx run-many -t build
-bun run lint             # nx run-many -t lint
-bun run test             # nx run-many -t test (not all projects define this)
-
-bunx nx graph
-bunx nx affected
+bun install                    # Install all dependencies
+bun run dev                    # Start all dev servers
+bun run build                  # Build all projects
+bun run lint                   # Lint all projects
+bunx nx affected -t build      # Build only affected projects
 ```
 
-### Backend (apps/backend)
-Nx targets (preferred):
+### Backend (Go) - from `apps/backend/`
 ```bash
-bunx nx dev backend
-bunx nx build backend
-bunx nx lint backend
-bunx nx test backend
-bunx nx fmt backend
-bunx nx tidy backend
-bunx nx generate backend  # regenerates proto + copies Go gen into backend
+# Via Nx (preferred)
+bunx nx build backend          # Compile binary
+bunx nx dev backend            # Run dev server
+bunx nx test backend           # Run all tests
+bunx nx lint backend           # golangci-lint
+
+# Direct Go commands
+go test ./...                              # All tests
+go test -v -run TestName ./...             # Single test by name
+go test -v -run "TestCreate.*" ./...       # Pattern match
+go test -v ./internal/services/...         # Package scope
+go test -v ./internal/services -run TestX  # Package + single test
+go test -race -cover ./...                 # With race detection + coverage
 ```
 
-Go direct (run from `apps/backend/`):
+### Frontend (React) - from repo root
 ```bash
-go test ./...
+bunx nx dev events-admin       # Dev server (Vite)
+bunx nx build events-admin     # Production build
+bunx nx lint events-admin      # ESLint
+bunx nx typecheck events-admin # tsc --noEmit
 
-go test -v -run TestName ./...                 # single test by name
-go test -v -run "TestCreate.*" ./...           # name pattern
-go test -v ./internal/services/...             # package scope
-go test -v ./internal/services -run TestFoo    # package + one test
-
-golangci-lint run
+# If tests exist (vitest)
+bunx vitest -t "test name"     # Single test by name
+bunx vitest path/to/file.test.tsx  # Single file
 ```
-
-### Frontend (apps/events-admin)
-Nx targets (these are `package.json` scripts):
-```bash
-bunx nx dev events-admin
-bunx nx build events-admin
-bunx nx lint events-admin
-bunx nx typecheck events-admin
-```
-
-Direct scripts (run from repo root):
-```bash
-bun run --filter events-admin dev
-bun run --filter events-admin build
-bun run --filter events-admin lint
-```
-
-Single test note:
-- `apps/events-admin` currently depends on `vitest`, but there are no `*.test/*spec*` files and no Nx `test` target detected for `events-admin`.
-- If tests are added later, the typical patterns are:
-  - `bunx vitest -t "name"` (name pattern)
-  - `bunx vitest path/to/file.test.tsx` (single file)
 
 ### Proto / DB packages
 ```bash
-bun run --filter @repo/proto generate   # buf generate
-bun run --filter @repo/proto build      # tsc (also runs generate via prebuild)
-
-bun run schema:sync                     # db push + build + seed
-bun run --filter @repo/db db:push
-bun run --filter @repo/db db:generate
-bun run --filter @repo/db db:studio
+bun run --filter @repo/proto generate  # buf generate
+bun run --filter @repo/db db:push      # Push schema to DB
+bun run --filter @repo/db db:studio    # Open Drizzle Studio
 ```
 
-### Infrastructure (local dev)
-```bash
-docker compose up -d
+## Code Style - TypeScript/React
+
+### Formatting (Prettier)
+Config: `@repo/prettier/frontend` - enforced via prettier plugin
+- `printWidth: 120`, `tabWidth: 2`, `useTabs: false`
+- `semi: false` (no semicolons)
+- `singleQuote: true`, `jsxSingleQuote: true`
+- `trailingComma: 'none'`
+
+### Import Order (auto-sorted by prettier)
+```typescript
+// 1. Third-party modules
+import { useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
+
+// 2. Internal aliases (@/...)
+import { Button } from '@/ui/button'
+import { useAuth } from '@/lib/auth'
+
+// 3. Relative imports (parent then sibling)
+import { helper } from '../utils'
+import { local } from './local'
 ```
 
-## Code Style (TypeScript/React)
-### Formatting
-- Prettier config is provided by `@repo/prettier`.
-- Frontend uses `@repo/prettier/frontend` (see `packages/prettier/frontend.js`).
-- Defaults:
-  - `printWidth: 120`
-  - `tabWidth: 2`, `useTabs: false`
-  - `semi: false`
-  - `singleQuote: true`, `jsxSingleQuote: true`
-  - `trailingComma: 'none'`
-  - `arrowParens: 'always'`
+### TypeScript Conventions
+- Use `import type { Foo }` for type-only imports
+- Avoid `any` - use `unknown` with type narrowing
+- Prefer explicit return types on exported functions
+- Use strict null checks (`strictNullChecks: true`)
 
-### Imports
-- Imports are auto-sorted via `@trivago/prettier-plugin-sort-imports`.
-- Frontend import order (high level):
-  1) third-party
-  2) `@/components`, `@/layout`, `@/ui`, `@/providers`, `@/lib`, `@/constants`, `@/types`, ...
-  3) parent (`../`) then sibling (`./`)
-  4) styles last
-
-### TypeScript conventions
-- Prefer `import type { Foo } from '...'` for type-only imports.
-- Keep types narrow and explicit; avoid `any`.
-- Prefer `unknown` + narrowing when needed.
-- Avoid unstable implicit `any` in callbacks; type parameters when it helps.
-
-### React conventions
-- Functional components + hooks.
-- Prefer named exports for components/hooks.
-- Feature organization: `apps/events-admin/src/features/<domain>/...`
-- Routing: file-based TanStack Router under `apps/events-admin/src/routes/`.
+### React Conventions
+- Functional components only, with hooks
+- Named exports for components: `export function EventCard() {}`
+- Feature organization: `src/features/<domain>/`
+- File-based routing: `src/routes/` (TanStack Router)
+- Component files: `PascalCase.tsx`
+- Hook files: `useXxx.ts`
 
 ### Naming
-- Components/files: `PascalCase.tsx` (e.g. `EventCard.tsx`)
-- Hooks: `useXxx` camelCase file + identifier
-- Utilities: camelCase file (`formatDate.ts`)
-- Constants: `SCREAMING_SNAKE_CASE` for module-level constants
-- Types/interfaces: `PascalCase`
+| Type | Convention | Example |
+|------|------------|---------|
+| Components | PascalCase | `EventCard.tsx` |
+| Hooks | camelCase with `use` prefix | `useEventData.ts` |
+| Utilities | camelCase | `formatDate.ts` |
+| Constants | SCREAMING_SNAKE | `const MAX_ITEMS = 100` |
+| Types/Interfaces | PascalCase | `interface EventData` |
 
-### Frontend error handling
-- Wrap async UI actions in `try/catch`.
-- Return early on errors; show a toast/message where appropriate.
-- Avoid swallowing errors silently; at least log in dev.
+### Error Handling
+```typescript
+// Wrap async actions in try/catch
+async function handleSubmit() {
+  try {
+    await createEvent(data)
+    toast.success('Event created')
+  } catch (error) {
+    console.error('Failed to create event:', error)
+    toast.error('Failed to create event')
+  }
+}
+```
 
-## Code Style (Go backend)
-### General
-- Always check errors; wrap with context: `fmt.Errorf("...: %w", err)`.
-- Logging uses `log/slog` with structured fields.
+## Code Style - Go Backend
 
-### Connect-RPC error handling
-- Use `connect.NewError(code, err)` with the closest Connect code:
-  - `connect.CodeInvalidArgument`
-  - `connect.CodeUnauthenticated`
-  - `connect.CodePermissionDenied`
-  - `connect.CodeNotFound`
-  - `connect.CodeFailedPrecondition`
-  - `connect.CodeInternal`
+### File Naming
+- Files: `snake_case.go`
+- Exported identifiers: `PascalCase`
 
-### File / symbol naming
-- Files: `snake_case.go`.
-- Exported identifiers: `PascalCase`.
+### Error Handling
+```go
+// Always check and wrap errors with context
+result, err := s.queries.GetEvent(ctx, id)
+if err != nil {
+    if errors.Is(err, pgx.ErrNoRows) {
+        return nil, connect.NewError(connect.CodeNotFound, fmt.Errorf("event not found"))
+    }
+    return nil, connect.NewError(connect.CodeInternal, fmt.Errorf("failed to get event: %w", err))
+}
+```
 
-### DB patterns
-- Queries via sqlc in `apps/backend/internal/db/`.
-- Use transactions for multi-step mutations.
+### Connect-RPC Error Codes
+| Code | Use Case |
+|------|----------|
+| `CodeInvalidArgument` | Bad request data |
+| `CodeNotFound` | Resource doesn't exist |
+| `CodeUnauthenticated` | No valid session |
+| `CodePermissionDenied` | Lacks permission |
+| `CodeFailedPrecondition` | State conflict |
+| `CodeInternal` | Server errors |
 
-## Internal Packages / Imports
-- Use workspace packages via `@repo/*`:
-  - `@repo/db`, `@repo/proto`, `@repo/env`, `@repo/ui`
-- Frontend alias: `@/` resolves to `apps/events-admin/src/`.
+### Logging
+```go
+// Use structured logging with slog
+slog.Info("creating event", "title", req.Msg.Title, "org_id", req.Msg.OrganizationId)
+slog.Error("failed to create event", "error", err)
+```
 
-## Before you open a PR / handoff checklist
-- Run the narrowest tests first (package/test-file/test-name).
-- Run `bunx nx lint <project>` for touched TS projects.
-- For backend Go changes, run `go test ./...` in `apps/backend/`.
+### DB Patterns
+- Queries via sqlc: `apps/backend/internal/db/`
+- Use transactions for multi-step mutations
+- Use `pgxpool` for connection pooling
+
+## Project Structure
+
+### Frontend Routes (`apps/events-admin/src/routes/`)
+- `__root.tsx` - Root layout
+- `_authenticated.tsx` - Auth-required layout
+- `_authenticated/events/` - Events pages
+- `auth/login.tsx` - Login page
+
+### Frontend Features (`apps/events-admin/src/features/`)
+- `events/`, `organizations/`, `users/`, `calendar/`, `statistics/`
+
+### Backend Services (`apps/backend/internal/`)
+- `services/` - Connect-RPC handlers
+- `db/` - sqlc queries
+- `auth/` - Kratos integration
+- `perms/` - SpiceDB authorization
+
+## Internal Packages
+- `@repo/db` - Drizzle schema
+- `@repo/proto` - Protobuf + generated clients
+- `@repo/ui` - shadcn/ui components
+- `@repo/env` - Zod env validation
+- Frontend alias: `@/` -> `apps/events-admin/src/`
+
+## Before Committing
+1. Run tests for changed code: `go test ./...` or `bunx vitest`
+2. Run linting: `bunx nx lint <project>`
+3. For Go: `golangci-lint run` in `apps/backend/`
+4. Ensure no `any` types or unhandled errors

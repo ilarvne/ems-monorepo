@@ -4,10 +4,12 @@ version: v1.3.0
 
 serve:
   public:
-    base_url: https://ems-kratos.icycoast-91810834.westus2.azurecontainerapps.io/
+    base_url: https://auth.studyverse.app/
     cors:
       enabled: true
       allowed_origins:
+        - https://ems.studyverse.app
+        - https://auth.studyverse.app
         - https://ems-frontend.icycoast-91810834.westus2.azurecontainerapps.io
         - https://ems-backend.icycoast-91810834.westus2.azurecontainerapps.io
       allowed_methods:
@@ -29,8 +31,9 @@ serve:
     base_url: http://127.0.0.1:4434/
 
 selfservice:
-  default_browser_return_url: https://ems-frontend.icycoast-91810834.westus2.azurecontainerapps.io/
+  default_browser_return_url: https://ems.studyverse.app/
   allowed_return_urls:
+    - https://ems.studyverse.app
     - https://ems-frontend.icycoast-91810834.westus2.azurecontainerapps.io
 
   methods:
@@ -52,8 +55,8 @@ selfservice:
         providers:
           - id: microsoft
             provider: microsoft
-            client_id: ${MICROSOFT_CLIENT_ID}
-            client_secret: ${MICROSOFT_CLIENT_SECRET}
+            client_id: $MICROSOFT_CLIENT_ID
+            client_secret: $MICROSOFT_CLIENT_SECRET
             microsoft_tenant: common
             mapper_url: file:///etc/config/kratos/microsoft-claims-mapper.jsonnet
             scope:
@@ -63,36 +66,36 @@ selfservice:
 
   flows:
     error:
-      ui_url: https://ems-frontend.icycoast-91810834.westus2.azurecontainerapps.io/auth/error
+      ui_url: https://ems.studyverse.app/auth/error
 
     settings:
-      ui_url: https://ems-frontend.icycoast-91810834.westus2.azurecontainerapps.io/auth/settings
+      ui_url: https://ems.studyverse.app/auth/settings
       privileged_session_max_age: 15m
       required_aal: highest_available
 
     recovery:
       enabled: true
-      ui_url: https://ems-frontend.icycoast-91810834.westus2.azurecontainerapps.io/auth/recovery
+      ui_url: https://ems.studyverse.app/auth/recovery
       use: code
 
     verification:
       enabled: true
-      ui_url: https://ems-frontend.icycoast-91810834.westus2.azurecontainerapps.io/auth/verification
+      ui_url: https://ems.studyverse.app/auth/verification
       use: code
       after:
-        default_browser_return_url: https://ems-frontend.icycoast-91810834.westus2.azurecontainerapps.io/
+        default_browser_return_url: https://ems.studyverse.app/
 
     logout:
       after:
-        default_browser_return_url: https://ems-frontend.icycoast-91810834.westus2.azurecontainerapps.io/auth/login
+        default_browser_return_url: https://ems.studyverse.app/auth/login
 
     login:
-      ui_url: https://ems-frontend.icycoast-91810834.westus2.azurecontainerapps.io/auth/login
+      ui_url: https://ems.studyverse.app/auth/login
       lifespan: 10m
 
     registration:
       lifespan: 10m
-      ui_url: https://ems-frontend.icycoast-91810834.westus2.azurecontainerapps.io/auth/registration
+      ui_url: https://ems.studyverse.app/auth/registration
       after:
         password:
           hooks:
@@ -134,10 +137,12 @@ courier:
 
 cookies:
   path: /
-  same_site: None
+  same_site: Lax
+  domain: .studyverse.app
 
 session:
   lifespan: 24h
   cookie:
     path: /
-    same_site: None
+    same_site: Lax
+    domain: .studyverse.app

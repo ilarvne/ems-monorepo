@@ -1,14 +1,15 @@
 import { Suspense, useMemo, useState } from 'react'
+import { createClient } from '@connectrpc/connect'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { useMutation, useSuspenseQuery } from '@connectrpc/connect-query'
+import { useMutation, useSuspenseQuery, useTransport } from '@connectrpc/connect-query'
 import { useQueryClient } from '@tanstack/react-query'
 import { CalendarIcon, CheckIcon, ChevronsUpDownIcon, Loader2, PencilIcon, X, XIcon } from 'lucide-react'
 import { format } from 'date-fns'
 import { toast } from 'sonner'
 
-import { createEvent, updateEvent, EventFormat, listOrganizations } from '@repo/proto'
+import { createEvent, updateEvent, EventsService, EventFormat, listOrganizations } from '@repo/proto'
 
 import {
   Dialog,
@@ -164,6 +165,8 @@ interface CreateEventFormProps {
 
 export function CreateEventForm({ open, onOpenChange, eventId, initialValues }: CreateEventFormProps) {
   const queryClient = useQueryClient()
+  const transport = useTransport()
+  const eventsClient = useMemo(() => createClient(EventsService, transport), [transport])
   const isEditMode = !!eventId
   const [tagInput, setTagInput] = useState('')
   const [isDescriptionEditorOpen, setIsDescriptionEditorOpen] = useState(false)
@@ -219,6 +222,25 @@ export function CreateEventForm({ open, onOpenChange, eventId, initialValues }: 
   const isSubmitting = createMutation.isPending || updateMutation.isPending
 
   const handleSubmit = form.handleSubmit(async (data) => {
+    let imageUrl: string | undefined
+
+    if (data.coverImage instanceof File) {
+      const presign = await eventsClient.getEventImageUploadUrl({
+        filename: data.coverImage.name,
+        contentType: data.coverImage.type,
+      })
+
+      const uploadRes = await fetch(presign.uploadUrl, {
+        method: 'PUT',
+        body: data.coverImage,
+      })
+      if (!uploadRes.ok) {
+        throw new Error(`Image upload failed: ${uploadRes.status}`)
+      }
+
+      imageUrl = presign.publicUrl
+    }
+
     const startDate = new Date(data.startDate)
     const endDate = new Date(data.endDate)
 
@@ -242,6 +264,7 @@ export function CreateEventForm({ open, onOpenChange, eventId, initialValues }: 
         startTime: startDate.toISOString(),
         endTime: endDate.toISOString(),
         organizationId: data.organizationIds[0],
+        ...(imageUrl ? { imageUrl } : {}),
         tagIds: [],
       })
     } else {
@@ -254,6 +277,7 @@ export function CreateEventForm({ open, onOpenChange, eventId, initialValues }: 
         endTime: endDate.toISOString(),
         userId: 0,
         organizationId: data.organizationIds[0],
+        ...(imageUrl ? { imageUrl } : {}),
         tagIds: [],
       })
     }
