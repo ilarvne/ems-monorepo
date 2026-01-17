@@ -102,7 +102,7 @@ jobs:
           tags: ${{ steps.meta-frontend.outputs.tags }}
           labels: ${{ steps.meta-frontend.outputs.labels }}
           build-args: |
-            VITE_API_URL=https://ems-backend.icycoast-91810834.westus2.azurecontainerapps.io
+            VITE_API_URL=https://api.studyverse.app
             VITE_KRATOS_PUBLIC_URL=https://auth.studyverse.app
           cache-from: type=gha
           cache-to: type=gha,mode=max

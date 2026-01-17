@@ -64,6 +64,6 @@ jobs:
           echo "|---------|-----|" >> $GITHUB_STEP_SUMMARY
           echo "| Frontend | https://ems.studyverse.app |" >> $GITHUB_STEP_SUMMARY
           echo "| Auth (Kratos) | https://auth.studyverse.app |" >> $GITHUB_STEP_SUMMARY
-          echo "| Backend | https://ems-backend.icycoast-91810834.westus2.azurecontainerapps.io |" >> $GITHUB_STEP_SUMMARY
+          echo "| Backend | https://api.studyverse.app |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Image Tag:** \`${{ steps.sha.outputs.SHORT_SHA }}\`" >> $GITHUB_STEP_SUMMARY
