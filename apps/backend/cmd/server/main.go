@@ -121,6 +121,53 @@ func main() {
 		_, _ = w.Write([]byte("OK"))
 	})
 
+	// Admin endpoint to promote users to platform admin/staff
+	// Protected by ADMIN_SECRET environment variable
+	adminSecret := os.Getenv("ADMIN_SECRET")
+	if adminSecret != "" && permsClient != nil {
+		mux.HandleFunc("/admin/promote", func(w http.ResponseWriter, r *http.Request) {
+			if r.Method != http.MethodPost {
+				http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+				return
+			}
+
+			// Check admin secret
+			secret := r.Header.Get("X-Admin-Secret")
+			if secret != adminSecret {
+				http.Error(w, "Unauthorized", http.StatusUnauthorized)
+				return
+			}
+
+			// Get user ID and role from query params
+			userID := r.URL.Query().Get("user_id")
+			role := r.URL.Query().Get("role")
+			if userID == "" {
+				http.Error(w, "user_id is required", http.StatusBadRequest)
+				return
+			}
+			if role == "" {
+				role = "admin" // default to admin
+			}
+			if role != "admin" && role != "staff" {
+				http.Error(w, "role must be 'admin' or 'staff'", http.StatusBadRequest)
+				return
+			}
+
+			// Write the relationship to SpiceDB
+			err := permsClient.SetupPlatformRelationship(r.Context(), userID, role)
+			if err != nil {
+				slog.Error("Failed to promote user", "userID", userID, "role", role, "error", err)
+				http.Error(w, "Failed to promote user: "+err.Error(), http.StatusInternalServerError)
+				return
+			}
+
+			slog.Info("User promoted", "userID", userID, "role", role)
+			w.WriteHeader(http.StatusOK)
+			_, _ = w.Write([]byte("User " + userID + " promoted to " + role))
+		})
+		slog.Info("Admin promotion endpoint enabled at /admin/promote")
+	}
+
 	// Build middleware chain: CORS -> Auth -> Mux
 	// Auth middleware extracts Kratos session and injects user ID into context
 	authMiddleware := auth.NewMiddleware(kratosClient)

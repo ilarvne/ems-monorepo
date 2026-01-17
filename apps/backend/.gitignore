@@ -1,5 +1,5 @@
-# Compiled binary
-server
+# Compiled binary (at root of backend, not the cmd/server directory)
+/server
 
 # Test coverage
 coverage.out
