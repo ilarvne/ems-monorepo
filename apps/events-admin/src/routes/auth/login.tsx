@@ -2,12 +2,11 @@ import { createFileRoute, redirect } from '@tanstack/react-router'
 import { z } from 'zod'
 import { useState } from 'react'
 import { Button } from '@repo/ui/components/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/components/card'
 import { useAuth } from '@/lib/auth'
 
 // Validate search params for redirect
 const searchSchema = z.object({
-  redirect: z.string().optional(),
+  redirect: z.string().optional()
 })
 
 export const Route = createFileRoute('/auth/login')({
@@ -18,7 +17,7 @@ export const Route = createFileRoute('/auth/login')({
       throw redirect({ to: '/' })
     }
   },
-  component: LoginPage,
+  component: LoginPage
 })
 
 function LoginPage() {
@@ -46,79 +45,205 @@ function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <Card className="w-full max-w-md mx-4">
-        <CardHeader className="text-center">
-          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-            <svg
-              className="h-6 w-6 text-primary"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-              />
-            </svg>
-          </div>
-          <CardTitle className="text-2xl">
-            <span>AITU</span> <span className="font-bold">EMS</span>
-          </CardTitle>
-          <CardDescription>Sign in to access the admin dashboard</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <Button
-            onClick={handleMicrosoftLogin}
-            className="w-full gap-2"
-            size="lg"
-            variant="outline"
-            disabled={isLoading}
-          >
-            {isLoading ? (
-              <div className="h-5 w-5 animate-spin rounded-full border-2 border-current border-t-transparent" />
-            ) : (
-              <MicrosoftIcon className="h-5 w-5" />
-            )}
-            {isLoading ? 'Redirecting...' : 'Sign in with Microsoft'}
-          </Button>
-          
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t" />
-            </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-card px-2 text-muted-foreground">Or</span>
-            </div>
-          </div>
+    <div className="grid min-h-svh lg:grid-cols-2">
+      {/* Left Pane - Branding & Visual */}
+      <div className="relative hidden bg-primary lg:flex lg:flex-col lg:justify-between p-10">
+        {/* Decorative background pattern */}
+        <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
+          <div className="absolute -top-1/4 -right-1/4 h-[600px] w-[600px] rounded-full bg-white/5" />
+          <div className="absolute -bottom-1/4 -left-1/4 h-[500px] w-[500px] rounded-full bg-white/5" />
+          <div className="absolute top-1/2 left-1/2 h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/5" />
+        </div>
 
-          <Button
-            onClick={handleGuestMode}
-            className="w-full gap-2"
-            size="lg"
-            variant="ghost"
-            disabled={isLoading}
-          >
-            <GuestIcon className="h-5 w-5" />
-            Continue as Guest
-          </Button>
-          
-          <p className="text-center text-xs text-muted-foreground">
-            Use your organization Microsoft account to sign in.
-            <br />
-            Guest access is limited to viewing the calendar and organizations.
+        {/* Logo */}
+        <div className="relative z-10 flex items-center gap-2 text-primary-foreground">
+          <CalendarIcon className="h-8 w-8" aria-hidden="true" />
+          <span className="text-xl tracking-tight">
+            <span className="font-normal">AITU</span>{' '}
+            <span className="font-bold">EMS</span>
+          </span>
+        </div>
+
+        {/* Hero Content */}
+        <div className="relative z-10 flex flex-col gap-6">
+          <h1 className="text-4xl font-bold tracking-tight text-primary-foreground text-pretty">
+            Event Management System
+          </h1>
+          <p className="text-lg text-primary-foreground/80 max-w-md text-pretty">
+            Streamline your university events. Plan, organize, and track all campus activities in one place.
           </p>
-        </CardContent>
-      </Card>
+        </div>
+
+        {/* Footer Quote */}
+        <figure className="relative z-10">
+          <blockquote className="text-primary-foreground/90 text-sm leading-relaxed">
+            &ldquo;The best way to predict the future is to create it.&rdquo;
+          </blockquote>
+          <figcaption className="mt-2 text-primary-foreground/60 text-sm">
+            &mdash; Peter Drucker
+          </figcaption>
+        </figure>
+      </div>
+
+      {/* Right Pane - Login Form */}
+      <div className="flex flex-col">
+        {/* Mobile Header */}
+        <header className="flex items-center justify-between p-6 lg:hidden">
+          <div className="flex items-center gap-2">
+            <CalendarIcon className="h-6 w-6 text-primary" aria-hidden="true" />
+            <span className="text-lg tracking-tight">
+              <span className="font-normal">AITU</span>{' '}
+              <span className="font-bold">EMS</span>
+            </span>
+          </div>
+        </header>
+
+        {/* Login Form Container */}
+        <main className="flex flex-1 items-center justify-center p-6 lg:p-10">
+          <div className="w-full max-w-sm space-y-8">
+            {/* Welcome Text */}
+            <div className="space-y-2 text-center lg:text-left">
+              <h2 className="text-2xl font-semibold tracking-tight">Welcome Back</h2>
+              <p className="text-muted-foreground">
+                Sign in with your organization account to continue
+              </p>
+            </div>
+
+            {/* Login Actions */}
+            <div className="space-y-4">
+              <Button
+                onClick={handleMicrosoftLogin}
+                className="w-full h-12 gap-3 text-base transition-transform active:scale-[0.98]"
+                size="lg"
+                disabled={isLoading}
+                aria-busy={isLoading}
+              >
+                {isLoading ? (
+                  <LoadingSpinner />
+                ) : (
+                  <MicrosoftIcon className="h-5 w-5" aria-hidden="true" />
+                )}
+                <span>{isLoading ? 'Redirecting\u2026' : 'Sign in with Microsoft'}</span>
+              </Button>
+
+              <div className="relative" role="separator" aria-orientation="horizontal">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t" />
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-background px-3 text-muted-foreground">Or</span>
+                </div>
+              </div>
+
+              <Button
+                onClick={handleGuestMode}
+                className="w-full h-11 gap-3 transition-transform active:scale-[0.98]"
+                size="lg"
+                variant="outline"
+                disabled={isLoading}
+              >
+                <GuestIcon className="h-5 w-5" aria-hidden="true" />
+                <span>Continue as Guest</span>
+              </Button>
+            </div>
+
+            {/* Help Text */}
+            <div className="space-y-3 text-center text-sm text-muted-foreground">
+              <p>
+                Use your <strong>@astanait.edu.kz</strong> account to sign in.
+              </p>
+              <p className="text-xs">
+                Guest access is limited to viewing the calendar and organizations.
+              </p>
+            </div>
+
+            {/* Footer Links - Desktop */}
+            <nav className="hidden lg:flex items-center justify-center gap-4 text-xs text-muted-foreground pt-8">
+              <a
+                href="https://astanait.edu.kz"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-foreground transition-colors underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm"
+              >
+                AITU Website
+              </a>
+              <span aria-hidden="true">&middot;</span>
+              <a
+                href="mailto:support@astanait.edu.kz"
+                className="hover:text-foreground transition-colors underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm"
+              >
+                Get Help
+              </a>
+            </nav>
+          </div>
+        </main>
+
+        {/* Mobile Footer */}
+        <footer className="p-6 lg:hidden">
+          <nav className="flex items-center justify-center gap-4 text-xs text-muted-foreground">
+            <a
+              href="https://astanait.edu.kz"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-foreground transition-colors underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm"
+            >
+              AITU Website
+            </a>
+            <span aria-hidden="true">&middot;</span>
+            <a
+              href="mailto:support@astanait.edu.kz"
+              className="hover:text-foreground transition-colors underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm"
+            >
+              Get Help
+            </a>
+          </nav>
+        </footer>
+      </div>
     </div>
+  )
+}
+
+function LoadingSpinner() {
+  return (
+    <svg
+      className="h-5 w-5 animate-spin"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+    >
+      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+      <path
+        className="opacity-75"
+        fill="currentColor"
+        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+      />
+    </svg>
+  )
+}
+
+function CalendarIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth={2}
+      aria-hidden="true"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+      />
+    </svg>
   )
 }
 
 function MicrosoftIcon({ className }: { className?: string }) {
   return (
-    <svg className={className} viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg className={className} viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <rect x="1" y="1" width="9" height="9" fill="#F25022" />
       <rect x="11" y="1" width="9" height="9" fill="#7FBA00" />
       <rect x="1" y="11" width="9" height="9" fill="#00A4EF" />
@@ -129,7 +254,16 @@ function MicrosoftIcon({ className }: { className?: string }) {
 
 function GuestIcon({ className }: { className?: string }) {
   return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
       <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
       <circle cx="12" cy="7" r="4" />
     </svg>
