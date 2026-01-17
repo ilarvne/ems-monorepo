@@ -21,97 +21,85 @@ export const Route = createFileRoute('/_authenticated/analytics')({
 function AnalyticsLoading() {
   return (
     <div className="flex flex-col gap-6">
-      {/* Page Header Skeleton */}
+      {/* Page Header */}
       <div className="px-4 lg:px-6">
-        <Skeleton className="h-9 w-48" />
-        <Skeleton className="h-5 w-96 mt-2" />
+        <Skeleton className="h-8 w-40" />
+        <Skeleton className="h-4 w-80 mt-2" />
       </div>
 
       <div className="grid gap-6 px-4 lg:grid-cols-3 lg:px-6">
-        {/* Left Column (2/3) */}
+        {/* Left Column */}
         <div className="lg:col-span-2 flex flex-col gap-6">
-          {/* Event Activity Heatmap Skeleton */}
+          {/* Heatmap */}
           <Card>
             <CardHeader>
-              <Skeleton className="h-6 w-36" />
-              <Skeleton className="h-4 w-48 mt-2" />
+              <Skeleton className="h-5 w-32" />
+              <Skeleton className="h-4 w-44 mt-1" />
             </CardHeader>
             <CardContent>
-              <Skeleton className="h-[120px] w-full" />
+              <Skeleton className="h-[100px] w-full" />
             </CardContent>
           </Card>
 
-          {/* Area Chart Skeleton */}
+          {/* Area Chart */}
           <Card>
             <CardHeader>
-              <Skeleton className="h-6 w-40" />
-              <Skeleton className="h-4 w-64 mt-2" />
+              <Skeleton className="h-5 w-28" />
+              <Skeleton className="h-4 w-48 mt-1" />
             </CardHeader>
             <CardContent>
-              <Skeleton className="h-[300px] w-full" />
+              <Skeleton className="h-[280px] w-full" />
             </CardContent>
           </Card>
 
-          {/* Event Analytics Table Skeleton */}
+          {/* Table */}
           <Card>
             <CardHeader>
-              <Skeleton className="h-6 w-48" />
-              <Skeleton className="h-4 w-96 mt-2" />
+              <Skeleton className="h-5 w-36" />
+              <Skeleton className="h-4 w-64 mt-1" />
             </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <Skeleton className="h-10 w-full" />
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Skeleton key={i} className="h-16 w-full" />
-                ))}
-              </div>
+            <CardContent className="space-y-2">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <Skeleton key={i} className="h-12 w-full" />
+              ))}
             </CardContent>
           </Card>
         </div>
 
-        {/* Right Column (1/3) */}
+        {/* Right Column */}
         <div className="flex flex-col gap-6">
-          {/* Radial Engagement Skeleton */}
+          {/* Radial Chart */}
           <Card>
             <CardHeader>
-              <Skeleton className="h-6 w-36" />
-              <Skeleton className="h-4 w-52 mt-2" />
+              <Skeleton className="h-5 w-32" />
+              <Skeleton className="h-4 w-44 mt-1" />
             </CardHeader>
             <CardContent>
-              <Skeleton className="h-[200px] w-full" />
+              <Skeleton className="h-[180px] w-full" />
             </CardContent>
           </Card>
 
-          {/* Pie Chart Skeleton */}
+          {/* Pie Chart */}
           <Card>
             <CardHeader>
-              <Skeleton className="h-6 w-32" />
-              <Skeleton className="h-4 w-48 mt-2" />
+              <Skeleton className="h-5 w-28" />
+              <Skeleton className="h-4 w-40 mt-1" />
             </CardHeader>
             <CardContent>
-              <Skeleton className="h-[250px] w-full rounded-full mx-auto max-w-[200px]" />
+              <Skeleton className="h-[220px] w-full" />
             </CardContent>
           </Card>
 
-          {/* Club Leaderboard Skeleton */}
+          {/* Leaderboard */}
           <Card>
             <CardHeader>
-              <Skeleton className="h-6 w-40" />
-              <Skeleton className="h-4 w-56 mt-2" />
+              <Skeleton className="h-5 w-48" />
+              <Skeleton className="h-4 w-52 mt-1" />
             </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <div key={i} className="flex items-center gap-3">
-                    <Skeleton className="h-8 w-8 rounded-full" />
-                    <div className="flex-1">
-                      <Skeleton className="h-4 w-32 mb-1" />
-                      <Skeleton className="h-3 w-20" />
-                    </div>
-                    <Skeleton className="h-4 w-16" />
-                  </div>
-                ))}
-              </div>
+            <CardContent className="space-y-3">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <Skeleton key={i} className="h-10 w-full" />
+              ))}
             </CardContent>
           </Card>
         </div>

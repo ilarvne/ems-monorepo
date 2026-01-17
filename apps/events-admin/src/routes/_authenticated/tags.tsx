@@ -21,51 +21,35 @@ export const Route = createFileRoute('/_authenticated/tags')({
 function TagsLoading() {
   return (
     <div className="p-8">
-      <div className="flex justify-between items-center mb-6">
-        <div className="space-y-2">
-          <Skeleton className="h-9 w-24" />
-          <Skeleton className="h-5 w-56" />
-        </div>
+      {/* Header */}
+      <div className="mb-6 space-y-2">
+        <Skeleton className="h-9 w-24" />
+        <Skeleton className="h-5 w-56" />
       </div>
 
-      <div className="space-y-4">
-        {/* Filters skeleton */}
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <Skeleton className="h-10 w-60" />
-          <Skeleton className="h-10 w-24" />
-        </div>
+      {/* Toolbar */}
+      <div className="mb-4 flex items-center justify-between gap-3">
+        <Skeleton className="h-10 w-64" />
+        <Skeleton className="h-10 w-24" />
+      </div>
 
-        {/* Table skeleton */}
-        <div className="overflow-hidden rounded-lg border bg-background">
-          <div className="p-4 space-y-3">
-            {/* Header row */}
-            <div className="flex gap-4 border-b pb-3">
-              <Skeleton className="h-4 w-32" />
-              <Skeleton className="h-4 w-24" />
-              <Skeleton className="h-4 w-28" />
-            </div>
-            {/* Table rows */}
-            {Array.from({ length: 8 }).map((_, i) => (
-              <div key={i} className="flex gap-4 items-center py-2">
-                <Skeleton className="h-4 w-32" />
-                <Skeleton className="h-5 w-8 rounded" />
-                <Skeleton className="h-4 w-24" />
-              </div>
-            ))}
-          </div>
+      {/* Table */}
+      <div className="rounded-lg border">
+        <div className="border-b px-4 py-3">
+          <Skeleton className="h-4 w-full max-w-xl" />
         </div>
+        {Array.from({ length: 10 }).map((_, i) => (
+          <div key={i} className="border-b px-4 py-3 last:border-0">
+            <Skeleton className="h-5 w-full" />
+          </div>
+        ))}
+      </div>
 
-        {/* Pagination skeleton */}
-        <div className="flex items-center justify-between gap-8">
-          <Skeleton className="h-9 w-32" />
-          <Skeleton className="h-5 w-40" />
-          <div className="flex gap-1">
-            <Skeleton className="h-9 w-9" />
-            <Skeleton className="h-9 w-9" />
-            <Skeleton className="h-9 w-9" />
-            <Skeleton className="h-9 w-9" />
-          </div>
-        </div>
+      {/* Pagination */}
+      <div className="mt-4 flex items-center justify-between">
+        <Skeleton className="h-9 w-28" />
+        <Skeleton className="h-5 w-32" />
+        <Skeleton className="h-9 w-24" />
       </div>
     </div>
   )

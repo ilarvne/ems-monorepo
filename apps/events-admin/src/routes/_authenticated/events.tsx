@@ -46,63 +46,46 @@ export const Route = createFileRoute('/_authenticated/events')({
 
 function EventsLoading() {
   return (
-    <div className="p-8">
-      <div className="flex justify-between items-center mb-6">
-        <div className="space-y-2">
-          <Skeleton className="h-9 w-32" />
-          <Skeleton className="h-5 w-64" />
+    <div className="p-6 lg:p-8 space-y-4">
+      {/* Header */}
+      <div>
+        <Skeleton className="h-7 w-24" />
+        <Skeleton className="h-4 w-48 mt-1" />
+      </div>
+
+      {/* Toolbar */}
+      <div className="flex items-center justify-between gap-4">
+        <div className="flex items-center gap-2">
+          <Skeleton className="h-9 w-64" />
+          <Skeleton className="h-9 w-20" />
+        </div>
+        <div className="flex items-center gap-2">
+          <Skeleton className="h-9 w-20" />
+          <Skeleton className="h-9 w-20" />
+          <Skeleton className="h-9 w-24" />
         </div>
       </div>
 
-      <div className="space-y-4">
-        {/* Filters skeleton */}
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center gap-3">
-            <Skeleton className="h-10 w-60" />
-            <Skeleton className="h-10 w-24" />
-          </div>
-          <Skeleton className="h-10 w-28" />
+      {/* Table */}
+      <div className="rounded-lg border">
+        <div className="border-b px-4 py-3">
+          <Skeleton className="h-4 w-full max-w-2xl" />
         </div>
-
-        {/* Table skeleton */}
-        <div className="overflow-hidden rounded-lg border bg-background">
-          <div className="p-4 space-y-3">
-            {/* Header row */}
-            <div className="flex gap-4 border-b pb-3">
-              <Skeleton className="h-4 w-8" />
-              <Skeleton className="h-4 w-12" />
-              <Skeleton className="h-4 w-40" />
-              <Skeleton className="h-4 w-20" />
-              <Skeleton className="h-4 w-32" />
-              <Skeleton className="h-4 w-28" />
-              <Skeleton className="h-4 w-20" />
-            </div>
-            {/* Table rows */}
-            {Array.from({ length: 8 }).map((_, i) => (
-              <div key={i} className="flex gap-4 items-center py-2">
-                <Skeleton className="h-4 w-4" />
-                <Skeleton className="h-9 w-9 rounded-md" />
-                <Skeleton className="h-4 w-40" />
-                <Skeleton className="h-4 w-16" />
-                <Skeleton className="h-4 w-28" />
-                <Skeleton className="h-4 w-24" />
-                <Skeleton className="h-5 w-16 rounded-full" />
-                <Skeleton className="h-4 w-20" />
-              </div>
-            ))}
+        {Array.from({ length: 10 }).map((_, i) => (
+          <div key={i} className="border-b last:border-0 px-4 py-3">
+            <Skeleton className="h-5 w-full" />
           </div>
-        </div>
+        ))}
+      </div>
 
-        {/* Pagination skeleton */}
-        <div className="flex items-center justify-between gap-8">
-          <Skeleton className="h-9 w-32" />
-          <Skeleton className="h-5 w-48" />
-          <div className="flex gap-1">
-            <Skeleton className="h-9 w-9" />
-            <Skeleton className="h-9 w-9" />
-            <Skeleton className="h-9 w-9" />
-            <Skeleton className="h-9 w-9" />
-          </div>
+      {/* Pagination */}
+      <div className="flex items-center justify-between">
+        <Skeleton className="h-9 w-28" />
+        <Skeleton className="h-4 w-32" />
+        <div className="flex gap-1">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <Skeleton key={i} className="h-9 w-9" />
+          ))}
         </div>
       </div>
     </div>
