@@ -43,24 +43,16 @@ function StatusIcon({ status, className }: { status: EventStatus; className?: st
 
   switch (status) {
     case 'live':
-    case 'ongoing':
-      // Pulsing dot for live/ongoing events
+      // Pulsing dot only for live events
       return (
         <span className="relative flex size-3">
-          <span
-            className={cn(
-              'absolute inline-flex h-full w-full animate-ping rounded-full opacity-75',
-              status === 'live' ? 'bg-status-live' : 'bg-status-ongoing'
-            )}
-          />
-          <span
-            className={cn(
-              'relative inline-flex size-3 rounded-full',
-              status === 'live' ? 'bg-status-live' : 'bg-status-ongoing'
-            )}
-          />
+          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-status-live opacity-75" />
+          <span className="relative inline-flex size-3 rounded-full bg-status-live" />
         </span>
       )
+    case 'ongoing':
+      // Static dot for ongoing events (no animation)
+      return <span className="inline-flex size-2.5 rounded-full bg-status-ongoing" />
     case 'today':
       return <Clock className={iconClass} />
     case 'upcoming':
@@ -111,7 +103,7 @@ interface EventStatusBadgeProps extends VariantProps<typeof eventStatusBadgeVari
  * Features:
  * - WCAG AA compliant colors
  * - Icon + text (not color alone) for accessibility
- * - Animated pulse for live/ongoing status
+ * - Animated pulse for live status only
  * - Consistent styling across light/dark modes
  *
  * @example

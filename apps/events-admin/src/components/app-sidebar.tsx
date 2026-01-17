@@ -110,7 +110,7 @@ const data = {
   navSecondary: [
     {
       title: 'Get Help',
-      url: '#',
+      url: 'mailto:me@ilarvne.dev',
       icon: HelpCircle
     }
   ],
