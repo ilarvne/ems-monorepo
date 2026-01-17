@@ -8,14 +8,77 @@ import { parseAsArrayOf, parseAsInteger, useQueryState } from 'nuqs'
 import { Button } from '@repo/ui/components/button'
 import { Checkbox } from '@repo/ui/components/checkbox'
 import { Popover, PopoverContent, PopoverTrigger } from '@repo/ui/components/popover'
+import { Skeleton } from '@repo/ui/components/skeleton'
 
 import { DataTable, useDataTableState } from '@/components/admin-data-table'
 import { columns } from '@/features/organizations/organizations.columns'
 import { CreateOrganizationForm } from '@/features/organizations/components/create-organization-form'
 
 export const Route = createFileRoute('/_authenticated/organizations')({
-  component: Organizations
+  component: () => (
+    <Suspense fallback={<OrganizationsLoading />}>
+      <Organizations />
+    </Suspense>
+  )
 })
+
+function OrganizationsLoading() {
+  return (
+    <div className="p-8">
+      <div className="flex justify-between items-center mb-6">
+        <div className="space-y-2">
+          <Skeleton className="h-9 w-40" />
+          <Skeleton className="h-5 w-48" />
+        </div>
+      </div>
+
+      <div className="space-y-4">
+        {/* Filters skeleton */}
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <Skeleton className="h-10 w-60" />
+            <Skeleton className="h-10 w-24" />
+          </div>
+          <Skeleton className="h-10 w-36" />
+        </div>
+
+        {/* Table skeleton */}
+        <div className="overflow-hidden rounded-lg border bg-background">
+          <div className="p-4 space-y-3">
+            {/* Header row */}
+            <div className="flex gap-4 border-b pb-3">
+              <Skeleton className="h-4 w-40" />
+              <Skeleton className="h-4 w-20" />
+              <Skeleton className="h-4 w-32" />
+              <Skeleton className="h-4 w-28" />
+            </div>
+            {/* Table rows */}
+            {Array.from({ length: 8 }).map((_, i) => (
+              <div key={i} className="flex gap-4 items-center py-2">
+                <Skeleton className="h-4 w-40" />
+                <Skeleton className="h-5 w-16 rounded-full" />
+                <Skeleton className="h-4 w-28" />
+                <Skeleton className="h-4 w-24" />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Pagination skeleton */}
+        <div className="flex items-center justify-between gap-8">
+          <Skeleton className="h-9 w-32" />
+          <Skeleton className="h-5 w-48" />
+          <div className="flex gap-1">
+            <Skeleton className="h-9 w-9" />
+            <Skeleton className="h-9 w-9" />
+            <Skeleton className="h-9 w-9" />
+            <Skeleton className="h-9 w-9" />
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
 
 // Status filter options
 const statusOptions = [
