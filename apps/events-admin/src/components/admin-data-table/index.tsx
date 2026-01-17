@@ -604,7 +604,7 @@ export function DataTable<TData extends { id?: string | number }>({
                           <div
                             className={cn(
                               'flex items-center gap-1.5',
-                              isNumeric && 'justify-end'
+                              isNumeric ? 'justify-end' : 'justify-start'
                             )}
                           >
                             <span className="truncate">
@@ -993,9 +993,11 @@ function TableRow<TData>({
       onClick={() => onClick?.(row)}
     >
       {row.getVisibleCells().map((cell, colIndex) => {
-        const isNumeric = ['id', 'amount', 'price', 'count', 'total'].some(
-          (key) => cell.column.id.toLowerCase().includes(key)
-        )
+        const columnId = cell.column.id.toLowerCase()
+        const isNumeric = columnId === 'id' || 
+          ['amount', 'price', 'count', 'total', 'quantity', 'balance'].some(
+            (key) => columnId.includes(key)
+          )
         const isFocused = focusedCell?.rowIndex === rowIndex && focusedCell?.colIndex === colIndex
 
         return (
@@ -1012,7 +1014,7 @@ function TableRow<TData>({
             )}
             style={{ width: cell.column.getSize() }}
           >
-            <div className="truncate">
+            <div className={cn('truncate', isNumeric ? 'text-right' : 'text-left')}>
               {flexRender(cell.column.columnDef.cell, cell.getContext())}
             </div>
           </td>

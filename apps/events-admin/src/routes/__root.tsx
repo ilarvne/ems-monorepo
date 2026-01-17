@@ -10,11 +10,17 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 })
 
 function RootComponent() {
+  const isDev = import.meta.env.DEV
+
   return (
     <NuqsAdapter>
       <Outlet />
-      <ReactQueryDevtools initialIsOpen={false} />
-      <TanStackRouterDevtools position="bottom-right" />
+      {isDev && (
+        <>
+          <ReactQueryDevtools initialIsOpen={false} />
+          <TanStackRouterDevtools position="bottom-right" />
+        </>
+      )}
     </NuqsAdapter>
   )
 }

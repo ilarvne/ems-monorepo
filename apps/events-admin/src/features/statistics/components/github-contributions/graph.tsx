@@ -57,21 +57,6 @@ export function AnimatedGitHubContributionGraph({
     setHasPlayedOnce(true);
   }, [animationState]);
 
-  const handleReset = useCallback(async () => {
-    if (animationState === "resetting") return;
-
-    setAnimationState("resetting");
-
-    // Trigger all reset animations
-    const resets = Array.from(squareRefs.current.values()).map((ref) =>
-      ref.resetAnimation()
-    );
-
-    await Promise.all(resets);
-    setAnimationState("idle");
-    setHasPlayedOnce(false);
-  }, [animationState]);
-
   useEffect(() => {
     if (!autoPlay || hasPlayedOnce || !containerRef.current) return;
 
@@ -98,7 +83,7 @@ export function AnimatedGitHubContributionGraph({
   }, [autoPlay, animationState, hasPlayedOnce, handleAnimation]);
 
   return (
-    <div ref={containerRef} className="space-y-4">
+    <div ref={containerRef}>
       <ContributionGraph
         className="mx-auto py-2"
         data={data}
@@ -167,23 +152,6 @@ export function AnimatedGitHubContributionGraph({
           <ContributionGraphLegend />
         </ContributionGraphFooter>
       </ContributionGraph>
-
-      <div className="flex justify-center gap-2">
-        <button
-          onClick={handleAnimation}
-          disabled={animationState === "animating"}
-          className="rounded bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
-        >
-          {animationState === "animating" ? "Animating..." : "Play Animation"}
-        </button>
-        <button
-          onClick={handleReset}
-          disabled={animationState === "resetting"}
-          className="rounded bg-secondary px-4 py-2 text-sm font-medium text-secondary-foreground hover:bg-secondary/90 disabled:opacity-50"
-        >
-          {animationState === "resetting" ? "Resetting..." : "Reset"}
-        </button>
-      </div>
     </div>
   );
 }

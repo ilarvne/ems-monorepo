@@ -20,30 +20,39 @@ function Dashboard() {
   const currentMonth = new Date().getMonth() + 1
 
   return (
-    <>
+    <div className="flex flex-col gap-6">
+      {/* KPI Cards Section */}
       <SectionCards />
-      <div className='grid grid-cols-1 gap-4 px-4 lg:px-6 xl:grid-cols-3'>
+
+      {/* Charts Row: Area Chart (2/3) + Pie Chart (1/3) */}
+      <div className="grid grid-cols-1 gap-6 px-4 lg:px-6 xl:grid-cols-3">
         <ChartAreaInteractive />
         <ChartPieInteractive year={currentYear} month={currentMonth} />
       </div>
-      <div className='grid grid-cols-1 gap-4 px-4 lg:px-6 xl:grid-cols-5'>
-        <div className='xl:col-span-2'>
+
+      {/* Analytics Row: Radial Chart (2/5) + Leaderboard (3/5) */}
+      <div className="grid grid-cols-1 gap-6 px-4 lg:px-6 xl:grid-cols-5">
+        <div className="xl:col-span-2">
           <ChartRadialEngagement />
         </div>
-        <div className='xl:col-span-3'>
+        <div className="xl:col-span-3">
           <ClubLeaderboard limit={5} days={90} />
         </div>
       </div>
-      <div className='px-4 lg:px-6'>
+
+      {/* Event Activity Heatmap */}
+      <div className="px-4 lg:px-6">
         <EventActivity year={currentYear} />
       </div>
-      <div className='px-4 lg:px-6'>
+
+      {/* Event Analytics Table */}
+      <div className="px-4 lg:px-6">
         <Suspense
           fallback={
             <Card>
               <CardHeader>
                 <Skeleton className="h-6 w-48" />
-                <Skeleton className="h-4 w-96 mt-2" />
+                <Skeleton className="mt-2 h-4 w-96" />
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
@@ -59,6 +68,6 @@ function Dashboard() {
           <EventAnalytics />
         </Suspense>
       </div>
-    </>
+    </div>
   )
 }
