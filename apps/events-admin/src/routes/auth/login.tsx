@@ -62,15 +62,6 @@ function LoginPage() {
         {/* Login Form Container */}
         <main className="flex flex-1 items-center justify-center p-6 lg:p-10">
           <div className="w-full max-w-sm space-y-8">
-            {/* Logo - Desktop */}
-            <div className="hidden lg:flex items-center gap-2 text-foreground">
-              <CalendarIcon className="h-8 w-8 text-primary" aria-hidden="true" />
-              <span className="text-xl tracking-tight">
-                <span className="font-normal">AITU</span>{' '}
-                <span className="font-bold">EMS</span>
-              </span>
-            </div>
-
             {/* Welcome Text */}
             <div className="space-y-2 text-center lg:text-left">
               <h1 className="text-2xl font-semibold tracking-tight">Welcome Back</h1>
@@ -133,21 +124,17 @@ function LoginPage() {
       {/* Right Pane - Image */}
       <div className="relative hidden lg:block">
         <img
-          src="/expo2017.jpg"
-          alt="EXPO 2017 Astana - Nur Alem Sphere"
+          src="/aitu.jpg"
+          alt="Astana IT University main lobby"
           className="absolute inset-0 h-full w-full object-cover"
           width={1200}
           height={800}
         />
-        {/* Gradient overlay for better text contrast if needed */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20" aria-hidden="true" />
+        {/* Gradient overlay for better text contrast */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent" aria-hidden="true" />
 
         {/* Branding overlay */}
-        <div className="absolute inset-0 flex flex-col justify-between p-10">
-          {/* Top spacer */}
-          <div />
-
-          {/* Bottom content */}
+        <div className="absolute inset-0 flex flex-col justify-end p-10">
           <div className="relative z-10 flex flex-col gap-4">
             <h2 className="text-3xl font-bold tracking-tight text-white text-pretty drop-shadow-lg">
               Event Management System
