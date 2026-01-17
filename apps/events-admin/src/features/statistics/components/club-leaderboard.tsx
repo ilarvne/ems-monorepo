@@ -12,16 +12,16 @@ import { Badge } from '@repo/ui/components/badge'
 import { SchrodingersModal } from '@repo/ui/components/schrodingers-modal'
 import { useSchrodingersModal } from '@/hooks/use-schrodingers-modal'
 
-interface ClubLeaderboardProps {
+interface OrganizationLeaderboardProps {
   limit?: number
   days?: number
 }
 
-export function ClubLeaderboard({ limit = 5, days = 90 }: ClubLeaderboardProps) {
+export function ClubLeaderboard({ limit = 5, days = 90 }: OrganizationLeaderboardProps) {
   const modal = useSchrodingersModal()
   const { data, isLoading } = useQuery(getTopPerformingClubs, { limit, days })
 
-  const clubs = data?.clubs || []
+  const organizations = data?.clubs || []
 
   if (isLoading) {
     return (
@@ -29,7 +29,7 @@ export function ClubLeaderboard({ limit = 5, days = 90 }: ClubLeaderboardProps) 
         <CardHeader>
           <CardTitle className='flex items-center gap-2'>
             <Trophy className='size-5' />
-            Top Performing Clubs
+            Top Performing Organizations
           </CardTitle>
           <CardDescription>Most active organizations in the last {days} days</CardDescription>
         </CardHeader>
@@ -48,7 +48,7 @@ export function ClubLeaderboard({ limit = 5, days = 90 }: ClubLeaderboardProps) 
     )
   }
 
-  const topClubs = clubs.slice(0, limit)
+  const topOrganizations = organizations.slice(0, limit)
 
   return (
     <>
@@ -58,7 +58,7 @@ export function ClubLeaderboard({ limit = 5, days = 90 }: ClubLeaderboardProps) 
             <div>
               <CardTitle className='flex items-center gap-2'>
                 <Trophy className='size-5' />
-                Top Performing Clubs
+                Top Performing Organizations
               </CardTitle>
               <CardDescription>Most active organizations in the last {days} days</CardDescription>
             </div>
@@ -68,14 +68,14 @@ export function ClubLeaderboard({ limit = 5, days = 90 }: ClubLeaderboardProps) 
           </div>
         </CardHeader>
         <CardContent>
-          {topClubs.length === 0 ? (
+          {topOrganizations.length === 0 ? (
             <div className='text-muted-foreground flex h-32 items-center justify-center text-sm'>
-              No club activity in this period
+              No organization activity in this period
             </div>
           ) : (
             <div className='space-y-4'>
-              {topClubs.map((club, index) => (
-                <div key={club.organizationId} className='flex items-center gap-4'>
+              {topOrganizations.map((org, index) => (
+                <div key={org.organizationId} className='flex items-center gap-4'>
                   <div className='flex size-10 shrink-0 items-center justify-center'>
                     {index < 3 ? (
                       <div
@@ -94,25 +94,25 @@ export function ClubLeaderboard({ limit = 5, days = 90 }: ClubLeaderboardProps) 
                     )}
                   </div>
                   <Avatar className='size-12'>
-                    <AvatarImage src={club.organizationImage || undefined} alt={club.organizationTitle} />
-                    <AvatarFallback>{club.organizationTitle.slice(0, 2).toUpperCase()}</AvatarFallback>
+                    <AvatarImage src={org.organizationImage || undefined} alt={org.organizationTitle} />
+                    <AvatarFallback>{org.organizationTitle.slice(0, 2).toUpperCase()}</AvatarFallback>
                   </Avatar>
                   <div className='flex-1 space-y-1'>
-                    <div className='font-medium'>{club.organizationTitle}</div>
+                    <div className='font-medium'>{org.organizationTitle}</div>
                     <div className='flex gap-3 text-xs text-muted-foreground'>
                       <span className='flex items-center gap-1'>
                         <Calendar className='size-3' />
-                        {club.totalEvents} events
+                        {org.totalEvents} events
                       </span>
                       <span className='flex items-center gap-1'>
                         <Users className='size-3' />
-                        {club.totalRegistrations} registrations
+                        {org.totalRegistrations} registrations
                       </span>
                     </div>
                   </div>
                   <Badge variant='secondary' className='ml-auto'>
                     <TrendingUp className='mr-1 size-3' />
-                    {club.averageAttendanceRate.toFixed(0)}%
+                    {org.averageAttendanceRate.toFixed(0)}%
                   </Badge>
                 </div>
               ))}
@@ -123,18 +123,18 @@ export function ClubLeaderboard({ limit = 5, days = 90 }: ClubLeaderboardProps) 
 
       <SchrodingersModal
         {...modal.props}
-        title='Top Performing Clubs'
-        description={`All clubs ranked by activity in the last ${days} days`}
+        title='Top Performing Organizations'
+        description={`All organizations ranked by activity in the last ${days} days`}
         className='max-w-2xl'
       >
         <div className='space-y-4 py-4'>
-          {clubs.length === 0 ? (
+          {organizations.length === 0 ? (
             <div className='text-muted-foreground flex h-32 items-center justify-center text-sm'>
-              No club activity in this period
+              No organization activity in this period
             </div>
           ) : (
-            clubs.map((club, index) => (
-              <div key={club.organizationId} className='flex items-center gap-4 rounded-lg border p-4'>
+            organizations.map((org, index) => (
+              <div key={org.organizationId} className='flex items-center gap-4 rounded-lg border p-4'>
                 <div className='flex size-12 shrink-0 items-center justify-center'>
                   {index < 3 ? (
                     <div
@@ -153,29 +153,29 @@ export function ClubLeaderboard({ limit = 5, days = 90 }: ClubLeaderboardProps) 
                   )}
                 </div>
                 <Avatar className='size-14'>
-                  <AvatarImage src={club.organizationImage || undefined} alt={club.organizationTitle} />
-                  <AvatarFallback>{club.organizationTitle.slice(0, 2).toUpperCase()}</AvatarFallback>
+                  <AvatarImage src={org.organizationImage || undefined} alt={org.organizationTitle} />
+                  <AvatarFallback>{org.organizationTitle.slice(0, 2).toUpperCase()}</AvatarFallback>
                 </Avatar>
                 <div className='flex-1 space-y-2'>
-                  <div className='text-lg font-semibold'>{club.organizationTitle}</div>
+                  <div className='text-lg font-semibold'>{org.organizationTitle}</div>
                   <div className='grid grid-cols-3 gap-4 text-sm'>
                     <div>
                       <div className='text-muted-foreground text-xs'>Events</div>
-                      <div className='font-semibold'>{club.totalEvents}</div>
+                      <div className='font-semibold'>{org.totalEvents}</div>
                     </div>
                     <div>
                       <div className='text-muted-foreground text-xs'>Registrations</div>
-                      <div className='font-semibold'>{club.totalRegistrations}</div>
+                      <div className='font-semibold'>{org.totalRegistrations}</div>
                     </div>
                     <div>
                       <div className='text-muted-foreground text-xs'>Attendees</div>
-                      <div className='font-semibold'>{club.totalAttendees}</div>
+                      <div className='font-semibold'>{org.totalAttendees}</div>
                     </div>
                   </div>
                 </div>
                 <Badge variant='secondary' className='ml-auto'>
                   <TrendingUp className='mr-1 size-3' />
-                  {club.averageAttendanceRate.toFixed(1)}%
+                  {org.averageAttendanceRate.toFixed(1)}%
                 </Badge>
               </div>
             ))

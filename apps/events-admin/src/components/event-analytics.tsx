@@ -173,6 +173,8 @@ const columns: ColumnDef<Event>[] = [
 ]
 
 export function EventAnalytics() {
+  'use no memo'
+  
   // Pre-fetch all data at parent level to avoid suspense on tab switch
   const recentEventsQuery = useSuspenseQuery(listEventsForAdmin, {
     page: 1,
@@ -242,6 +244,8 @@ export function EventAnalytics() {
 }
 
 function RecentEventsView({ data }: { data: any }) {
+  'use no memo'
+  
   const [sorting, setSorting] = React.useState<SortingState>([
     { id: 'startTime', desc: true }
   ])
@@ -301,6 +305,8 @@ function RecentEventsView({ data }: { data: any }) {
 }
 
 function TopPerformingEventsView({ data }: { data: any }) {
+  'use no memo'
+  
   const [sorting, setSorting] = React.useState<SortingState>([
     { id: 'attendanceRate', desc: true }
   ])
@@ -358,6 +364,8 @@ function TopPerformingEventsView({ data }: { data: any }) {
 }
 
 function LowRegistrationEventsView({ data }: { data: any }) {
+  'use no memo'
+  
   const [sorting, setSorting] = React.useState<SortingState>([
     { id: 'daysUntilEvent', desc: false }
   ])
@@ -415,6 +423,8 @@ function LowRegistrationEventsView({ data }: { data: any }) {
 }
 
 function OrganizationActivityView({ data }: { data: any }) {
+  'use no memo'
+  
   const [sorting, setSorting] = React.useState<SortingState>([
     { id: 'eventsThisMonth', desc: true }
   ])
