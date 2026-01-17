@@ -46,46 +46,7 @@ function LoginPage() {
 
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
-      {/* Left Pane - Branding & Visual */}
-      <div className="relative hidden bg-primary lg:flex lg:flex-col lg:justify-between p-10">
-        {/* Decorative background pattern */}
-        <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
-          <div className="absolute -top-1/4 -right-1/4 h-[600px] w-[600px] rounded-full bg-white/5" />
-          <div className="absolute -bottom-1/4 -left-1/4 h-[500px] w-[500px] rounded-full bg-white/5" />
-          <div className="absolute top-1/2 left-1/2 h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/5" />
-        </div>
-
-        {/* Logo */}
-        <div className="relative z-10 flex items-center gap-2 text-primary-foreground">
-          <CalendarIcon className="h-8 w-8" aria-hidden="true" />
-          <span className="text-xl tracking-tight">
-            <span className="font-normal">AITU</span>{' '}
-            <span className="font-bold">EMS</span>
-          </span>
-        </div>
-
-        {/* Hero Content */}
-        <div className="relative z-10 flex flex-col gap-6">
-          <h1 className="text-4xl font-bold tracking-tight text-primary-foreground text-pretty">
-            Event Management System
-          </h1>
-          <p className="text-lg text-primary-foreground/80 max-w-md text-pretty">
-            Streamline your university events. Plan, organize, and track all campus activities in one place.
-          </p>
-        </div>
-
-        {/* Footer Quote */}
-        <figure className="relative z-10">
-          <blockquote className="text-primary-foreground/90 text-sm leading-relaxed">
-            &ldquo;The best way to predict the future is to create it.&rdquo;
-          </blockquote>
-          <figcaption className="mt-2 text-primary-foreground/60 text-sm">
-            &mdash; Peter Drucker
-          </figcaption>
-        </figure>
-      </div>
-
-      {/* Right Pane - Login Form */}
+      {/* Left Pane - Login Form */}
       <div className="flex flex-col">
         {/* Mobile Header */}
         <header className="flex items-center justify-between p-6 lg:hidden">
@@ -101,9 +62,18 @@ function LoginPage() {
         {/* Login Form Container */}
         <main className="flex flex-1 items-center justify-center p-6 lg:p-10">
           <div className="w-full max-w-sm space-y-8">
+            {/* Logo - Desktop */}
+            <div className="hidden lg:flex items-center gap-2 text-foreground">
+              <CalendarIcon className="h-8 w-8 text-primary" aria-hidden="true" />
+              <span className="text-xl tracking-tight">
+                <span className="font-normal">AITU</span>{' '}
+                <span className="font-bold">EMS</span>
+              </span>
+            </div>
+
             {/* Welcome Text */}
             <div className="space-y-2 text-center lg:text-left">
-              <h2 className="text-2xl font-semibold tracking-tight">Welcome Back</h2>
+              <h1 className="text-2xl font-semibold tracking-tight">Welcome Back</h1>
               <p className="text-muted-foreground">
                 Sign in with your organization account to continue
               </p>
@@ -148,7 +118,7 @@ function LoginPage() {
             </div>
 
             {/* Help Text */}
-            <div className="space-y-3 text-center text-sm text-muted-foreground">
+            <div className="space-y-3 text-center lg:text-left text-sm text-muted-foreground">
               <p>
                 Use your <strong>@astanait.edu.kz</strong> account to sign in.
               </p>
@@ -156,48 +126,37 @@ function LoginPage() {
                 Guest access is limited to viewing the calendar and organizations.
               </p>
             </div>
-
-            {/* Footer Links - Desktop */}
-            <nav className="hidden lg:flex items-center justify-center gap-4 text-xs text-muted-foreground pt-8">
-              <a
-                href="https://astanait.edu.kz"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-foreground transition-colors underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm"
-              >
-                AITU Website
-              </a>
-              <span aria-hidden="true">&middot;</span>
-              <a
-                href="mailto:support@astanait.edu.kz"
-                className="hover:text-foreground transition-colors underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm"
-              >
-                Get Help
-              </a>
-            </nav>
           </div>
         </main>
+      </div>
 
-        {/* Mobile Footer */}
-        <footer className="p-6 lg:hidden">
-          <nav className="flex items-center justify-center gap-4 text-xs text-muted-foreground">
-            <a
-              href="https://astanait.edu.kz"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-foreground transition-colors underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm"
-            >
-              AITU Website
-            </a>
-            <span aria-hidden="true">&middot;</span>
-            <a
-              href="mailto:support@astanait.edu.kz"
-              className="hover:text-foreground transition-colors underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm"
-            >
-              Get Help
-            </a>
-          </nav>
-        </footer>
+      {/* Right Pane - Image */}
+      <div className="relative hidden lg:block">
+        <img
+          src="/expo2017.jpg"
+          alt="EXPO 2017 Astana - Nur Alem Sphere"
+          className="absolute inset-0 h-full w-full object-cover"
+          width={1200}
+          height={800}
+        />
+        {/* Gradient overlay for better text contrast if needed */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20" aria-hidden="true" />
+
+        {/* Branding overlay */}
+        <div className="absolute inset-0 flex flex-col justify-between p-10">
+          {/* Top spacer */}
+          <div />
+
+          {/* Bottom content */}
+          <div className="relative z-10 flex flex-col gap-4">
+            <h2 className="text-3xl font-bold tracking-tight text-white text-pretty drop-shadow-lg">
+              Event Management System
+            </h2>
+            <p className="text-base text-white/90 max-w-md text-pretty drop-shadow-md">
+              Streamline your university events. Plan, organize, and track all campus activities in one place.
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   )
