@@ -5,6 +5,13 @@ COPY kratos.prod.yml /etc/config/kratos/kratos.yml
 COPY identity.schema.json /etc/config/kratos/identity.schema.json
 COPY microsoft-claims-mapper.jsonnet /etc/config/kratos/microsoft-claims-mapper.jsonnet
 
+# Required environment variables (must be set at runtime):
+# - DSN: PostgreSQL connection string
+# - SECRETS_COOKIE: Cookie encryption secret (32+ chars)
+# - SECRETS_CIPHER: Cipher encryption secret (32 chars exactly)
+# - SELFSERVICE_METHODS_OIDC_CONFIG_PROVIDERS_0_CLIENT_ID: Microsoft OAuth client ID
+# - SELFSERVICE_METHODS_OIDC_CONFIG_PROVIDERS_0_CLIENT_SECRET: Microsoft OAuth client secret
+
 # Expose ports
 EXPOSE 4433 4434
 
