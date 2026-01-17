@@ -11,6 +11,18 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+const countPreRegisteredUsers = `-- name: CountPreRegisteredUsers :one
+SELECT COUNT(*) FROM pre_registered_users
+WHERE ($1::boolean = true OR used_at IS NULL)
+`
+
+func (q *Queries) CountPreRegisteredUsers(ctx context.Context, includeUsed bool) (int64, error) {
+	row := q.db.QueryRow(ctx, countPreRegisteredUsers, includeUsed)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
 const countUsers = `-- name: CountUsers :one
 SELECT COUNT(*) FROM users
 `
@@ -20,6 +32,36 @@ func (q *Queries) CountUsers(ctx context.Context) (int64, error) {
 	var count int64
 	err := row.Scan(&count)
 	return count, err
+}
+
+const createPreRegisteredUser = `-- name: CreatePreRegisteredUser :one
+
+INSERT INTO pre_registered_users (email, platform_role, created_by)
+VALUES ($1, $2, $3)
+RETURNING id, email, platform_role, created_by, used_at, used_by_user_id, created_at, updated_at
+`
+
+type CreatePreRegisteredUserParams struct {
+	Email        string       `json:"email"`
+	PlatformRole PlatformRole `json:"platform_role"`
+	CreatedBy    pgtype.Int4  `json:"created_by"`
+}
+
+// Pre-registered users queries
+func (q *Queries) CreatePreRegisteredUser(ctx context.Context, arg CreatePreRegisteredUserParams) (PreRegisteredUser, error) {
+	row := q.db.QueryRow(ctx, createPreRegisteredUser, arg.Email, arg.PlatformRole, arg.CreatedBy)
+	var i PreRegisteredUser
+	err := row.Scan(
+		&i.ID,
+		&i.Email,
+		&i.PlatformRole,
+		&i.CreatedBy,
+		&i.UsedAt,
+		&i.UsedByUserID,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
 }
 
 const createUser = `-- name: CreateUser :one
@@ -77,6 +119,15 @@ func (q *Queries) CreateUserFromKratos(ctx context.Context, arg CreateUserFromKr
 	return i, err
 }
 
+const deletePreRegisteredUser = `-- name: DeletePreRegisteredUser :exec
+DELETE FROM pre_registered_users WHERE id = $1
+`
+
+func (q *Queries) DeletePreRegisteredUser(ctx context.Context, id int32) error {
+	_, err := q.db.Exec(ctx, deletePreRegisteredUser, id)
+	return err
+}
+
 const deleteUser = `-- name: DeleteUser :exec
 DELETE FROM users WHERE id = $1
 `
@@ -84,6 +135,26 @@ DELETE FROM users WHERE id = $1
 func (q *Queries) DeleteUser(ctx context.Context, id int32) error {
 	_, err := q.db.Exec(ctx, deleteUser, id)
 	return err
+}
+
+const getPreRegisteredUserByEmail = `-- name: GetPreRegisteredUserByEmail :one
+SELECT id, email, platform_role, created_by, used_at, used_by_user_id, created_at, updated_at FROM pre_registered_users WHERE email = $1 AND used_at IS NULL
+`
+
+func (q *Queries) GetPreRegisteredUserByEmail(ctx context.Context, email string) (PreRegisteredUser, error) {
+	row := q.db.QueryRow(ctx, getPreRegisteredUserByEmail, email)
+	var i PreRegisteredUser
+	err := row.Scan(
+		&i.ID,
+		&i.Email,
+		&i.PlatformRole,
+		&i.CreatedBy,
+		&i.UsedAt,
+		&i.UsedByUserID,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
 }
 
 const getUser = `-- name: GetUser :one
@@ -162,6 +233,48 @@ func (q *Queries) GetUserByUsername(ctx context.Context, username string) (User,
 	return i, err
 }
 
+const listPreRegisteredUsers = `-- name: ListPreRegisteredUsers :many
+SELECT id, email, platform_role, created_by, used_at, used_by_user_id, created_at, updated_at FROM pre_registered_users
+WHERE ($3::boolean = true OR used_at IS NULL)
+ORDER BY created_at DESC
+LIMIT $1 OFFSET $2
+`
+
+type ListPreRegisteredUsersParams struct {
+	Limit       int32 `json:"limit"`
+	Offset      int32 `json:"offset"`
+	IncludeUsed bool  `json:"include_used"`
+}
+
+func (q *Queries) ListPreRegisteredUsers(ctx context.Context, arg ListPreRegisteredUsersParams) ([]PreRegisteredUser, error) {
+	rows, err := q.db.Query(ctx, listPreRegisteredUsers, arg.Limit, arg.Offset, arg.IncludeUsed)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []PreRegisteredUser
+	for rows.Next() {
+		var i PreRegisteredUser
+		if err := rows.Scan(
+			&i.ID,
+			&i.Email,
+			&i.PlatformRole,
+			&i.CreatedBy,
+			&i.UsedAt,
+			&i.UsedByUserID,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const listUsers = `-- name: ListUsers :many
 SELECT id, kratos_id, username, email, password, created_at, updated_at FROM users
 ORDER BY id
@@ -199,6 +312,34 @@ func (q *Queries) ListUsers(ctx context.Context, arg ListUsersParams) ([]User, e
 		return nil, err
 	}
 	return items, nil
+}
+
+const markPreRegisteredUserUsed = `-- name: MarkPreRegisteredUserUsed :one
+UPDATE pre_registered_users
+SET used_at = NOW(), used_by_user_id = $2, updated_at = NOW()
+WHERE id = $1
+RETURNING id, email, platform_role, created_by, used_at, used_by_user_id, created_at, updated_at
+`
+
+type MarkPreRegisteredUserUsedParams struct {
+	ID           int32       `json:"id"`
+	UsedByUserID pgtype.Int4 `json:"used_by_user_id"`
+}
+
+func (q *Queries) MarkPreRegisteredUserUsed(ctx context.Context, arg MarkPreRegisteredUserUsedParams) (PreRegisteredUser, error) {
+	row := q.db.QueryRow(ctx, markPreRegisteredUserUsed, arg.ID, arg.UsedByUserID)
+	var i PreRegisteredUser
+	err := row.Scan(
+		&i.ID,
+		&i.Email,
+		&i.PlatformRole,
+		&i.CreatedBy,
+		&i.UsedAt,
+		&i.UsedByUserID,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
 }
 
 const updateUser = `-- name: UpdateUser :one

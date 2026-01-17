@@ -1,13 +1,14 @@
 import { useSuspenseQuery } from '@connectrpc/connect-query'
 import { listUsers } from '@repo/proto'
 import { createFileRoute } from '@tanstack/react-router'
-import { PlusIcon } from 'lucide-react'
+import { UserPlusIcon } from 'lucide-react'
 import { Suspense } from 'react'
 
 import { Button } from '@repo/ui/components/button'
 import { Skeleton } from '@repo/ui/components/skeleton'
 
 import { DataTable, useDataTableState } from '@/components/admin-data-table'
+import { PreRegisterUserDialog } from '@/features/users/pre-register-user-dialog'
 import { columns } from '@/features/users/users.columns'
 
 export const Route = createFileRoute('/_authenticated/users')({
@@ -70,7 +71,7 @@ function Users() {
     <div className="p-6 lg:p-8">
       <div className="mb-6">
         <h1 className="text-2xl font-semibold tracking-tight">Users</h1>
-        <p className="text-sm text-muted-foreground mt-1">Manage users and accounts</p>
+        <p className="text-sm text-muted-foreground mt-1">Manage users, roles, and pre-registrations</p>
       </div>
 
       <DataTable
@@ -84,10 +85,12 @@ function Users() {
         defaultSortBy="id"
         defaultSortDesc={false}
         toolbarActions={
-          <Button className="ml-auto" disabled title="Coming soon">
-            <PlusIcon aria-hidden="true" className="-ms-1 opacity-60" size={16} />
-            Add user
-          </Button>
+          <PreRegisterUserDialog>
+            <Button className="ml-auto">
+              <UserPlusIcon aria-hidden="true" className="-ms-1 opacity-60" size={16} />
+              Pre-register user
+            </Button>
+          </PreRegisterUserDialog>
         }
       />
     </div>

@@ -41,6 +41,7 @@ export const organizationTypes = pgTable('organization_types', (t) => ({
 export const formatEnum = pgEnum('format', ['online', 'offline'])
 export const registrationStatusEnum = pgEnum('registration_status', ['registered', 'cancelled', 'waitlist'])
 export const attendanceStatusEnum = pgEnum('attendance_status', ['attended', 'no_show', 'checked_in'])
+export const platformRoleEnum = pgEnum('platform_role', ['admin', 'staff'])
 
 export const events = pgTable('events', (t) => ({
   id: t.serial('id').primaryKey(),
@@ -101,6 +102,18 @@ export const eventAttendance = pgTable('event_attendance', (t) => ({
   checkedInAt: t.timestamp({ withTimezone: true, mode: 'string' }),
   checkedInBy: t.integer().references(() => users.id),
   notes: t.text(),
+  createdAt: t.timestamp({ withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+  updatedAt: t.timestamp({ withTimezone: true, mode: 'string' }).defaultNow().$onUpdateFn(() => new Date().toISOString()).notNull()
+}))
+
+// Pre-registered users for auto-role assignment on first sign-up
+export const preRegisteredUsers = pgTable('pre_registered_users', (t) => ({
+  id: t.serial('id').primaryKey(),
+  email: t.text().notNull().unique(), // Must be @astanait.edu.kz
+  platformRole: platformRoleEnum().notNull(),
+  createdBy: t.integer().references(() => users.id),
+  usedAt: t.timestamp({ withTimezone: true, mode: 'string' }), // When user signed up and consumed this
+  usedByUserId: t.integer().references(() => users.id), // Which user consumed this pre-registration
   createdAt: t.timestamp({ withTimezone: true, mode: 'string' }).defaultNow().notNull(),
   updatedAt: t.timestamp({ withTimezone: true, mode: 'string' }).defaultNow().$onUpdateFn(() => new Date().toISOString()).notNull()
 }))

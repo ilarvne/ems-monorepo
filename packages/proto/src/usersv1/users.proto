@@ -4,6 +4,14 @@ package users.v1;
 
 option go_package = "github.com/studyverse/ems-backend/gen/usersv1;usersv1";
 
+// Platform role enum
+enum PlatformRole {
+  PLATFORM_ROLE_UNSPECIFIED = 0;
+  PLATFORM_ROLE_USER = 1;     // Regular user (no special permissions)
+  PLATFORM_ROLE_STAFF = 2;    // Staff (can manage all clubs)
+  PLATFORM_ROLE_ADMIN = 3;    // Admin (full system access)
+}
+
 // Messages
 message User {
   int32 id = 1;
@@ -11,6 +19,19 @@ message User {
   string email = 3;
   string created_at = 4;
   string updated_at = 5;
+  PlatformRole platform_role = 6;  // User's platform-level role
+}
+
+// Pre-registered user entry
+message PreRegisteredUser {
+  int32 id = 1;
+  string email = 2;
+  PlatformRole platform_role = 3;
+  optional int32 created_by = 4;
+  optional string used_at = 5;        // When consumed by a sign-up
+  optional int32 used_by_user_id = 6; // Which user consumed this
+  string created_at = 7;
+  string updated_at = 8;
 }
 
 // Request/Response Messages for User CRUD
@@ -86,6 +107,47 @@ message UpdatePasswordResponse {
   bool success = 1;
 }
 
+// Assign/remove platform role for a user
+message AssignPlatformRoleRequest {
+  int32 user_id = 1;
+  PlatformRole role = 2;
+}
+
+message AssignPlatformRoleResponse {
+  User user = 1;
+}
+
+// Pre-register a user by email with a role (role applied on first sign-up)
+message PreRegisterUserRequest {
+  string email = 1;
+  PlatformRole platform_role = 2;
+}
+
+message PreRegisterUserResponse {
+  PreRegisteredUser pre_registered_user = 1;
+}
+
+// List pre-registered users
+message ListPreRegisteredUsersRequest {
+  int32 page = 1;
+  int32 limit = 2;
+  bool include_used = 3;  // Include already-consumed entries
+}
+
+message ListPreRegisteredUsersResponse {
+  repeated PreRegisteredUser pre_registered_users = 1;
+  int32 total = 2;
+}
+
+// Delete a pre-registration entry
+message DeletePreRegisteredUserRequest {
+  int32 id = 1;
+}
+
+message DeletePreRegisteredUserResponse {
+  bool success = 1;
+}
+
 // Services
 service UsersService {
   rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
@@ -96,4 +158,12 @@ service UsersService {
   rpc UpdateUser(UpdateUserRequest) returns (UpdateUserResponse);
   rpc DeleteUser(DeleteUserRequest) returns (DeleteUserResponse);
   rpc UpdatePassword(UpdatePasswordRequest) returns (UpdatePasswordResponse);
+  
+  // Platform role management
+  rpc AssignPlatformRole(AssignPlatformRoleRequest) returns (AssignPlatformRoleResponse);
+  
+  // Pre-registration management
+  rpc PreRegisterUser(PreRegisterUserRequest) returns (PreRegisterUserResponse);
+  rpc ListPreRegisteredUsers(ListPreRegisteredUsersRequest) returns (ListPreRegisteredUsersResponse);
+  rpc DeletePreRegisteredUser(DeletePreRegisteredUserRequest) returns (DeletePreRegisteredUserResponse);
 }

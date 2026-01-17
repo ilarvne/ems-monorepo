@@ -18,6 +18,7 @@ type Querier interface {
 	CountEvents(ctx context.Context, arg CountEventsParams) (int64, error)
 	CountOrganizationTypes(ctx context.Context) (int64, error)
 	CountOrganizations(ctx context.Context) (int64, error)
+	CountPreRegisteredUsers(ctx context.Context, includeUsed bool) (int64, error)
 	CountTags(ctx context.Context) (int64, error)
 	CountUsers(ctx context.Context) (int64, error)
 	CreateEvent(ctx context.Context, arg CreateEventParams) (Event, error)
@@ -25,12 +26,15 @@ type Querier interface {
 	CreateEventRegistration(ctx context.Context, arg CreateEventRegistrationParams) (EventRegistration, error)
 	CreateOrganization(ctx context.Context, arg CreateOrganizationParams) (Organization, error)
 	CreateOrganizationType(ctx context.Context, title string) (OrganizationType, error)
+	// Pre-registered users queries
+	CreatePreRegisteredUser(ctx context.Context, arg CreatePreRegisteredUserParams) (PreRegisteredUser, error)
 	CreateTag(ctx context.Context, name string) (Tag, error)
 	CreateUser(ctx context.Context, arg CreateUserParams) (User, error)
 	CreateUserFromKratos(ctx context.Context, arg CreateUserFromKratosParams) (User, error)
 	DeleteEvent(ctx context.Context, id int32) error
 	DeleteOrganization(ctx context.Context, id int32) error
 	DeleteOrganizationType(ctx context.Context, id int32) error
+	DeletePreRegisteredUser(ctx context.Context, id int32) error
 	DeleteTag(ctx context.Context, id int32) error
 	DeleteUser(ctx context.Context, id int32) error
 	GetEvent(ctx context.Context, id int32) (Event, error)
@@ -45,6 +49,7 @@ type Querier interface {
 	GetOrganization(ctx context.Context, id int32) (Organization, error)
 	GetOrganizationType(ctx context.Context, id int32) (OrganizationType, error)
 	GetOrganizationsByUserRoles(ctx context.Context, arg GetOrganizationsByUserRolesParams) ([]Organization, error)
+	GetPreRegisteredUserByEmail(ctx context.Context, email string) (PreRegisteredUser, error)
 	GetTag(ctx context.Context, id int32) (Tag, error)
 	GetUser(ctx context.Context, id int32) (User, error)
 	GetUserByEmail(ctx context.Context, email string) (User, error)
@@ -54,8 +59,10 @@ type Querier interface {
 	ListEvents(ctx context.Context, arg ListEventsParams) ([]Event, error)
 	ListOrganizationTypes(ctx context.Context, arg ListOrganizationTypesParams) ([]OrganizationType, error)
 	ListOrganizations(ctx context.Context, arg ListOrganizationsParams) ([]Organization, error)
+	ListPreRegisteredUsers(ctx context.Context, arg ListPreRegisteredUsersParams) ([]PreRegisteredUser, error)
 	ListTags(ctx context.Context, arg ListTagsParams) ([]Tag, error)
 	ListUsers(ctx context.Context, arg ListUsersParams) ([]User, error)
+	MarkPreRegisteredUserUsed(ctx context.Context, arg MarkPreRegisteredUserUsedParams) (PreRegisteredUser, error)
 	RemoveEventTags(ctx context.Context, eventID int32) error
 	UpdateEvent(ctx context.Context, arg UpdateEventParams) (Event, error)
 	UpdateEventAttendance(ctx context.Context, arg UpdateEventAttendanceParams) (EventAttendance, error)

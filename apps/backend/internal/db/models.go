@@ -139,6 +139,48 @@ func (ns NullOrganizationStatus) Value() (driver.Value, error) {
 	return string(ns.OrganizationStatus), nil
 }
 
+type PlatformRole string
+
+const (
+	PlatformRoleAdmin PlatformRole = "admin"
+	PlatformRoleStaff PlatformRole = "staff"
+)
+
+func (e *PlatformRole) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = PlatformRole(s)
+	case string:
+		*e = PlatformRole(s)
+	default:
+		return fmt.Errorf("unsupported scan type for PlatformRole: %T", src)
+	}
+	return nil
+}
+
+type NullPlatformRole struct {
+	PlatformRole PlatformRole `json:"platform_role"`
+	Valid        bool         `json:"valid"` // Valid is true if PlatformRole is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullPlatformRole) Scan(value interface{}) error {
+	if value == nil {
+		ns.PlatformRole, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.PlatformRole.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullPlatformRole) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.PlatformRole), nil
+}
+
 type RegistrationStatus string
 
 const (
@@ -247,6 +289,17 @@ type OrganizationType struct {
 	Title     string             `json:"title"`
 	CreatedAt pgtype.Timestamptz `json:"created_at"`
 	UpdatedAt pgtype.Timestamptz `json:"updated_at"`
+}
+
+type PreRegisteredUser struct {
+	ID           int32              `json:"id"`
+	Email        string             `json:"email"`
+	PlatformRole PlatformRole       `json:"platform_role"`
+	CreatedBy    pgtype.Int4        `json:"created_by"`
+	UsedAt       pgtype.Timestamptz `json:"used_at"`
+	UsedByUserID pgtype.Int4        `json:"used_by_user_id"`
+	CreatedAt    pgtype.Timestamptz `json:"created_at"`
+	UpdatedAt    pgtype.Timestamptz `json:"updated_at"`
 }
 
 type Role struct {

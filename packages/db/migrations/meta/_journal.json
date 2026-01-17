@@ -8,6 +8,13 @@
       "when": 1768424749174,
       "tag": "0000_fixed_talkback",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1768691914171,
+      "tag": "0001_friendly_night_thrasher",
+      "breakpoints": true
     }
   ]
 }

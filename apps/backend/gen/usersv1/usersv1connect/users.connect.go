@@ -52,6 +52,18 @@ const (
 	// UsersServiceUpdatePasswordProcedure is the fully-qualified name of the UsersService's
 	// UpdatePassword RPC.
 	UsersServiceUpdatePasswordProcedure = "/users.v1.UsersService/UpdatePassword"
+	// UsersServiceAssignPlatformRoleProcedure is the fully-qualified name of the UsersService's
+	// AssignPlatformRole RPC.
+	UsersServiceAssignPlatformRoleProcedure = "/users.v1.UsersService/AssignPlatformRole"
+	// UsersServicePreRegisterUserProcedure is the fully-qualified name of the UsersService's
+	// PreRegisterUser RPC.
+	UsersServicePreRegisterUserProcedure = "/users.v1.UsersService/PreRegisterUser"
+	// UsersServiceListPreRegisteredUsersProcedure is the fully-qualified name of the UsersService's
+	// ListPreRegisteredUsers RPC.
+	UsersServiceListPreRegisteredUsersProcedure = "/users.v1.UsersService/ListPreRegisteredUsers"
+	// UsersServiceDeletePreRegisteredUserProcedure is the fully-qualified name of the UsersService's
+	// DeletePreRegisteredUser RPC.
+	UsersServiceDeletePreRegisteredUserProcedure = "/users.v1.UsersService/DeletePreRegisteredUser"
 )
 
 // UsersServiceClient is a client for the users.v1.UsersService service.
@@ -64,6 +76,12 @@ type UsersServiceClient interface {
 	UpdateUser(context.Context, *connect.Request[usersv1.UpdateUserRequest]) (*connect.Response[usersv1.UpdateUserResponse], error)
 	DeleteUser(context.Context, *connect.Request[usersv1.DeleteUserRequest]) (*connect.Response[usersv1.DeleteUserResponse], error)
 	UpdatePassword(context.Context, *connect.Request[usersv1.UpdatePasswordRequest]) (*connect.Response[usersv1.UpdatePasswordResponse], error)
+	// Platform role management
+	AssignPlatformRole(context.Context, *connect.Request[usersv1.AssignPlatformRoleRequest]) (*connect.Response[usersv1.AssignPlatformRoleResponse], error)
+	// Pre-registration management
+	PreRegisterUser(context.Context, *connect.Request[usersv1.PreRegisterUserRequest]) (*connect.Response[usersv1.PreRegisterUserResponse], error)
+	ListPreRegisteredUsers(context.Context, *connect.Request[usersv1.ListPreRegisteredUsersRequest]) (*connect.Response[usersv1.ListPreRegisteredUsersResponse], error)
+	DeletePreRegisteredUser(context.Context, *connect.Request[usersv1.DeletePreRegisteredUserRequest]) (*connect.Response[usersv1.DeletePreRegisteredUserResponse], error)
 }
 
 // NewUsersServiceClient constructs a client for the users.v1.UsersService service. By default, it
@@ -125,19 +143,47 @@ func NewUsersServiceClient(httpClient connect.HTTPClient, baseURL string, opts .
 			connect.WithSchema(usersServiceMethods.ByName("UpdatePassword")),
 			connect.WithClientOptions(opts...),
 		),
+		assignPlatformRole: connect.NewClient[usersv1.AssignPlatformRoleRequest, usersv1.AssignPlatformRoleResponse](
+			httpClient,
+			baseURL+UsersServiceAssignPlatformRoleProcedure,
+			connect.WithSchema(usersServiceMethods.ByName("AssignPlatformRole")),
+			connect.WithClientOptions(opts...),
+		),
+		preRegisterUser: connect.NewClient[usersv1.PreRegisterUserRequest, usersv1.PreRegisterUserResponse](
+			httpClient,
+			baseURL+UsersServicePreRegisterUserProcedure,
+			connect.WithSchema(usersServiceMethods.ByName("PreRegisterUser")),
+			connect.WithClientOptions(opts...),
+		),
+		listPreRegisteredUsers: connect.NewClient[usersv1.ListPreRegisteredUsersRequest, usersv1.ListPreRegisteredUsersResponse](
+			httpClient,
+			baseURL+UsersServiceListPreRegisteredUsersProcedure,
+			connect.WithSchema(usersServiceMethods.ByName("ListPreRegisteredUsers")),
+			connect.WithClientOptions(opts...),
+		),
+		deletePreRegisteredUser: connect.NewClient[usersv1.DeletePreRegisteredUserRequest, usersv1.DeletePreRegisteredUserResponse](
+			httpClient,
+			baseURL+UsersServiceDeletePreRegisteredUserProcedure,
+			connect.WithSchema(usersServiceMethods.ByName("DeletePreRegisteredUser")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
 // usersServiceClient implements UsersServiceClient.
 type usersServiceClient struct {
-	createUser        *connect.Client[usersv1.CreateUserRequest, usersv1.CreateUserResponse]
-	getUser           *connect.Client[usersv1.GetUserRequest, usersv1.GetUserResponse]
-	getUserByEmail    *connect.Client[usersv1.GetUserByEmailRequest, usersv1.GetUserByEmailResponse]
-	getUserByUsername *connect.Client[usersv1.GetUserByUsernameRequest, usersv1.GetUserByUsernameResponse]
-	listUsers         *connect.Client[usersv1.ListUsersRequest, usersv1.ListUsersResponse]
-	updateUser        *connect.Client[usersv1.UpdateUserRequest, usersv1.UpdateUserResponse]
-	deleteUser        *connect.Client[usersv1.DeleteUserRequest, usersv1.DeleteUserResponse]
-	updatePassword    *connect.Client[usersv1.UpdatePasswordRequest, usersv1.UpdatePasswordResponse]
+	createUser              *connect.Client[usersv1.CreateUserRequest, usersv1.CreateUserResponse]
+	getUser                 *connect.Client[usersv1.GetUserRequest, usersv1.GetUserResponse]
+	getUserByEmail          *connect.Client[usersv1.GetUserByEmailRequest, usersv1.GetUserByEmailResponse]
+	getUserByUsername       *connect.Client[usersv1.GetUserByUsernameRequest, usersv1.GetUserByUsernameResponse]
+	listUsers               *connect.Client[usersv1.ListUsersRequest, usersv1.ListUsersResponse]
+	updateUser              *connect.Client[usersv1.UpdateUserRequest, usersv1.UpdateUserResponse]
+	deleteUser              *connect.Client[usersv1.DeleteUserRequest, usersv1.DeleteUserResponse]
+	updatePassword          *connect.Client[usersv1.UpdatePasswordRequest, usersv1.UpdatePasswordResponse]
+	assignPlatformRole      *connect.Client[usersv1.AssignPlatformRoleRequest, usersv1.AssignPlatformRoleResponse]
+	preRegisterUser         *connect.Client[usersv1.PreRegisterUserRequest, usersv1.PreRegisterUserResponse]
+	listPreRegisteredUsers  *connect.Client[usersv1.ListPreRegisteredUsersRequest, usersv1.ListPreRegisteredUsersResponse]
+	deletePreRegisteredUser *connect.Client[usersv1.DeletePreRegisteredUserRequest, usersv1.DeletePreRegisteredUserResponse]
 }
 
 // CreateUser calls users.v1.UsersService.CreateUser.
@@ -180,6 +226,26 @@ func (c *usersServiceClient) UpdatePassword(ctx context.Context, req *connect.Re
 	return c.updatePassword.CallUnary(ctx, req)
 }
 
+// AssignPlatformRole calls users.v1.UsersService.AssignPlatformRole.
+func (c *usersServiceClient) AssignPlatformRole(ctx context.Context, req *connect.Request[usersv1.AssignPlatformRoleRequest]) (*connect.Response[usersv1.AssignPlatformRoleResponse], error) {
+	return c.assignPlatformRole.CallUnary(ctx, req)
+}
+
+// PreRegisterUser calls users.v1.UsersService.PreRegisterUser.
+func (c *usersServiceClient) PreRegisterUser(ctx context.Context, req *connect.Request[usersv1.PreRegisterUserRequest]) (*connect.Response[usersv1.PreRegisterUserResponse], error) {
+	return c.preRegisterUser.CallUnary(ctx, req)
+}
+
+// ListPreRegisteredUsers calls users.v1.UsersService.ListPreRegisteredUsers.
+func (c *usersServiceClient) ListPreRegisteredUsers(ctx context.Context, req *connect.Request[usersv1.ListPreRegisteredUsersRequest]) (*connect.Response[usersv1.ListPreRegisteredUsersResponse], error) {
+	return c.listPreRegisteredUsers.CallUnary(ctx, req)
+}
+
+// DeletePreRegisteredUser calls users.v1.UsersService.DeletePreRegisteredUser.
+func (c *usersServiceClient) DeletePreRegisteredUser(ctx context.Context, req *connect.Request[usersv1.DeletePreRegisteredUserRequest]) (*connect.Response[usersv1.DeletePreRegisteredUserResponse], error) {
+	return c.deletePreRegisteredUser.CallUnary(ctx, req)
+}
+
 // UsersServiceHandler is an implementation of the users.v1.UsersService service.
 type UsersServiceHandler interface {
 	CreateUser(context.Context, *connect.Request[usersv1.CreateUserRequest]) (*connect.Response[usersv1.CreateUserResponse], error)
@@ -190,6 +256,12 @@ type UsersServiceHandler interface {
 	UpdateUser(context.Context, *connect.Request[usersv1.UpdateUserRequest]) (*connect.Response[usersv1.UpdateUserResponse], error)
 	DeleteUser(context.Context, *connect.Request[usersv1.DeleteUserRequest]) (*connect.Response[usersv1.DeleteUserResponse], error)
 	UpdatePassword(context.Context, *connect.Request[usersv1.UpdatePasswordRequest]) (*connect.Response[usersv1.UpdatePasswordResponse], error)
+	// Platform role management
+	AssignPlatformRole(context.Context, *connect.Request[usersv1.AssignPlatformRoleRequest]) (*connect.Response[usersv1.AssignPlatformRoleResponse], error)
+	// Pre-registration management
+	PreRegisterUser(context.Context, *connect.Request[usersv1.PreRegisterUserRequest]) (*connect.Response[usersv1.PreRegisterUserResponse], error)
+	ListPreRegisteredUsers(context.Context, *connect.Request[usersv1.ListPreRegisteredUsersRequest]) (*connect.Response[usersv1.ListPreRegisteredUsersResponse], error)
+	DeletePreRegisteredUser(context.Context, *connect.Request[usersv1.DeletePreRegisteredUserRequest]) (*connect.Response[usersv1.DeletePreRegisteredUserResponse], error)
 }
 
 // NewUsersServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -247,6 +319,30 @@ func NewUsersServiceHandler(svc UsersServiceHandler, opts ...connect.HandlerOpti
 		connect.WithSchema(usersServiceMethods.ByName("UpdatePassword")),
 		connect.WithHandlerOptions(opts...),
 	)
+	usersServiceAssignPlatformRoleHandler := connect.NewUnaryHandler(
+		UsersServiceAssignPlatformRoleProcedure,
+		svc.AssignPlatformRole,
+		connect.WithSchema(usersServiceMethods.ByName("AssignPlatformRole")),
+		connect.WithHandlerOptions(opts...),
+	)
+	usersServicePreRegisterUserHandler := connect.NewUnaryHandler(
+		UsersServicePreRegisterUserProcedure,
+		svc.PreRegisterUser,
+		connect.WithSchema(usersServiceMethods.ByName("PreRegisterUser")),
+		connect.WithHandlerOptions(opts...),
+	)
+	usersServiceListPreRegisteredUsersHandler := connect.NewUnaryHandler(
+		UsersServiceListPreRegisteredUsersProcedure,
+		svc.ListPreRegisteredUsers,
+		connect.WithSchema(usersServiceMethods.ByName("ListPreRegisteredUsers")),
+		connect.WithHandlerOptions(opts...),
+	)
+	usersServiceDeletePreRegisteredUserHandler := connect.NewUnaryHandler(
+		UsersServiceDeletePreRegisteredUserProcedure,
+		svc.DeletePreRegisteredUser,
+		connect.WithSchema(usersServiceMethods.ByName("DeletePreRegisteredUser")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/users.v1.UsersService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case UsersServiceCreateUserProcedure:
@@ -265,6 +361,14 @@ func NewUsersServiceHandler(svc UsersServiceHandler, opts ...connect.HandlerOpti
 			usersServiceDeleteUserHandler.ServeHTTP(w, r)
 		case UsersServiceUpdatePasswordProcedure:
 			usersServiceUpdatePasswordHandler.ServeHTTP(w, r)
+		case UsersServiceAssignPlatformRoleProcedure:
+			usersServiceAssignPlatformRoleHandler.ServeHTTP(w, r)
+		case UsersServicePreRegisterUserProcedure:
+			usersServicePreRegisterUserHandler.ServeHTTP(w, r)
+		case UsersServiceListPreRegisteredUsersProcedure:
+			usersServiceListPreRegisteredUsersHandler.ServeHTTP(w, r)
+		case UsersServiceDeletePreRegisteredUserProcedure:
+			usersServiceDeletePreRegisteredUserHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -304,4 +408,20 @@ func (UnimplementedUsersServiceHandler) DeleteUser(context.Context, *connect.Req
 
 func (UnimplementedUsersServiceHandler) UpdatePassword(context.Context, *connect.Request[usersv1.UpdatePasswordRequest]) (*connect.Response[usersv1.UpdatePasswordResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("users.v1.UsersService.UpdatePassword is not implemented"))
+}
+
+func (UnimplementedUsersServiceHandler) AssignPlatformRole(context.Context, *connect.Request[usersv1.AssignPlatformRoleRequest]) (*connect.Response[usersv1.AssignPlatformRoleResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("users.v1.UsersService.AssignPlatformRole is not implemented"))
+}
+
+func (UnimplementedUsersServiceHandler) PreRegisterUser(context.Context, *connect.Request[usersv1.PreRegisterUserRequest]) (*connect.Response[usersv1.PreRegisterUserResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("users.v1.UsersService.PreRegisterUser is not implemented"))
+}
+
+func (UnimplementedUsersServiceHandler) ListPreRegisteredUsers(context.Context, *connect.Request[usersv1.ListPreRegisteredUsersRequest]) (*connect.Response[usersv1.ListPreRegisteredUsersResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("users.v1.UsersService.ListPreRegisteredUsers is not implemented"))
+}
+
+func (UnimplementedUsersServiceHandler) DeletePreRegisteredUser(context.Context, *connect.Request[usersv1.DeletePreRegisteredUserRequest]) (*connect.Response[usersv1.DeletePreRegisteredUserResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("users.v1.UsersService.DeletePreRegisteredUser is not implemented"))
 }
