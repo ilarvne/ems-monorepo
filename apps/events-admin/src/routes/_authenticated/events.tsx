@@ -686,36 +686,6 @@ function EventsFilter({
           </div>
         </PopoverContent>
       </Popover>
-
-      {/* Selected Filter Badges - Status and Format only (no org badges) */}
-      {(statusFilter.length > 0 || formatFilter.length > 0) && (
-        <div className="flex items-center gap-1 flex-wrap">
-          {/* Status badges */}
-          {statusFilter.map((status) => (
-            <Badge
-              key={status}
-              variant="secondary"
-              className="text-xs gap-1 cursor-pointer hover:bg-destructive/10 hover:text-destructive transition-colors"
-              onClick={() => onStatusChange(false, status)}
-            >
-              {statusOptions.find((o) => o.value === status)?.label}
-              <XIcon className="h-3 w-3" />
-            </Badge>
-          ))}
-          {/* Format badges */}
-          {formatFilter.map((format) => (
-            <Badge
-              key={format}
-              variant="secondary"
-              className="text-xs gap-1 cursor-pointer hover:bg-destructive/10 hover:text-destructive transition-colors"
-              onClick={() => onFormatChange(false, format)}
-            >
-              {formatOptions.find((o) => o.value === format)?.label}
-              <XIcon className="h-3 w-3" />
-            </Badge>
-          ))}
-        </div>
-      )}
     </div>
   )
 }

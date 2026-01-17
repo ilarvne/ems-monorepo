@@ -1,6 +1,7 @@
 import { createFileRoute, redirect } from '@tanstack/react-router'
 import { z } from 'zod'
 import { useState } from 'react'
+import { toast } from 'sonner'
 import { Button } from '@repo/ui/components/button'
 import { useAuth } from '@/lib/auth'
 
@@ -33,6 +34,7 @@ function LoginPage() {
       await login(returnTo)
     } catch (error) {
       console.error('Login failed:', error)
+      toast.error('Failed to sign in. Please try again.')
       setIsLoading(false)
     }
     // Note: Don't set isLoading to false on success - page will redirect

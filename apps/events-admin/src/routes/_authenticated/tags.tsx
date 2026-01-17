@@ -20,10 +20,10 @@ export const Route = createFileRoute('/_authenticated/tags')({
 
 function TagsLoading() {
   return (
-    <div className="p-8">
+    <div className="p-6 lg:p-8">
       {/* Header */}
       <div className="mb-6 space-y-2">
-        <Skeleton className="h-9 w-24" />
+        <Skeleton className="h-8 w-24" />
         <Skeleton className="h-5 w-56" />
       </div>
 
@@ -67,12 +67,10 @@ function Tags() {
   })
 
   return (
-    <div className="p-8">
-      <div className="flex justify-between items-center mb-6">
-        <div>
-          <h1 className="text-3xl font-bold">Tags</h1>
-          <p className="text-muted-foreground mt-1">Manage event tags and categories</p>
-        </div>
+    <div className="p-6 lg:p-8">
+      <div className="mb-6">
+        <h1 className="text-2xl font-semibold tracking-tight">Tags</h1>
+        <p className="text-sm text-muted-foreground mt-1">Manage event tags and categories</p>
       </div>
 
       <DataTable
@@ -86,7 +84,7 @@ function Tags() {
         defaultSortBy="name"
         defaultSortDesc={false}
         toolbarActions={
-          <Button className="ml-auto">
+          <Button className="ml-auto" disabled title="Coming soon">
             <PlusIcon aria-hidden="true" className="-ms-1 opacity-60" size={16} />
             Add tag
           </Button>

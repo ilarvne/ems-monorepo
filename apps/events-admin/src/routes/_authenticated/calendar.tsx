@@ -7,7 +7,7 @@ export const Route = createFileRoute('/_authenticated/calendar')({
 
 function CalendarPage() {
   return (
-    <div className='px-8'>
+    <div className='p-6 lg:p-8'>
       <Calendar />
     </div>
   )

@@ -20,10 +20,10 @@ export const Route = createFileRoute('/_authenticated/users')({
 
 function UsersLoading() {
   return (
-    <div className="p-8">
+    <div className="p-6 lg:p-8">
       {/* Header */}
       <div className="mb-6 space-y-2">
-        <Skeleton className="h-9 w-24" />
+        <Skeleton className="h-8 w-24" />
         <Skeleton className="h-5 w-48" />
       </div>
 
@@ -67,12 +67,10 @@ function Users() {
   })
 
   return (
-    <div className="p-8">
-      <div className="flex justify-between items-center mb-6">
-        <div>
-          <h1 className="text-3xl font-bold">Users</h1>
-          <p className="text-muted-foreground mt-1">Manage users and accounts</p>
-        </div>
+    <div className="p-6 lg:p-8">
+      <div className="mb-6">
+        <h1 className="text-2xl font-semibold tracking-tight">Users</h1>
+        <p className="text-sm text-muted-foreground mt-1">Manage users and accounts</p>
       </div>
 
       <DataTable
@@ -86,7 +84,7 @@ function Users() {
         defaultSortBy="id"
         defaultSortDesc={false}
         toolbarActions={
-          <Button className="ml-auto">
+          <Button className="ml-auto" disabled title="Coming soon">
             <PlusIcon aria-hidden="true" className="-ms-1 opacity-60" size={16} />
             Add user
           </Button>

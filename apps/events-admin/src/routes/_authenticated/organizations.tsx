@@ -24,10 +24,10 @@ export const Route = createFileRoute('/_authenticated/organizations')({
 
 function OrganizationsLoading() {
   return (
-    <div className="p-8">
+    <div className="p-6 lg:p-8">
       {/* Header */}
       <div className="mb-6 space-y-2">
-        <Skeleton className="h-9 w-40" />
+        <Skeleton className="h-8 w-40" />
         <Skeleton className="h-5 w-48" />
       </div>
 
@@ -95,12 +95,10 @@ function Organizations() {
   }
 
   return (
-    <div className="p-8">
-      <div className="mb-6 flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">Organizations</h1>
-          <p className="mt-1 text-muted-foreground">Manage organizations</p>
-        </div>
+    <div className="p-6 lg:p-8">
+      <div className="mb-6">
+        <h1 className="text-2xl font-semibold tracking-tight">Organizations</h1>
+        <p className="text-sm text-muted-foreground mt-1">Manage organizations</p>
       </div>
 
       <DataTable

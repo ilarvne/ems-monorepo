@@ -115,8 +115,8 @@ function Analytics() {
   return (
     <div className="flex flex-col gap-6">
       <div className="px-4 lg:px-6">
-        <h1 className="text-3xl font-bold tracking-tight">Event Analytics</h1>
-        <p className="text-muted-foreground mt-2">
+        <h1 className="text-2xl font-semibold tracking-tight">Event Analytics</h1>
+        <p className="text-sm text-muted-foreground mt-1">
           Analyze event performance, identify opportunities, and track organization activity
         </p>
       </div>
