@@ -6,8 +6,6 @@ import {
   FileText,
   HelpCircle,
   LayoutDashboard,
-  Search,
-  Settings,
   Sparkles,
   Tags,
   Users,
@@ -111,19 +109,9 @@ const data = {
   ],
   navSecondary: [
     {
-      title: 'Settings',
-      url: '#',
-      icon: Settings
-    },
-    {
       title: 'Get Help',
       url: '#',
       icon: HelpCircle
-    },
-    {
-      title: 'Search',
-      url: '#',
-      icon: Search
     }
   ],
   documents: [
