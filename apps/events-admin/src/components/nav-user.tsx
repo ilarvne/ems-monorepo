@@ -32,9 +32,9 @@ export function NavUser() {
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size='lg'
-              className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground group-data-[collapsible=icon]:!p-0'
+              className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground group-data-[collapsible=icon]:!p-0 group-data-[collapsible=icon]:!size-12'
             >
-              <Avatar className='h-8 w-8 rounded-lg shrink-0'>
+              <Avatar className='h-8 w-8 rounded-lg shrink-0 group-data-[collapsible=icon]:h-12 group-data-[collapsible=icon]:w-12'>
                 <AvatarImage src="" alt={displayName} />
                 <AvatarFallback className='rounded-lg bg-primary/10 text-primary'>
                   {initials}
