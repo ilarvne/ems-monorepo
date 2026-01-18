@@ -64,9 +64,9 @@ function AuthenticatedLayout() {
       <AppSidebar variant="inset" />
       <SidebarInset>
         <SiteHeader />
-        {/* Main Content with max-width for readability on ultra-wide monitors */}
-        <div className="flex flex-1 flex-col gap-4 p-4">
-          <div className="@container/main mx-auto w-full max-w-7xl py-4 md:py-6">
+        {/* Main Content with consistent padding */}
+        <div className="@container/main flex flex-1 flex-col">
+          <div className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
             <Outlet />
           </div>
         </div>

@@ -22,12 +22,12 @@ function AnalyticsLoading() {
   return (
     <div className="flex flex-col gap-6">
       {/* Page Header */}
-      <div className="px-4 lg:px-6">
+      <div>
         <Skeleton className="h-8 w-40" />
         <Skeleton className="h-4 w-80 mt-2" />
       </div>
 
-      <div className="grid gap-6 px-4 lg:grid-cols-3 lg:px-6">
+      <div className="grid gap-6 lg:grid-cols-3">
         {/* Left Column */}
         <div className="lg:col-span-2 flex flex-col gap-6">
           {/* Heatmap */}
@@ -114,14 +114,14 @@ function Analytics() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="px-4 lg:px-6">
+      <div>
         <h1 className="text-2xl font-semibold tracking-tight">Event Analytics</h1>
         <p className="text-sm text-muted-foreground mt-1">
           Analyze event performance, identify opportunities, and track organization activity
         </p>
       </div>
 
-      <div className="grid gap-6 px-4 lg:grid-cols-3 lg:px-6">
+      <div className="grid gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2 flex flex-col gap-6">
           <EventActivity year={currentYear} />
           <ChartAreaInteractive />

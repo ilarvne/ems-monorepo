@@ -46,7 +46,7 @@ export const Route = createFileRoute('/_authenticated/events')({
 
 function EventsLoading() {
   return (
-    <div className="p-6 lg:p-8 space-y-4">
+    <div className="space-y-4">
       {/* Header */}
       <div>
         <Skeleton className="h-7 w-24" />
@@ -364,7 +364,7 @@ function Events() {
   }, [filteredEvents, selectedEventIds])
 
   return (
-    <div className="p-6 lg:p-8 space-y-4">
+    <div className="space-y-6">
       {/* Page Header */}
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">Events</h1>

@@ -23,7 +23,7 @@ function DashboardLoading() {
   return (
     <div className="flex flex-col gap-6">
       {/* KPI Cards */}
-      <div className="grid grid-cols-1 gap-4 px-4 sm:grid-cols-2 lg:grid-cols-4 lg:px-6">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {Array.from({ length: 4 }).map((_, i) => (
           <Card key={i}>
             <CardHeader>
@@ -35,7 +35,7 @@ function DashboardLoading() {
       </div>
 
       {/* Charts Row */}
-      <div className="grid grid-cols-1 gap-6 px-4 lg:px-6 xl:grid-cols-3">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
         <Card className="xl:col-span-2">
           <CardHeader>
             <Skeleton className="h-5 w-32" />
@@ -57,7 +57,7 @@ function DashboardLoading() {
       </div>
 
       {/* Analytics Row */}
-      <div className="grid grid-cols-1 gap-6 px-4 lg:px-6 xl:grid-cols-5">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-5">
         <Card className="xl:col-span-2">
           <CardHeader>
             <Skeleton className="h-5 w-32" />
@@ -81,32 +81,28 @@ function DashboardLoading() {
       </div>
 
       {/* Heatmap */}
-      <div className="px-4 lg:px-6">
-        <Card>
-          <CardHeader>
-            <Skeleton className="h-5 w-32" />
-            <Skeleton className="h-4 w-40 mt-1" />
-          </CardHeader>
-          <CardContent>
-            <Skeleton className="h-[100px] w-full" />
-          </CardContent>
-        </Card>
-      </div>
+      <Card>
+        <CardHeader>
+          <Skeleton className="h-5 w-32" />
+          <Skeleton className="h-4 w-40 mt-1" />
+        </CardHeader>
+        <CardContent>
+          <Skeleton className="h-[100px] w-full" />
+        </CardContent>
+      </Card>
 
       {/* Table */}
-      <div className="px-4 lg:px-6">
-        <Card>
-          <CardHeader>
-            <Skeleton className="h-5 w-36" />
-            <Skeleton className="h-4 w-64 mt-1" />
-          </CardHeader>
-          <CardContent className="space-y-2">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <Skeleton key={i} className="h-12 w-full" />
-            ))}
-          </CardContent>
-        </Card>
-      </div>
+      <Card>
+        <CardHeader>
+          <Skeleton className="h-5 w-36" />
+          <Skeleton className="h-4 w-64 mt-1" />
+        </CardHeader>
+        <CardContent className="space-y-2">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <Skeleton key={i} className="h-12 w-full" />
+          ))}
+        </CardContent>
+      </Card>
     </div>
   )
 }
@@ -121,13 +117,13 @@ function Dashboard() {
       <SectionCards />
 
       {/* Charts Row: Area Chart (2/3) + Pie Chart (1/3) */}
-      <div className="grid grid-cols-1 gap-6 px-4 lg:px-6 xl:grid-cols-3">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
         <ChartAreaInteractive />
         <ChartPieInteractive year={currentYear} month={currentMonth} />
       </div>
 
       {/* Analytics Row: Radial Chart (2/5) + Leaderboard (3/5) */}
-      <div className="grid grid-cols-1 gap-6 px-4 lg:px-6 xl:grid-cols-5">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-5">
         <div className="xl:col-span-2">
           <ChartRadialEngagement />
         </div>
@@ -137,14 +133,10 @@ function Dashboard() {
       </div>
 
       {/* Event Activity Heatmap */}
-      <div className="px-4 lg:px-6">
-        <EventActivity year={currentYear} />
-      </div>
+      <EventActivity year={currentYear} />
 
       {/* Event Analytics Table */}
-      <div className="px-4 lg:px-6">
-        <EventAnalytics />
-      </div>
+      <EventAnalytics />
     </div>
   )
 }

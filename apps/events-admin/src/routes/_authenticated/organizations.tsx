@@ -24,7 +24,7 @@ export const Route = createFileRoute('/_authenticated/organizations')({
 
 function OrganizationsLoading() {
   return (
-    <div className="p-6 lg:p-8">
+    <div className="space-y-4">
       {/* Header */}
       <div className="mb-6 space-y-2">
         <Skeleton className="h-8 w-40" />
@@ -95,8 +95,8 @@ function Organizations() {
   }
 
   return (
-    <div className="p-6 lg:p-8">
-      <div className="mb-6">
+    <div className="space-y-6">
+      <div>
         <h1 className="text-2xl font-semibold tracking-tight">Organizations</h1>
         <p className="text-sm text-muted-foreground mt-1">Manage organizations</p>
       </div>

@@ -6,9 +6,5 @@ export const Route = createFileRoute('/_authenticated/calendar')({
 })
 
 function CalendarPage() {
-  return (
-    <div className='p-6 lg:p-8'>
-      <Calendar />
-    </div>
-  )
+  return <Calendar />
 }
