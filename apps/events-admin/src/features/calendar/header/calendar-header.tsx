@@ -17,10 +17,12 @@ import { TodayButton } from "@/features/calendar/header/today-button";
 import { UserSelect } from "@/features/calendar/header/user-select";
 import { Settings } from "@/features/calendar/settings/settings";
 import { CreateEventForm } from "@/features/events/components";
+import { useAuth } from "@/lib/auth";
 import Views from "./view-tabs";
 
 export function CalendarHeader() {
 	const { view, events } = useCalendar();
+	const { isGuest } = useAuth();
 	const [isCreateOpen, setIsCreateOpen] = useState(false);
 
 	return (
@@ -51,14 +53,18 @@ export function CalendarHeader() {
 				<div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:gap-1.5">
 					<UserSelect />
 
-					<Button onClick={() => setIsCreateOpen(true)}>
-						<Plus className="h-4 w-4" />
-						Add Event
-					</Button>
+					{!isGuest && (
+						<>
+							<Button onClick={() => setIsCreateOpen(true)}>
+								<Plus className="h-4 w-4" />
+								Add Event
+							</Button>
 
-					<Suspense fallback={<div className="h-10 w-10 flex items-center justify-center"><Loader2 className="h-4 w-4 animate-spin" /></div>}>
-						<CreateEventForm open={isCreateOpen} onOpenChange={setIsCreateOpen} />
-					</Suspense>
+							<Suspense fallback={<div className="h-10 w-10 flex items-center justify-center"><Loader2 className="h-4 w-4 animate-spin" /></div>}>
+								<CreateEventForm open={isCreateOpen} onOpenChange={setIsCreateOpen} />
+							</Suspense>
+						</>
+					)}
 				</div>
 				<Settings />
 			</motion.div>

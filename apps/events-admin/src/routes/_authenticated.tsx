@@ -42,8 +42,8 @@ function AuthenticatedLayout() {
     return (
       <div className="min-h-screen bg-background">
         <GuestHeader />
-        <main className="container py-6">
-          <div className="@container/main mx-auto w-full max-w-7xl">
+        <main className="@container/main flex flex-1 flex-col">
+          <div className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
             <Outlet />
           </div>
         </main>

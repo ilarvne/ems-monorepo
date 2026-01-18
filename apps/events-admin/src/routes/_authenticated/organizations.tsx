@@ -13,6 +13,7 @@ import { Skeleton } from '@repo/ui/components/skeleton'
 import { DataTable, useDataTableState } from '@/components/admin-data-table'
 import { columns } from '@/features/organizations/organizations.columns'
 import { CreateOrganizationForm } from '@/features/organizations/components/create-organization-form'
+import { useAuth } from '@/lib/auth'
 
 export const Route = createFileRoute('/_authenticated/organizations')({
   component: () => (
@@ -67,6 +68,7 @@ const statusOptions = [
 ]
 
 function Organizations() {
+  const { isGuest } = useAuth()
   const { tableState } = useDataTableState({ defaultSortBy: 'title', defaultSortDesc: false })
   const [isCreateOpen, setIsCreateOpen] = useState(false)
 
@@ -111,6 +113,7 @@ function Organizations() {
         entityName="organizations"
         defaultSortBy="title"
         defaultSortDesc={false}
+        readOnly={isGuest}
         filterComponents={
           <StatusFilter
             statusOptions={statusOptions}
@@ -119,10 +122,12 @@ function Organizations() {
           />
         }
         toolbarActions={
-          <Button className="ml-auto" onClick={() => setIsCreateOpen(true)}>
-            <PlusIcon aria-hidden="true" className="-ms-1 opacity-60" size={16} />
-            Add organization
-          </Button>
+          !isGuest && (
+            <Button className="ml-auto" onClick={() => setIsCreateOpen(true)}>
+              <PlusIcon aria-hidden="true" className="-ms-1 opacity-60" size={16} />
+              Add organization
+            </Button>
+          )
         }
       />
 

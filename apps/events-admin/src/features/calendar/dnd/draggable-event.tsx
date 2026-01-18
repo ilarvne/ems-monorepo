@@ -3,6 +3,7 @@ import type React from "react";
 import type { ReactNode } from "react";
 import { useDragDrop } from "@/features/calendar/contexts/dnd-context";
 import type { IEvent } from "@/features/calendar/interfaces";
+import { useAuth } from "@/lib/auth";
 
 interface DraggableEventProps {
 	event: IEvent;
@@ -15,6 +16,7 @@ export function DraggableEvent({
 	children,
 	className,
 }: DraggableEventProps) {
+	const { isGuest } = useAuth();
 	const { startDrag, endDrag, isDragging, draggedEvent } = useDragDrop();
 
 	const isCurrentlyDragged = isDragging && draggedEvent?.id === event.id;
@@ -22,6 +24,15 @@ export function DraggableEvent({
 	const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
 		e.stopPropagation();
 	};
+
+	// Guests cannot drag events
+	if (isGuest) {
+		return (
+			<div className={className} onClick={handleClick}>
+				{children}
+			</div>
+		);
+	}
 
 	return (
 		<motion.div

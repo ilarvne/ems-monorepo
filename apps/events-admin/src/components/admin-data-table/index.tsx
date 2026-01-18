@@ -99,6 +99,8 @@ export interface DataTableProps<TData> {
   isDeleting?: boolean
   pageSizeOptions?: number[]
   getRowId?: (row: TData) => string
+  /** When true, hides select/delete columns and selection controls (for guest/read-only mode) */
+  readOnly?: boolean
 }
 
 // ============================================================================
@@ -129,7 +131,8 @@ export function DataTable<TData extends { id?: string | number }>({
   onDeleteSelected,
   isDeleting = false,
   pageSizeOptions = [10, 25, 50, 100],
-  getRowId: customGetRowId
+  getRowId: customGetRowId,
+  readOnly = false
 }: DataTableProps<TData>) {
   const id = useId()
   const tableContainerRef = useRef<HTMLDivElement>(null)
@@ -225,65 +228,72 @@ export function DataTable<TData extends { id?: string | number }>({
     [setTableState]
   )
 
-  // Column with select checkbox and delete action
+  // Column with select checkbox and delete action (only when not readOnly)
   const columns: ColumnDef<TData>[] = useMemo(
-    () => [
-      {
-        id: 'select',
-        size: 48,
-        minSize: 48,
-        maxSize: 48,
-        enableHiding: false,
-        enableSorting: false,
-        header: () => null, // We use the Select All button in toolbar instead
-        cell: ({ row }) => (
-          <div
-            className="flex items-center justify-center"
-            onClick={(e) => e.stopPropagation()} // Prevent row click when clicking checkbox
-          >
-            <Checkbox
-              checked={row.getIsSelected()}
-              onCheckedChange={(value) => row.toggleSelected(!!value)}
-              aria-label="Select row"
-              className="data-[state=checked]:bg-primary data-[state=checked]:border-primary"
-            />
-          </div>
-        )
-      },
-      ...baseColumns.filter((col) => col.id !== 'actions'), // Remove old actions column
-      {
-        id: 'delete',
-        size: 48,
-        minSize: 48,
-        maxSize: 48,
-        enableHiding: false,
-        enableSorting: false,
-        header: () => null,
-        cell: ({ row }) => (
-          <div
-            className="flex items-center justify-center"
-            onClick={(e) => e.stopPropagation()} // Prevent row click when clicking delete
-          >
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
-              onClick={() => {
-                const rowId = row.original.id
-                if (rowId !== undefined && onDeleteSelected) {
-                  setPendingDeleteIds([rowId])
-                  setDeleteConfirmOpen(true)
-                }
-              }}
-              aria-label="Delete row"
-            >
-              <Trash2Icon className="h-4 w-4" />
-            </Button>
-          </div>
-        )
+    () => {
+      // In readOnly mode, just use base columns without select/delete
+      if (readOnly) {
+        return baseColumns.filter((col) => col.id !== 'actions')
       }
-    ],
-    [baseColumns, onDeleteSelected]
+
+      return [
+        {
+          id: 'select',
+          size: 48,
+          minSize: 48,
+          maxSize: 48,
+          enableHiding: false,
+          enableSorting: false,
+          header: () => null, // We use the Select All button in toolbar instead
+          cell: ({ row }) => (
+            <div
+              className="flex items-center justify-center"
+              onClick={(e) => e.stopPropagation()} // Prevent row click when clicking checkbox
+            >
+              <Checkbox
+                checked={row.getIsSelected()}
+                onCheckedChange={(value) => row.toggleSelected(!!value)}
+                aria-label="Select row"
+                className="data-[state=checked]:bg-primary data-[state=checked]:border-primary"
+              />
+            </div>
+          )
+        },
+        ...baseColumns.filter((col) => col.id !== 'actions'), // Remove old actions column
+        {
+          id: 'delete',
+          size: 48,
+          minSize: 48,
+          maxSize: 48,
+          enableHiding: false,
+          enableSorting: false,
+          header: () => null,
+          cell: ({ row }) => (
+            <div
+              className="flex items-center justify-center"
+              onClick={(e) => e.stopPropagation()} // Prevent row click when clicking delete
+            >
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                onClick={() => {
+                  const rowId = row.original.id
+                  if (rowId !== undefined && onDeleteSelected) {
+                    setPendingDeleteIds([rowId])
+                    setDeleteConfirmOpen(true)
+                  }
+                }}
+                aria-label="Delete row"
+              >
+                <Trash2Icon className="h-4 w-4" />
+              </Button>
+            </div>
+          )
+        }
+      ]
+    },
+    [baseColumns, onDeleteSelected, readOnly]
   )
 
   // Custom getRowId function
@@ -518,25 +528,27 @@ export function DataTable<TData extends { id?: string | number }>({
         filterSlot={filterComponents}
         actionSlot={
           <div className="flex items-center gap-2">
-            {/* Select All / Deselect All Button */}
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleSelectAll}
-              className="h-9 gap-2"
-            >
-              {isAllSelected || isSomeSelected ? (
-                <>
-                  <CircleXIcon className="h-4 w-4" />
-                  Deselect All
-                </>
-              ) : (
-                <>
-                  <CheckIcon className="h-4 w-4" />
-                  Select All
-                </>
-              )}
-            </Button>
+            {/* Select All / Deselect All Button - hidden in readOnly mode */}
+            {!readOnly && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleSelectAll}
+                className="h-9 gap-2"
+              >
+                {isAllSelected || isSomeSelected ? (
+                  <>
+                    <CircleXIcon className="h-4 w-4" />
+                    Deselect All
+                  </>
+                ) : (
+                  <>
+                    <CheckIcon className="h-4 w-4" />
+                    Select All
+                  </>
+                )}
+              </Button>
+            )}
 
             {toolbarActions}
           </div>
