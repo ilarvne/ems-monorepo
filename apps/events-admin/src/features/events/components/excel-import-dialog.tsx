@@ -294,7 +294,7 @@ export function ExcelImportDialog({ open, onOpenChange }: ExcelImportDialogProps
         </DialogHeader>
 
         {/* Content */}
-        <div className="flex-1 overflow-hidden">
+        <div className="flex-1 min-h-0 overflow-hidden">
           {/* Upload Step */}
           {step === 'upload' && (
             <div className="px-5 pb-5">
@@ -314,7 +314,7 @@ export function ExcelImportDialog({ open, onOpenChange }: ExcelImportDialogProps
 
           {/* Preview Step */}
           {step === 'preview' && parseResult && (
-            <div className="flex flex-col h-full">
+            <div className="flex flex-col h-full min-h-0">
               {/* Toolbar */}
               <div className="px-5 pb-3 flex items-center justify-between gap-3 border-b">
                 <div className="flex items-center gap-3">
