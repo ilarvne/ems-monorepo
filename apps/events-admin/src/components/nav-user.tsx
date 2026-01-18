@@ -14,13 +14,12 @@ import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '@re
 import { useAuth, getUserDisplayName, getUserInitials, getUserEmail } from '@/lib/auth'
 
 export function NavUser() {
-  const { isMobile, state } = useSidebar()
+  const { isMobile } = useSidebar()
   const { session, logout } = useAuth()
 
   const displayName = getUserDisplayName(session)
   const initials = getUserInitials(session)
   const email = getUserEmail(session)
-  const isCollapsed = state === 'collapsed'
 
   const handleLogout = async () => {
     await logout()
@@ -33,7 +32,7 @@ export function NavUser() {
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size='lg'
-              className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'
+              className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground group-data-[collapsible=icon]:!p-0'
             >
               <Avatar className='h-8 w-8 rounded-lg shrink-0'>
                 <AvatarImage src="" alt={displayName} />
@@ -41,15 +40,11 @@ export function NavUser() {
                   {initials}
                 </AvatarFallback>
               </Avatar>
-              {!isCollapsed && (
-                <>
-                  <div className='grid flex-1 text-left text-sm leading-tight'>
-                    <span className='truncate font-medium'>{displayName}</span>
-                    <span className='text-muted-foreground truncate text-xs'>{email}</span>
-                  </div>
-                  <MoreVertical className='ml-auto size-4' />
-                </>
-              )}
+              <div className='grid flex-1 text-left text-sm leading-tight group-data-[collapsible=icon]:hidden'>
+                <span className='truncate font-medium'>{displayName}</span>
+                <span className='text-muted-foreground truncate text-xs'>{email}</span>
+              </div>
+              <MoreVertical className='ml-auto size-4 group-data-[collapsible=icon]:hidden' />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
