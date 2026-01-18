@@ -269,7 +269,7 @@ export function ExcelImportDialog({ open, onOpenChange }: ExcelImportDialogProps
     <Dialog open={open} onOpenChange={(open) => !open && handleClose()}>
       <DialogContent
         className={cn(
-          'flex flex-col p-0 gap-0',
+          '!grid-rows-[auto_1fr_auto] p-0 gap-0',
           step === 'preview' ? 'sm:max-w-3xl max-h-[80vh]' : 'sm:max-w-md'
         )}
       >
@@ -294,7 +294,7 @@ export function ExcelImportDialog({ open, onOpenChange }: ExcelImportDialogProps
         </DialogHeader>
 
         {/* Content */}
-        <div className="flex-1 min-h-0 overflow-hidden">
+        <div className="min-h-0 overflow-hidden">
           {/* Upload Step */}
           {step === 'upload' && (
             <div className="px-5 pb-5">
@@ -314,7 +314,7 @@ export function ExcelImportDialog({ open, onOpenChange }: ExcelImportDialogProps
 
           {/* Preview Step */}
           {step === 'preview' && parseResult && (
-            <div className="flex flex-col h-full min-h-0">
+            <div className="flex flex-col h-full overflow-hidden">
               {/* Toolbar */}
               <div className="px-5 pb-3 flex items-center justify-between gap-3 border-b">
                 <div className="flex items-center gap-3">
@@ -364,7 +364,7 @@ export function ExcelImportDialog({ open, onOpenChange }: ExcelImportDialogProps
               )}
 
               {/* Event List */}
-              <ScrollArea className="flex-1">
+              <ScrollArea className="flex-1 min-h-0">
                 <div className="divide-y">
                   {paginatedIndices.map((index) => {
                     const event = parseResult.events[index]
