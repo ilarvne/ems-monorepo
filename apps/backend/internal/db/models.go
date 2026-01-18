@@ -324,6 +324,8 @@ type User struct {
 	Password  string             `json:"password"`
 	CreatedAt pgtype.Timestamptz `json:"created_at"`
 	UpdatedAt pgtype.Timestamptz `json:"updated_at"`
+	FirstName pgtype.Text        `json:"first_name"`
+	LastName  pgtype.Text        `json:"last_name"`
 }
 
 type UserRole struct {

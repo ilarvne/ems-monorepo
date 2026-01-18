@@ -8,6 +8,8 @@ export const users = pgTable('users', (t) => ({
   kratosId: t.text('kratos_id').unique(), // UUID from Ory Kratos identity
   username: t.text().notNull().unique(),
   email: t.text().notNull().unique(),
+  firstName: t.text('first_name'),
+  lastName: t.text('last_name'),
   password: t.text().notNull().default('kratos-managed'), // Placeholder - auth handled by Kratos
   createdAt: t.timestamp({ withTimezone: true, mode: 'string' }).defaultNow().notNull(),
   updatedAt: t.timestamp({ withTimezone: true, mode: 'string' }).defaultNow().$onUpdateFn(() => new Date().toISOString()).notNull()

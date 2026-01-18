@@ -19,9 +19,23 @@ import { UserAvatar } from './user-avatar'
 
 // Custom filter function for multi-column searching
 export const multiColumnFilterFn: FilterFn<User> = (row, _columnId, filterValue) => {
-  const searchableRowContent = `${row.original.username} ${row.original.email}`.toLowerCase()
+  const { firstName, lastName, username, email } = row.original
+  const fullName = firstName && lastName ? `${firstName} ${lastName}` : ''
+  const searchableRowContent = `${fullName} ${username} ${email}`.toLowerCase()
   const searchTerm = (filterValue ?? '').toLowerCase()
   return searchableRowContent.includes(searchTerm)
+}
+
+// Helper to get display name
+function getDisplayName(user: User): { name: string; isPending: boolean } {
+  if (user.firstName && user.lastName) {
+    return { name: `${user.firstName} ${user.lastName}`, isPending: false }
+  }
+  if (user.firstName) {
+    return { name: user.firstName, isPending: false }
+  }
+  // No name set - show username but mark as pending
+  return { name: user.username, isPending: true }
 }
 
 // Helper to get role badge styling
@@ -48,20 +62,24 @@ export const columns: ColumnDef<User>[] = [
     cell: ({ row }) => <span className="font-mono text-xs text-muted-foreground">{row.original.id}</span>
   },
   {
-    accessorKey: 'username',
-    header: 'User',
+    id: 'name',
+    accessorKey: 'firstName',
+    header: 'Name',
     size: 200,
     minSize: 150,
     enableSorting: true,
     filterFn: multiColumnFilterFn,
     cell: ({ row }) => {
-      const username = row.getValue('username') as string
+      const { name, isPending } = getDisplayName(row.original)
       return (
         <div className="flex items-center gap-2 min-w-0">
-          <UserAvatar username={username} />
-          <span className="font-medium text-sm truncate" title={username}>
-            {username}
-          </span>
+          <UserAvatar username={row.original.username} />
+          <div className="flex flex-col min-w-0">
+            <span className="font-medium text-sm truncate" title={name}>
+              {name}
+            </span>
+            {isPending && <span className="text-xs text-muted-foreground">Profile incomplete</span>}
+          </div>
         </div>
       )
     }

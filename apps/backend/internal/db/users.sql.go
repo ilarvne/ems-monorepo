@@ -67,7 +67,7 @@ func (q *Queries) CreatePreRegisteredUser(ctx context.Context, arg CreatePreRegi
 const createUser = `-- name: CreateUser :one
 INSERT INTO users (username, email, password)
 VALUES ($1, $2, $3)
-RETURNING id, kratos_id, username, email, password, created_at, updated_at
+RETURNING id, kratos_id, username, email, password, created_at, updated_at, first_name, last_name
 `
 
 type CreateUserParams struct {
@@ -87,6 +87,8 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 		&i.Password,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+		&i.FirstName,
+		&i.LastName,
 	)
 	return i, err
 }
@@ -95,7 +97,7 @@ const createUserFromKratos = `-- name: CreateUserFromKratos :one
 INSERT INTO users (kratos_id, username, email, password)
 VALUES ($1, $2, $3, 'kratos-managed')
 ON CONFLICT (email) DO UPDATE SET kratos_id = $1, updated_at = NOW()
-RETURNING id, kratos_id, username, email, password, created_at, updated_at
+RETURNING id, kratos_id, username, email, password, created_at, updated_at, first_name, last_name
 `
 
 type CreateUserFromKratosParams struct {
@@ -115,6 +117,8 @@ func (q *Queries) CreateUserFromKratos(ctx context.Context, arg CreateUserFromKr
 		&i.Password,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+		&i.FirstName,
+		&i.LastName,
 	)
 	return i, err
 }
@@ -158,7 +162,7 @@ func (q *Queries) GetPreRegisteredUserByEmail(ctx context.Context, email string)
 }
 
 const getUser = `-- name: GetUser :one
-SELECT id, kratos_id, username, email, password, created_at, updated_at FROM users WHERE id = $1
+SELECT id, kratos_id, username, email, password, created_at, updated_at, first_name, last_name FROM users WHERE id = $1
 `
 
 func (q *Queries) GetUser(ctx context.Context, id int32) (User, error) {
@@ -172,12 +176,14 @@ func (q *Queries) GetUser(ctx context.Context, id int32) (User, error) {
 		&i.Password,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+		&i.FirstName,
+		&i.LastName,
 	)
 	return i, err
 }
 
 const getUserByEmail = `-- name: GetUserByEmail :one
-SELECT id, kratos_id, username, email, password, created_at, updated_at FROM users WHERE email = $1
+SELECT id, kratos_id, username, email, password, created_at, updated_at, first_name, last_name FROM users WHERE email = $1
 `
 
 func (q *Queries) GetUserByEmail(ctx context.Context, email string) (User, error) {
@@ -191,12 +197,14 @@ func (q *Queries) GetUserByEmail(ctx context.Context, email string) (User, error
 		&i.Password,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+		&i.FirstName,
+		&i.LastName,
 	)
 	return i, err
 }
 
 const getUserByKratosID = `-- name: GetUserByKratosID :one
-SELECT id, kratos_id, username, email, password, created_at, updated_at FROM users WHERE kratos_id = $1
+SELECT id, kratos_id, username, email, password, created_at, updated_at, first_name, last_name FROM users WHERE kratos_id = $1
 `
 
 func (q *Queries) GetUserByKratosID(ctx context.Context, kratosID pgtype.Text) (User, error) {
@@ -210,12 +218,14 @@ func (q *Queries) GetUserByKratosID(ctx context.Context, kratosID pgtype.Text) (
 		&i.Password,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+		&i.FirstName,
+		&i.LastName,
 	)
 	return i, err
 }
 
 const getUserByUsername = `-- name: GetUserByUsername :one
-SELECT id, kratos_id, username, email, password, created_at, updated_at FROM users WHERE username = $1
+SELECT id, kratos_id, username, email, password, created_at, updated_at, first_name, last_name FROM users WHERE username = $1
 `
 
 func (q *Queries) GetUserByUsername(ctx context.Context, username string) (User, error) {
@@ -229,6 +239,8 @@ func (q *Queries) GetUserByUsername(ctx context.Context, username string) (User,
 		&i.Password,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+		&i.FirstName,
+		&i.LastName,
 	)
 	return i, err
 }
@@ -276,7 +288,7 @@ func (q *Queries) ListPreRegisteredUsers(ctx context.Context, arg ListPreRegiste
 }
 
 const listUsers = `-- name: ListUsers :many
-SELECT id, kratos_id, username, email, password, created_at, updated_at FROM users
+SELECT id, kratos_id, username, email, password, created_at, updated_at, first_name, last_name FROM users
 ORDER BY id
 LIMIT $1 OFFSET $2
 `
@@ -303,6 +315,8 @@ func (q *Queries) ListUsers(ctx context.Context, arg ListUsersParams) ([]User, e
 			&i.Password,
 			&i.CreatedAt,
 			&i.UpdatedAt,
+			&i.FirstName,
+			&i.LastName,
 		); err != nil {
 			return nil, err
 		}
@@ -348,7 +362,7 @@ SET username = COALESCE($1, username),
     email = COALESCE($2, email),
     updated_at = NOW()
 WHERE id = $3
-RETURNING id, kratos_id, username, email, password, created_at, updated_at
+RETURNING id, kratos_id, username, email, password, created_at, updated_at, first_name, last_name
 `
 
 type UpdateUserParams struct {
@@ -368,6 +382,8 @@ func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) (User, e
 		&i.Password,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+		&i.FirstName,
+		&i.LastName,
 	)
 	return i, err
 }

@@ -386,6 +386,14 @@ func (s *UsersService) dbUserToProto(ctx context.Context, u db.User) *usersv1.Us
 		PlatformRole: usersv1.PlatformRole_PLATFORM_ROLE_USER, // Default
 	}
 
+	// Add name fields if available
+	if u.FirstName.Valid {
+		protoUser.FirstName = &u.FirstName.String
+	}
+	if u.LastName.Valid {
+		protoUser.LastName = &u.LastName.String
+	}
+
 	// Lookup platform role from SpiceDB
 	if s.perms != nil {
 		userIDStr := fmt.Sprintf("%d", u.ID)

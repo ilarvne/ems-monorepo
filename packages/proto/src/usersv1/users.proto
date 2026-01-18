@@ -20,6 +20,8 @@ message User {
   string created_at = 4;
   string updated_at = 5;
   PlatformRole platform_role = 6;  // User's platform-level role
+  optional string first_name = 7;
+  optional string last_name = 8;
 }
 
 // Pre-registered user entry

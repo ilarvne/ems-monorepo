@@ -83,6 +83,8 @@ type User struct {
 	CreatedAt     string                 `protobuf:"bytes,4,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
 	UpdatedAt     string                 `protobuf:"bytes,5,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
 	PlatformRole  PlatformRole           `protobuf:"varint,6,opt,name=platform_role,json=platformRole,proto3,enum=users.v1.PlatformRole" json:"platform_role,omitempty"` // User's platform-level role
+	FirstName     *string                `protobuf:"bytes,7,opt,name=first_name,json=firstName,proto3,oneof" json:"first_name,omitempty"`
+	LastName      *string                `protobuf:"bytes,8,opt,name=last_name,json=lastName,proto3,oneof" json:"last_name,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -157,6 +159,20 @@ func (x *User) GetPlatformRole() PlatformRole {
 		return x.PlatformRole
 	}
 	return PlatformRole_PLATFORM_ROLE_UNSPECIFIED
+}
+
+func (x *User) GetFirstName() string {
+	if x != nil && x.FirstName != nil {
+		return *x.FirstName
+	}
+	return ""
+}
+
+func (x *User) GetLastName() string {
+	if x != nil && x.LastName != nil {
+		return *x.LastName
+	}
+	return ""
 }
 
 // Pre-registered user entry
@@ -1429,7 +1445,7 @@ var File_usersv1_users_proto protoreflect.FileDescriptor
 
 const file_usersv1_users_proto_rawDesc = "" +
 	"\n" +
-	"\x13usersv1/users.proto\x12\busers.v1\"\xc3\x01\n" +
+	"\x13usersv1/users.proto\x12\busers.v1\"\xa6\x02\n" +
 	"\x04User\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x05R\x02id\x12\x1a\n" +
 	"\busername\x18\x02 \x01(\tR\busername\x12\x14\n" +
@@ -1438,7 +1454,13 @@ const file_usersv1_users_proto_rawDesc = "" +
 	"created_at\x18\x04 \x01(\tR\tcreatedAt\x12\x1d\n" +
 	"\n" +
 	"updated_at\x18\x05 \x01(\tR\tupdatedAt\x12;\n" +
-	"\rplatform_role\x18\x06 \x01(\x0e2\x16.users.v1.PlatformRoleR\fplatformRole\"\xd1\x02\n" +
+	"\rplatform_role\x18\x06 \x01(\x0e2\x16.users.v1.PlatformRoleR\fplatformRole\x12\"\n" +
+	"\n" +
+	"first_name\x18\a \x01(\tH\x00R\tfirstName\x88\x01\x01\x12 \n" +
+	"\tlast_name\x18\b \x01(\tH\x01R\blastName\x88\x01\x01B\r\n" +
+	"\v_first_nameB\f\n" +
+	"\n" +
+	"_last_name\"\xd1\x02\n" +
 	"\x11PreRegisteredUser\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x05R\x02id\x12\x14\n" +
 	"\x05email\x18\x02 \x01(\tR\x05email\x12;\n" +
@@ -1635,6 +1657,7 @@ func file_usersv1_users_proto_init() {
 	if File_usersv1_users_proto != nil {
 		return
 	}
+	file_usersv1_users_proto_msgTypes[0].OneofWrappers = []any{}
 	file_usersv1_users_proto_msgTypes[1].OneofWrappers = []any{}
 	file_usersv1_users_proto_msgTypes[12].OneofWrappers = []any{}
 	type x struct{}
