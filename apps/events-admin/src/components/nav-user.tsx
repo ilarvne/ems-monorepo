@@ -14,12 +14,13 @@ import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '@re
 import { useAuth, getUserDisplayName, getUserInitials, getUserEmail } from '@/lib/auth'
 
 export function NavUser() {
-  const { isMobile } = useSidebar()
+  const { isMobile, state } = useSidebar()
   const { session, logout } = useAuth()
 
   const displayName = getUserDisplayName(session)
   const initials = getUserInitials(session)
   const email = getUserEmail(session)
+  const isCollapsed = state === 'collapsed'
 
   const handleLogout = async () => {
     await logout()
@@ -34,17 +35,21 @@ export function NavUser() {
               size='lg'
               className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'
             >
-              <Avatar className='h-8 w-8 rounded-lg'>
+              <Avatar className='h-8 w-8 rounded-lg shrink-0'>
                 <AvatarImage src="" alt={displayName} />
                 <AvatarFallback className='rounded-lg bg-primary/10 text-primary'>
                   {initials}
                 </AvatarFallback>
               </Avatar>
-              <div className='grid flex-1 text-left text-sm leading-tight'>
-                <span className='truncate font-medium'>{displayName}</span>
-                <span className='text-muted-foreground truncate text-xs'>{email}</span>
-              </div>
-              <MoreVertical className='ml-auto size-4' />
+              {!isCollapsed && (
+                <>
+                  <div className='grid flex-1 text-left text-sm leading-tight'>
+                    <span className='truncate font-medium'>{displayName}</span>
+                    <span className='text-muted-foreground truncate text-xs'>{email}</span>
+                  </div>
+                  <MoreVertical className='ml-auto size-4' />
+                </>
+              )}
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
