@@ -1,10 +1,22 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useMemo } from 'react'
 import { useQuery, useMutation } from '@connectrpc/connect-query'
 import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
-import { FileSpreadsheet, Loader2, CheckCircle2, AlertCircle, Download, Undo2, AlertTriangle, ChevronLeft, ChevronRight } from 'lucide-react'
+import {
+  FileSpreadsheet,
+  Loader2,
+  CheckCircle2,
+  AlertCircle,
+  Download,
+  Undo2,
+  AlertTriangle,
+  ChevronLeft,
+  ChevronRight,
+  Check,
+  X
+} from 'lucide-react'
 import * as XLSX from 'xlsx'
 
 import { createEvent, listOrganizations, deleteEvent } from '@repo/proto'
@@ -15,35 +27,15 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
+  DialogTitle
 } from '@repo/ui/components/dialog'
 import { Button } from '@repo/ui/components/button'
 import { ScrollArea } from '@repo/ui/components/scroll-area'
 import { Progress } from '@repo/ui/components/progress'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@repo/ui/components/select'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@repo/ui/components/select'
 import { Label } from '@repo/ui/components/label'
 import { Checkbox } from '@repo/ui/components/checkbox'
-import { Input } from '@repo/ui/components/input'
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@repo/ui/components/tooltip'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@repo/ui/components/table'
+import { Badge } from '@repo/ui/components/badge'
 
 import { FileUpload } from '@repo/ui/components/file-upload'
 import { parseExcelFile, toCreateEventRequest, type ExcelParseResult, type ParsedEvent } from '@/lib/excel-parser'
@@ -63,13 +55,12 @@ interface ImportResult {
   errors: { row: number; title: string; reason: string; originalData: ParsedEvent }[]
 }
 
-const ITEMS_PER_PAGE = 50
+const ITEMS_PER_PAGE = 25
 
 export function ExcelImportDialog({ open, onOpenChange }: ExcelImportDialogProps) {
   const queryClient = useQueryClient()
   const [step, setStep] = useState<ImportStep>('upload')
   const [parseResult, setParseResult] = useState<ExcelParseResult | null>(null)
-  const [editedEvents, setEditedEvents] = useState<Map<number, Partial<ParsedEvent>>>(new Map())
   const [selectedEvents, setSelectedEvents] = useState<Set<number>>(new Set())
   const [defaultOrganizationId, setDefaultOrganizationId] = useState<string>('')
   const [eventOrganizations, setEventOrganizations] = useState<Map<number, string>>(new Map())
@@ -78,37 +69,48 @@ export function ExcelImportDialog({ open, onOpenChange }: ExcelImportDialogProps
     success: 0,
     failed: 0,
     createdIds: [],
-    errors: [],
+    errors: []
   })
   const [currentPage, setCurrentPage] = useState(1)
   const [isUndoing, setIsUndoing] = useState(false)
 
   // Queries & Mutations
   const { data: orgsData } = useQuery(listOrganizations, { page: 1, limit: 100 })
-  const organizations = orgsData?.organizations || []
-  
+  const organizations = useMemo(() => orgsData?.organizations || [], [orgsData?.organizations])
+
   const createMutation = useMutation(createEvent)
   const deleteMutation = useMutation(deleteEvent)
 
   // Build organization lookup
-  const orgNameToId = new Map<string, number>()
-  organizations.forEach((org) => {
-    orgNameToId.set(org.title.toLowerCase(), org.id)
-    orgNameToId.set(org.title, org.id)
-  })
-  
-  const findOrgIdByName = useCallback((name: string | null | undefined): string | null => {
-    if (!name) return null
-    const id = orgNameToId.get(name) || orgNameToId.get(name.toLowerCase())
-    return id ? String(id) : null
-  }, [orgNameToId])
+  const orgNameToId = useMemo(() => {
+    const map = new Map<string, number>()
+    organizations.forEach((org) => {
+      map.set(org.title.toLowerCase(), org.id)
+      map.set(org.title, org.id)
+    })
+    return map
+  }, [organizations])
+
+  const orgIdToName = useMemo(() => {
+    const map = new Map<number, string>()
+    organizations.forEach((org) => map.set(org.id, org.title))
+    return map
+  }, [organizations])
+
+  const findOrgIdByName = useCallback(
+    (name: string | null | undefined): string | null => {
+      if (!name) return null
+      const id = orgNameToId.get(name) || orgNameToId.get(name.toLowerCase())
+      return id ? String(id) : null
+    },
+    [orgNameToId]
+  )
 
   // Handlers
   const handleFileChange = async (files: File[]) => {
     if (files.length === 0) return
     const file = files[0]
-    
-    // Manual MIME check as fallback
+
     if (!file.name.match(/\.(xlsx|xls)$/i)) {
       toast.error('Invalid file type', { description: 'Please upload an Excel file (.xlsx or .xls)' })
       return
@@ -116,10 +118,11 @@ export function ExcelImportDialog({ open, onOpenChange }: ExcelImportDialogProps
 
     const result = await parseExcelFile(file)
     setParseResult(result)
-    
+
     if (result.success && result.events.length > 0) {
       setSelectedEvents(new Set(result.events.map((_, i) => i)))
-      
+
+      // Auto-match organizations
       const orgAssignments = new Map<number, string>()
       result.events.forEach((event, index) => {
         const orgId = findOrgIdByName(event.normalizedOrganization)
@@ -137,30 +140,30 @@ export function ExcelImportDialog({ open, onOpenChange }: ExcelImportDialogProps
 
     const selectedIndices = Array.from(selectedEvents)
     if (selectedIndices.length === 0) {
-      toast.error('Selection Empty', { description: 'Please select at least one event to import' })
+      toast.error('No events selected', { description: 'Select at least one event to import' })
       return
     }
-    
+
     const missingOrgs = selectedIndices.filter((index) => {
       return !eventOrganizations.has(index) && !defaultOrganizationId
     })
     if (missingOrgs.length > 0) {
-      toast.error('Missing Organizations', { description: `${missingOrgs.length} events need an organization assigned.` })
+      toast.error('Missing organizations', {
+        description: `${missingOrgs.length} events need an organization. Set a fallback or deselect them.`
+      })
       return
     }
 
     setStep('importing')
     setImportProgress(0)
-    
-    const results: ImportResult = { success: 0, failed: 0, createdIds: [], errors: [] }
-    const mergedEvents = parseResult.events.map((event, i) => ({ ...event, ...(editedEvents.get(i) || {}) }))
 
-    // Process sequentially to maintain order and allow progress tracking
+    const results: ImportResult = { success: 0, failed: 0, createdIds: [], errors: [] }
+
     for (let i = 0; i < selectedIndices.length; i++) {
       const index = selectedIndices[i]
-      const event = mergedEvents[index]
+      const event = parseResult.events[index]
       const orgId = eventOrganizations.get(index) || defaultOrganizationId
-      
+
       try {
         const request = toCreateEventRequest(event, parseInt(orgId), 0)
         const response = await createMutation.mutateAsync(request)
@@ -187,17 +190,15 @@ export function ExcelImportDialog({ open, onOpenChange }: ExcelImportDialogProps
 
   const handleUndo = async () => {
     if (importResults.createdIds.length === 0) return
-    
+
     setIsUndoing(true)
-    let undoneCount = 0
-    
+
     try {
-      await Promise.all(importResults.createdIds.map(id => deleteMutation.mutateAsync({ id })))
-      undoneCount = importResults.createdIds.length
-      toast.success('Import Undone', { description: `Successfully removed ${undoneCount} created events.` })
+      await Promise.all(importResults.createdIds.map((id) => deleteMutation.mutateAsync({ id })))
+      toast.success('Import undone', { description: `Removed ${importResults.createdIds.length} events` })
       handleClose()
     } catch {
-      toast.error('Undo Partial/Failed', { description: 'Some events could not be removed. Please check manually.' })
+      toast.error('Undo failed', { description: 'Some events could not be removed' })
     } finally {
       setIsUndoing(false)
     }
@@ -206,26 +207,20 @@ export function ExcelImportDialog({ open, onOpenChange }: ExcelImportDialogProps
   const handleDownloadErrorReport = () => {
     if (importResults.errors.length === 0) return
 
-    // Prepare CSV data
-    const csvData = importResults.errors.map(err => ({
-      'Row Number': err.row,
-      'Event Title': err.title,
-      'Error Reason': err.reason,
-      ...err.originalData // Include original data for context
+    const csvData = importResults.errors.map((err) => ({
+      Row: err.row,
+      Title: err.title,
+      Error: err.reason
     }))
 
-    // Create worksheet
     const ws = XLSX.utils.json_to_sheet(csvData)
     const wb = XLSX.utils.book_new()
-    XLSX.utils.book_append_sheet(wb, ws, 'Import Errors')
-    
-    // Download
+    XLSX.utils.book_append_sheet(wb, ws, 'Errors')
     XLSX.writeFile(wb, `import-errors-${new Date().toISOString().slice(0, 10)}.csv`)
   }
 
   const handleClose = () => {
     setStep('upload')
-    setEditedEvents(new Map())
     setParseResult(null)
     setSelectedEvents(new Set())
     setDefaultOrganizationId('')
@@ -236,14 +231,20 @@ export function ExcelImportDialog({ open, onOpenChange }: ExcelImportDialogProps
     onOpenChange(false)
   }
 
-  // Pagination Logic
+  // Pagination
   const totalItems = parseResult?.events.length || 0
   const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE)
-  const paginatedIndices = parseResult?.events
-    .map((_, i) => i)
-    .slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE) || []
+  const paginatedIndices =
+    parseResult?.events.map((_, i) => i).slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE) || []
 
-  // Toggle selection
+  // Stats
+  const matchedCount = useMemo(() => {
+    if (!parseResult) return 0
+    return Array.from(selectedEvents).filter((i) => eventOrganizations.has(i)).length
+  }, [parseResult, selectedEvents, eventOrganizations])
+
+  const unmatchedCount = selectedEvents.size - matchedCount
+
   const toggleSelectAll = () => {
     if (!parseResult) return
     if (selectedEvents.size === parseResult.events.length) {
@@ -253,58 +254,102 @@ export function ExcelImportDialog({ open, onOpenChange }: ExcelImportDialogProps
     }
   }
 
+  const getOrgDisplay = (index: number) => {
+    const orgId = eventOrganizations.get(index)
+    if (orgId) {
+      return orgIdToName.get(parseInt(orgId)) || 'Unknown'
+    }
+    if (defaultOrganizationId) {
+      return orgIdToName.get(parseInt(defaultOrganizationId)) || 'Fallback'
+    }
+    return null
+  }
+
   return (
     <Dialog open={open} onOpenChange={(open) => !open && handleClose()}>
-      <DialogContent className={cn(
-        "flex flex-col p-0 gap-0 transition-all duration-200",
-        step === 'preview' 
-          ? "w-[95vw] sm:max-w-[1600px] h-[90vh]" 
-          : "w-full max-w-lg sm:max-w-lg rounded-lg border"
-      )}>
-        <DialogHeader className="px-6 py-4 border-b shrink-0">
-          <DialogTitle className="flex items-center gap-2">
-            <FileSpreadsheet className="h-5 w-5" />
-            {step === 'upload' && 'Import Events from Excel'}
-            {step === 'preview' && 'Review & Map Data'}
-            {step === 'importing' && 'Importing Events...'}
+      <DialogContent
+        className={cn(
+          'flex flex-col p-0 gap-0',
+          step === 'preview' ? 'sm:max-w-3xl max-h-[80vh]' : 'sm:max-w-md'
+        )}
+      >
+        {/* Header */}
+        <DialogHeader className="px-5 pt-5 pb-4">
+          <DialogTitle className="flex items-center gap-2 text-base font-semibold">
+            <FileSpreadsheet className="h-4 w-4 text-muted-foreground" />
+            {step === 'upload' && 'Import Events'}
+            {step === 'preview' && 'Review Import'}
+            {step === 'importing' && 'Importing…'}
             {step === 'complete' && 'Import Complete'}
           </DialogTitle>
-          <DialogDescription>
-            {step === 'upload' && 'Upload a spreadsheet to bulk create events. Supports .xlsx and .xls up to 10MB.'}
-            {step === 'preview' && 'Review the data below. Edit values inline or download an error report if needed.'}
-            {step === 'importing' && <span aria-live="polite">Processing {importProgress}%... Do not close this window.</span>}
-            {step === 'complete' && 'Review the results of your import below.'}
+          <DialogDescription className="text-sm">
+            {step === 'upload' && 'Upload an Excel file (.xlsx, .xls) to bulk create events.'}
+            {step === 'preview' && `${parseResult?.events.length || 0} events found. Review and select which to import.`}
+            {step === 'importing' && (
+              <span aria-live="polite">Processing {importProgress}%…</span>
+            )}
+            {step === 'complete' &&
+              `${importResults.success} imported${importResults.failed > 0 ? `, ${importResults.failed} failed` : ''}`}
           </DialogDescription>
         </DialogHeader>
 
-        {/* Content Area */}
-        <div className={cn(
-          "flex-1 relative overflow-hidden bg-muted/5",
-          step !== 'preview' && "min-h-0" 
-        )}>
+        {/* Content */}
+        <div className="flex-1 overflow-hidden">
+          {/* Upload Step */}
           {step === 'upload' && (
-            <div className="p-6">
-              <FileUpload 
-                accept={{ 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx'], 'application/vnd.ms-excel': ['.xls'] }}
-                maxSize={10 * 1024 * 1024} // 10MB
+            <div className="px-5 pb-5">
+              <FileUpload
+                accept={{
+                  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx'],
+                  'application/vnd.ms-excel': ['.xls']
+                }}
+                maxSize={10 * 1024 * 1024}
                 maxFiles={1}
                 onChange={handleFileChange}
-                placeholder="Drag & drop Excel file here"
-                className="bg-background w-full"
+                placeholder="Drop Excel file here or click to browse"
+                className="h-32"
               />
             </div>
           )}
 
+          {/* Preview Step */}
           {step === 'preview' && parseResult && (
-            <div className="h-full flex flex-col">
+            <div className="flex flex-col h-full">
               {/* Toolbar */}
-              <div className="px-6 py-3 border-b bg-background flex items-center justify-between gap-4 shrink-0">
-                <div className="flex items-center gap-4 flex-1">
-                  <div className="grid gap-1.5 flex-1 max-w-sm">
-                    <Label htmlFor="default-org" className="text-xs font-medium text-muted-foreground">Fallback Organization</Label>
+              <div className="px-5 pb-3 flex items-center justify-between gap-3 border-b">
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-1.5 text-xs">
+                    <span className="font-medium tabular-nums">{selectedEvents.size}</span>
+                    <span className="text-muted-foreground">selected</span>
+                  </div>
+                  {matchedCount > 0 && (
+                    <Badge variant="secondary" className="text-xs font-normal gap-1">
+                      <Check className="h-3 w-3" />
+                      {matchedCount} matched
+                    </Badge>
+                  )}
+                  {unmatchedCount > 0 && !defaultOrganizationId && (
+                    <Badge variant="outline" className="text-xs font-normal gap-1 text-amber-600 border-amber-200">
+                      <AlertTriangle className="h-3 w-3" />
+                      {unmatchedCount} need org
+                    </Badge>
+                  )}
+                </div>
+                <Button variant="ghost" size="sm" onClick={toggleSelectAll} className="h-7 text-xs">
+                  {selectedEvents.size === parseResult.events.length ? 'Deselect all' : 'Select all'}
+                </Button>
+              </div>
+
+              {/* Fallback Org Selector */}
+              {unmatchedCount > 0 && (
+                <div className="px-5 py-3 bg-muted/30 border-b">
+                  <div className="flex items-center gap-3">
+                    <Label htmlFor="fallback-org" className="text-xs text-muted-foreground whitespace-nowrap">
+                      Fallback organization:
+                    </Label>
                     <Select value={defaultOrganizationId} onValueChange={setDefaultOrganizationId}>
-                      <SelectTrigger id="default-org" className="h-8 text-xs">
-                        <SelectValue placeholder="Select fallback..." />
+                      <SelectTrigger id="fallback-org" className="h-8 text-xs flex-1 max-w-xs">
+                        <SelectValue placeholder="Select for unmatched events…" />
                       </SelectTrigger>
                       <SelectContent>
                         {organizations.map((org) => (
@@ -315,168 +360,98 @@ export function ExcelImportDialog({ open, onOpenChange }: ExcelImportDialogProps
                       </SelectContent>
                     </Select>
                   </div>
-                  
-                  <div className="h-8 w-px bg-border mx-2" />
-                  
-                  <div className="flex items-center gap-2 text-xs">
-                    <span className="font-medium">{selectedEvents.size}</span> selected
-                    <span className="text-muted-foreground">/ {parseResult.events.length} total</span>
-                  </div>
                 </div>
+              )}
 
-                <div className="flex items-center gap-2">
-                  <Button variant="ghost" size="sm" onClick={toggleSelectAll} className="h-8 text-xs">
-                    {selectedEvents.size === parseResult.events.length ? 'Deselect All' : 'Select All'}
-                  </Button>
-                </div>
-              </div>
+              {/* Event List */}
+              <ScrollArea className="flex-1">
+                <div className="divide-y">
+                  {paginatedIndices.map((index) => {
+                    const event = parseResult.events[index]
+                    const isSelected = selectedEvents.has(index)
+                    const orgDisplay = getOrgDisplay(index)
+                    const hasOrg = !!orgDisplay
 
-              {/* Data Table */}
-              <div className="flex-1 overflow-auto">
-                <Table>
-                  <TableHeader className="bg-muted/50 sticky top-0 z-10">
-                    <TableRow>
-                      <TableHead className="w-[40px] text-center">#</TableHead>
-                      <TableHead className="w-[250px]">Title</TableHead>
-                      <TableHead className="w-[120px]">Dates</TableHead>
-                      <TableHead className="w-[150px]">Location</TableHead>
-                      <TableHead className="w-[100px]">Format</TableHead>
-                      <TableHead className="w-[200px]">Organization</TableHead>
-                      <TableHead className="w-[50px] text-center">Status</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {paginatedIndices.map((index) => {
-                      const event = parseResult.events[index]
-                      const edits = editedEvents.get(index) || {}
-                      const currentEvent = { ...event, ...edits }
-                      const isSelected = selectedEvents.has(index)
-                      const hasOrg = !!(eventOrganizations.get(index) || defaultOrganizationId)
-                      
-                      // Row Validation Logic
-                      const isValid = currentEvent.title && hasOrg
-                      
-                      const updateField = (field: keyof ParsedEvent, value: string | number | undefined) => {
-                        const newMap = new Map(editedEvents)
-                        newMap.set(index, { ...(newMap.get(index) || {}), [field]: value })
-                        setEditedEvents(newMap)
-                      }
-
-                      return (
-                        <TableRow key={index} className={cn(!isSelected && "opacity-50 bg-muted/20")}>
-                          <TableCell className="text-center p-2">
-                            <Checkbox 
-                              checked={isSelected}
-                              onCheckedChange={() => {
-                                const newSet = new Set(selectedEvents)
-                                if (isSelected) newSet.delete(index)
-                                else newSet.add(index)
-                                setSelectedEvents(newSet)
-                              }}
-                            />
-                          </TableCell>
-                          <TableCell className="p-2">
-                            <Input 
-                              value={currentEvent.title} 
-                              onChange={(e) => updateField('title', e.target.value)}
-                              className={cn("h-7 text-xs", !currentEvent.title && "border-destructive")}
-                            />
-                          </TableCell>
-                          <TableCell className="p-2">
-                            <Input 
-                              value={currentEvent.formattedDates || currentEvent.dates || ''} 
-                              onChange={(e) => updateField('formattedDates', e.target.value)}
-                              className="h-7 text-xs"
-                            />
-                          </TableCell>
-                          <TableCell className="p-2">
-                            <Input 
-                              value={currentEvent.location || ''} 
-                              onChange={(e) => updateField('location', e.target.value)}
-                              className="h-7 text-xs"
-                            />
-                          </TableCell>
-                          <TableCell className="p-2">
-                            <Select 
-                              value={String(currentEvent.format)} 
-                              onValueChange={(v) => updateField('format', parseInt(v))}
-                            >
-                              <SelectTrigger className="h-7 text-xs"><SelectValue /></SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="1">Online</SelectItem>
-                                <SelectItem value="2">In-Person</SelectItem>
-                              </SelectContent>
-                            </Select>
-                          </TableCell>
-                          <TableCell className="p-2">
-                            <Select 
-                              value={eventOrganizations.get(index) || ''} 
-                              onValueChange={(v) => {
-                                const newMap = new Map(eventOrganizations)
-                                if (v) newMap.set(index, v)
-                                else newMap.delete(index)
-                                setEventOrganizations(newMap)
-                              }}
-                            >
-                              <SelectTrigger className={cn("h-7 text-xs", !hasOrg && isSelected && "border-warning text-warning-foreground")}>
-                                <SelectValue placeholder={event.normalizedOrganization || "Select..."} />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {organizations.map(org => (
-                                  <SelectItem key={org.id} value={String(org.id)}>{org.title}</SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                          </TableCell>
-                          <TableCell className="text-center p-2">
-                            {isSelected ? (
-                              isValid ? (
-                                <CheckCircle2 className="h-4 w-4 text-green-500 mx-auto" />
-                              ) : (
-                                <TooltipProvider>
-                                  <Tooltip>
-                                    <TooltipTrigger>
-                                      <AlertTriangle className="h-4 w-4 text-amber-500 mx-auto" />
-                                    </TooltipTrigger>
-                                    <TooltipContent>
-                                      <p>Missing required fields (Title or Organization)</p>
-                                    </TooltipContent>
-                                  </Tooltip>
-                                </TooltipProvider>
-                              )
-                            ) : (
-                              <div className="h-4 w-4 rounded-full border border-muted-foreground/30 mx-auto" />
+                    return (
+                      <div
+                        key={index}
+                        className={cn(
+                          'px-5 py-3 flex items-start gap-3 transition-colors',
+                          !isSelected && 'opacity-50'
+                        )}
+                      >
+                        <Checkbox
+                          checked={isSelected}
+                          onCheckedChange={() => {
+                            const newSet = new Set(selectedEvents)
+                            if (isSelected) newSet.delete(index)
+                            else newSet.add(index)
+                            setSelectedEvents(newSet)
+                          }}
+                          className="mt-0.5"
+                        />
+                        <div className="flex-1 min-w-0 space-y-1">
+                          <div className="flex items-center gap-2">
+                            <span className="font-medium text-sm truncate">{event.title || 'Untitled'}</span>
+                            {isSelected && !hasOrg && (
+                              <AlertTriangle className="h-3.5 w-3.5 text-amber-500 shrink-0" />
                             )}
-                          </TableCell>
-                        </TableRow>
-                      )
-                    })}
-                  </TableBody>
-                </Table>
-              </div>
+                          </div>
+                          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                            {event.formattedDates && <span>{event.formattedDates}</span>}
+                            {event.formattedDates && event.location && <span>·</span>}
+                            {event.location && <span className="truncate">{event.location}</span>}
+                          </div>
+                          {orgDisplay && (
+                            <div className="text-xs text-muted-foreground">
+                              <span className="text-foreground/70">{orgDisplay}</span>
+                              {!eventOrganizations.has(index) && defaultOrganizationId && (
+                                <span className="ml-1 text-muted-foreground">(fallback)</span>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                        <div className="shrink-0">
+                          {event.format === 1 ? (
+                            <Badge variant="secondary" className="text-xs font-normal">
+                              Online
+                            </Badge>
+                          ) : (
+                            <Badge variant="outline" className="text-xs font-normal">
+                              In-Person
+                            </Badge>
+                          )}
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              </ScrollArea>
 
               {/* Pagination */}
               {totalPages > 1 && (
-                <div className="flex items-center justify-between px-6 py-2 border-t bg-background shrink-0">
-                  <div className="text-xs text-muted-foreground">
-                    Page {currentPage} of {totalPages}
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Button 
-                      variant="outline" 
-                      size="icon" 
-                      className="h-8 w-8" 
-                      onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                <div className="px-5 py-2 border-t flex items-center justify-between">
+                  <span className="text-xs text-muted-foreground tabular-nums">
+                    {currentPage} / {totalPages}
+                  </span>
+                  <div className="flex items-center gap-1">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-7 w-7"
+                      onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                       disabled={currentPage === 1}
+                      aria-label="Previous page"
                     >
                       <ChevronLeft className="h-4 w-4" />
                     </Button>
-                    <Button 
-                      variant="outline" 
-                      size="icon" 
-                      className="h-8 w-8" 
-                      onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-7 w-7"
+                      onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                       disabled={currentPage === totalPages}
+                      aria-label="Next page"
                     >
                       <ChevronRight className="h-4 w-4" />
                     </Button>
@@ -486,119 +461,114 @@ export function ExcelImportDialog({ open, onOpenChange }: ExcelImportDialogProps
             </div>
           )}
 
+          {/* Importing Step */}
           {step === 'importing' && (
-            <div className="flex flex-col items-center justify-center p-8 space-y-6">
-              <div className="relative">
-                <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full" />
-                <Loader2 className="h-16 w-16 text-primary animate-spin relative" />
-              </div>
-              <div className="text-center space-y-2 w-full max-w-xs">
-                <h3 className="text-lg font-medium">Importing Events</h3>
-                <Progress value={importProgress} className="h-2 w-full" />
-                <p className="text-xs text-muted-foreground text-center" aria-live="polite">
+            <div className="px-5 pb-5 flex flex-col items-center justify-center py-8 space-y-4">
+              <Loader2 className="h-8 w-8 text-primary animate-spin" />
+              <div className="w-full max-w-xs space-y-2">
+                <Progress value={importProgress} className="h-1.5" />
+                <p className="text-xs text-muted-foreground text-center tabular-nums" aria-live="polite">
                   {importProgress}% complete
                 </p>
               </div>
             </div>
           )}
 
+          {/* Complete Step */}
           {step === 'complete' && (
-            <div className="flex flex-col items-center justify-center p-8">
-              <div className="w-full space-y-8">
-                <div className="text-center space-y-4">
-                  {importResults.failed === 0 ? (
-                    <div className="mx-auto h-20 w-20 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center">
-                      <CheckCircle2 className="h-10 w-10 text-green-600 dark:text-green-400" />
-                    </div>
-                  ) : (
-                    <div className="mx-auto h-20 w-20 bg-amber-100 dark:bg-amber-900/30 rounded-full flex items-center justify-center">
-                      <AlertTriangle className="h-10 w-10 text-amber-600 dark:text-amber-400" />
-                    </div>
-                  )}
-                  
-                  <div>
-                    <h3 className="text-2xl font-semibold">Import Complete</h3>
-                    <p className="text-muted-foreground mt-1">
-                      {importResults.success} events created successfully.
-                      {importResults.failed > 0 && ` ${importResults.failed} events failed.`}
-                    </p>
+            <div className="px-5 pb-5">
+              <div className="text-center py-6 space-y-3">
+                {importResults.failed === 0 ? (
+                  <div className="mx-auto h-12 w-12 rounded-full bg-green-50 dark:bg-green-950/30 flex items-center justify-center">
+                    <CheckCircle2 className="h-6 w-6 text-green-600 dark:text-green-400" />
                   </div>
-                </div>
-
-                {/* Error Summary Box */}
-                {importResults.failed > 0 && (
-                  <div className="border rounded-lg bg-background overflow-hidden">
-                    <div className="bg-destructive/5 px-4 py-3 border-b border-destructive/10 flex items-center justify-between">
-                      <div className="flex items-center gap-2 text-sm font-medium text-destructive">
-                        <AlertCircle className="h-4 w-4" />
-                        Failed Rows ({importResults.failed})
-                      </div>
-                      <Button 
-                        variant="ghost" 
-                        size="sm" 
-                        className="h-7 text-xs hover:bg-destructive/10 text-destructive"
-                        onClick={handleDownloadErrorReport}
-                      >
-                        <Download className="h-3 w-3 mr-1.5" />
-                        Download Report
-                      </Button>
-                    </div>
-                    <ScrollArea className="h-[150px]">
-                      <div className="divide-y">
-                        {importResults.errors.map((err, i) => (
-                          <div key={i} className="px-4 py-3 text-sm flex gap-3">
-                            <span className="font-mono text-xs text-muted-foreground shrink-0 mt-0.5">Row {err.row}</span>
-                            <div className="space-y-0.5">
-                              <p className="font-medium leading-none">{err.title || 'Untitled Event'}</p>
-                              <p className="text-xs text-destructive">{err.reason}</p>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </ScrollArea>
+                ) : (
+                  <div className="mx-auto h-12 w-12 rounded-full bg-amber-50 dark:bg-amber-950/30 flex items-center justify-center">
+                    <AlertTriangle className="h-6 w-6 text-amber-600 dark:text-amber-400" />
                   </div>
                 )}
+                <div>
+                  <p className="font-medium">
+                    {importResults.success} event{importResults.success !== 1 ? 's' : ''} imported
+                  </p>
+                  {importResults.failed > 0 && (
+                    <p className="text-sm text-muted-foreground">{importResults.failed} failed</p>
+                  )}
+                </div>
               </div>
+
+              {/* Error List */}
+              {importResults.failed > 0 && (
+                <div className="border rounded-lg overflow-hidden">
+                  <div className="px-3 py-2 bg-muted/50 border-b flex items-center justify-between">
+                    <div className="flex items-center gap-1.5 text-xs font-medium text-destructive">
+                      <AlertCircle className="h-3.5 w-3.5" />
+                      {importResults.failed} failed
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-6 text-xs"
+                      onClick={handleDownloadErrorReport}
+                    >
+                      <Download className="h-3 w-3 mr-1" />
+                      Export
+                    </Button>
+                  </div>
+                  <ScrollArea className="max-h-32">
+                    <div className="divide-y">
+                      {importResults.errors.map((err, i) => (
+                        <div key={i} className="px-3 py-2 text-xs flex items-center gap-2">
+                          <X className="h-3 w-3 text-destructive shrink-0" />
+                          <span className="font-medium truncate">{err.title || 'Untitled'}</span>
+                          <span className="text-muted-foreground truncate ml-auto">{err.reason}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </ScrollArea>
+                </div>
+              )}
             </div>
           )}
         </div>
 
         {/* Footer */}
-        <DialogFooter className="px-6 py-4 border-t bg-background shrink-0">
+        <DialogFooter className="px-5 py-4 border-t">
           {step === 'upload' && (
-            <Button variant="outline" onClick={handleClose}>Cancel</Button>
+            <Button variant="ghost" onClick={handleClose}>
+              Cancel
+            </Button>
           )}
-          
+
           {step === 'preview' && (
-            <div className="flex items-center justify-between w-full">
+            <>
               <Button variant="ghost" onClick={() => setStep('upload')}>
                 Back
               </Button>
-              <div className="flex gap-2">
-                <Button variant="outline" onClick={handleClose}>Cancel</Button>
-                <Button onClick={handleImport} disabled={selectedEvents.size === 0}>
-                  Import {selectedEvents.size} Events
-                </Button>
-              </div>
-            </div>
+              <div className="flex-1" />
+              <Button variant="ghost" onClick={handleClose}>
+                Cancel
+              </Button>
+              <Button
+                onClick={handleImport}
+                disabled={selectedEvents.size === 0 || (unmatchedCount > 0 && !defaultOrganizationId)}
+              >
+                Import {selectedEvents.size}
+              </Button>
+            </>
           )}
 
           {step === 'complete' && (
-            <div className="flex items-center justify-between w-full">
-              {importResults.success > 0 ? (
-                <Button 
-                  variant="outline" 
-                  onClick={handleUndo} 
-                  disabled={isUndoing}
-                  className="text-destructive hover:bg-destructive/10 border-destructive/20"
-                >
-                  {isUndoing ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Undo2 className="h-4 w-4 mr-2" />}
-                  Undo Import
+            <>
+              {importResults.success > 0 && (
+                <Button variant="ghost" onClick={handleUndo} disabled={isUndoing} className="text-destructive">
+                  {isUndoing ? <Loader2 className="h-4 w-4 animate-spin mr-1.5" /> : <Undo2 className="h-4 w-4 mr-1.5" />}
+                  Undo
                 </Button>
-              ) : <div />}
-              
+              )}
+              <div className="flex-1" />
               <Button onClick={handleClose}>Done</Button>
-            </div>
+            </>
           )}
         </DialogFooter>
       </DialogContent>
